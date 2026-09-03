@@ -61,7 +61,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
           autoPlay={index === 0}
           muted
           playsInline
-          preload={index === 0 ? 'auto' : 'metadata'}
+          preload="metadata"
           aria-hidden="true"
           onTimeUpdate={() => handleVideoProgress(index as 0 | 1)}
           onEnded={(event) => {

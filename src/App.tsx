@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { DeviceProvider, useDevice } from './context/DeviceContext';
-import { DesktopMenuBar } from './components/desktop/DesktopMenuBar';
-import { DesktopDock } from './components/desktop/DesktopDock';
-import { DesktopWindowManager } from './components/desktop/DesktopWindowManager';
-import { DesktopSpotlight } from './components/desktop/DesktopSpotlight';
-import { DesktopIconsHome } from './components/desktop/DesktopIconsHome';
 import { LandingScreen } from './components/common/LandingScreen';
-import { DesktopBackground } from './components/mac/system/DesktopBackground';
-import { IPhoneFrame } from './components/mobile/IPhoneFrame';
 import { sound } from './utils/audioHaptics';
+
+const DesktopMenuBar = lazy(() => import('./components/desktop/DesktopMenuBar').then(module => ({ default: module.DesktopMenuBar })));
+const DesktopDock = lazy(() => import('./components/desktop/DesktopDock').then(module => ({ default: module.DesktopDock })));
+const DesktopWindowManager = lazy(() => import('./components/desktop/DesktopWindowManager').then(module => ({ default: module.DesktopWindowManager })));
+const DesktopSpotlight = lazy(() => import('./components/desktop/DesktopSpotlight').then(module => ({ default: module.DesktopSpotlight })));
+const DesktopIconsHome = lazy(() => import('./components/desktop/DesktopIconsHome').then(module => ({ default: module.DesktopIconsHome })));
+const DesktopBackground = lazy(() => import('./components/mac/system/DesktopBackground').then(module => ({ default: module.DesktopBackground })));
+const IPhoneFrame = lazy(() => import('./components/mobile/IPhoneFrame').then(module => ({ default: module.IPhoneFrame })));
 
 const PortfolioRoot: React.FC = () => {
   const { deviceMode, settings, resolvedTheme } = useDevice();
@@ -42,32 +43,24 @@ const PortfolioRoot: React.FC = () => {
       }}
     >
       {/* Render View Based on Active Mode */}
-      {deviceMode === 'desktop' ? (
-        <DesktopBackground>
-          {isDesktopLocked ? <LandingScreen onExplore={() => setIsDesktopLocked(false)} /> : <div className="fixed inset-0 w-full h-full flex flex-col justify-between overflow-hidden">
-            {/* Top Menu Bar with active Control Center and File, Edit, View, Go, Window, Help */}
-            <DesktopMenuBar onOpenSpotlight={() => setSpotlightOpen(true)} />
+      <Suspense fallback={<LandingScreen onExplore={() => setIsDesktopLocked(false)} />}>
+        {deviceMode === 'desktop' ? (
+          <DesktopBackground>
+            {isDesktopLocked ? <LandingScreen onExplore={() => setIsDesktopLocked(false)} /> : <div className="fixed inset-0 w-full h-full flex flex-col justify-between overflow-hidden">
+              <DesktopMenuBar onOpenSpotlight={() => setSpotlightOpen(true)} />
+              <DesktopIconsHome />
+              <DesktopWindowManager />
+              <DesktopDock />
+            </div>}
+          </DesktopBackground>
+        ) : (
+          <div className="fixed inset-0 w-full h-full flex items-center justify-center overflow-hidden bg-black md:bg-radial md:from-slate-900 md:via-neutral-950 md:to-black">
+            <IPhoneFrame />
+          </div>
+        )}
 
-            {/* Desktop Icons in Home Canvas */}
-            <DesktopIconsHome />
-
-            {/* Interactive Window Manager (Multi-Window Desktop) */}
-            <DesktopWindowManager />
-
-            {/* Bottom Frosted Glass Dock */}
-            <DesktopDock />
-
-          </div>}
-        </DesktopBackground>
-      ) : (
-        /* iPhone 15 Pro Experience */
-        <div className="fixed inset-0 w-full h-full flex items-center justify-center overflow-hidden bg-black md:bg-radial md:from-slate-900 md:via-neutral-950 md:to-black">
-          <IPhoneFrame />
-        </div>
-      )}
-
-      {/* Global Spotlight Search Modal */}
-      <DesktopSpotlight isOpen={spotlightOpen} onClose={() => setSpotlightOpen(false)} />
+        <DesktopSpotlight isOpen={spotlightOpen} onClose={() => setSpotlightOpen(false)} />
+      </Suspense>
     </div>
   );
 };

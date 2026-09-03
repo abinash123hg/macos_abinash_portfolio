@@ -38,6 +38,8 @@ export const PosterCard: React.FC<PosterCardProps> = ({ show, onSelect, classNam
           <img
             src={primarySrc}
             alt={show.title}
+            loading="lazy"
+            decoding="async"
             onError={() => {
               // Try fallback direct root or assets path before switching to stylized canvas poster
               setImageError(true);

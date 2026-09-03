@@ -70,6 +70,7 @@ export const CertificatesApp: React.FC = () => {
                     alt={cert.title}
                     className="w-full h-full object-contain p-1.5 group-hover:scale-[1.02] transition-transform duration-300"
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
                     <span className="px-3 py-1.5 rounded-full bg-black/80 backdrop-blur-md text-white text-xs font-semibold flex items-center gap-1.5 border border-white/20 shadow-lg">
