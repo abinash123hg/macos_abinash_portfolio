@@ -38,3 +38,5 @@ secrets/
 secret/
 *.pem
 *.key
+.vercel
+.env*
