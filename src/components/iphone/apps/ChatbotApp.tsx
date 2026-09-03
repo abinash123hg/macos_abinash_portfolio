@@ -71,7 +71,7 @@ export const ChatbotApp: React.FC = () => {
       });
       const data = await res.json();
       
-      const botReplyText = data.reply || `Abinash is a 3rd-year B.Tech CSE (AI & ML) student at Centurion University (CUTM) with an 8.32 CGPA. Contact him at ${portfolioData.email}.`;
+      const botReplyText = data.reply || `Abinash is pursuing B.Tech AI/ML at Centurion University (CUTM) with an 8.32 CGPA. Contact him at ${portfolioData.email}.`;
       
       setMessages(prev => [
         ...prev,
@@ -88,7 +88,7 @@ export const ChatbotApp: React.FC = () => {
       const q = queryText.toLowerCase();
 
       if (q.includes('30s') || q.includes('30 second') || q.includes('tell me about') || q.includes('who is abinash')) {
-        reply = `Abinash is a 3rd-year B.Tech CSE (AI & ML) student at Centurion University (CUTM) with an 8.32 CGPA, focused on predictive ML, telemetry analytics, and intelligent systems.\n\n• Flagship: 5G Small-Cell KPI Management (96.2% accuracy) & SafeDrive AI.\n• Credentials: Oracle Certified Associate in Agentic AI, Tata GenAI, Deloitte Analytics.\n• Fit: Data Analyst, AI/ML Engineer, LLM/RAG Engineer, Analytics Engineer.\n\nContact: ${portfolioData.email} | ${portfolioData.phone}`;
+        reply = `Abinash is pursuing B.Tech AI/ML at Centurion University (CUTM) with an 8.32 CGPA, focused on predictive ML, telemetry analytics, and intelligent systems.\n\n• Flagship: 5G Small-Cell KPI Management (96.2% accuracy) & SafeDrive AI.\n• Credentials: Oracle Certified Associate in Agentic AI, Tata GenAI, Deloitte Analytics.\n• Fit: Data Analyst, AI/ML Engineer, LLM/RAG Engineer, Analytics Engineer.\n\nContact: ${portfolioData.email} | ${portfolioData.phone}`;
       } else if (q.includes('role') || q.includes('fit') || q.includes('job') || q.includes('position')) {
         reply = `Abinash is a strong fit for:\n• Data Analyst (SQL, Pandas, NumPy, statistical testing)\n• AI/ML Engineer (Scikit-learn, Random Forest, model evaluation)\n• LLM/RAG Engineer (Oracle Agentic AI certified, prompt engineering, RAG concepts)\n• Analytics Engineer (Streamlit dashboards, telemetry pipelines)\n\nHe is open to full-time roles and internships immediately.`;
       } else if (q.includes('5g') || q.includes('kpi') || q.includes('telemetry') || q.includes('project')) {
@@ -100,7 +100,7 @@ export const ChatbotApp: React.FC = () => {
       } else if (q.includes('hire') || q.includes('contact') || q.includes('email') || q.includes('phone') || q.includes('reach')) {
         reply = `You can hire or contact Abinash directly:\n• Email: ${portfolioData.email}\n• Phone: ${portfolioData.phone}\n• Location: Bhubaneswar, Odisha, India\n• Availability: Open to full-time roles & high-impact engineering opportunities.`;
       } else {
-        reply = `Abinash is a 3rd-year B.Tech CSE (AI & ML) student at Centurion University (CUTM) with an 8.32 CGPA. He specializes in predictive ML, telemetry analytics, and AI assistants.\n\nAsk me about his projects, skills, or email him at ${portfolioData.email}.`;
+        reply = `Abinash is pursuing B.Tech AI/ML at Centurion University (CUTM) with an 8.32 CGPA. He specializes in predictive ML, telemetry analytics, and AI assistants.\n\nAsk me about his projects, skills, or email him at ${portfolioData.email}.`;
       }
 
       setMessages(prev => [

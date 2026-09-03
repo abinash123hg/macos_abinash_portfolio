@@ -209,7 +209,7 @@ export const HRPolitelyApp: React.FC = () => {
               <div className="p-3 rounded-xl bg-neutral-900 border border-white/10">
                 <div className="text-[10px] text-neutral-400 font-medium">Academic CGPA</div>
                 <div className="text-[14px] font-bold text-amber-300 mt-0.5">8.32 / 10.0</div>
-                <div className="text-[9.5px] text-neutral-400 mt-0.5">B.Tech CSE (AI & ML)</div>
+                <div className="text-[9.5px] text-neutral-400 mt-0.5">B.Tech AI/ML</div>
               </div>
               <div className="p-3 rounded-xl bg-neutral-900 border border-white/10">
                 <div className="text-[10px] text-neutral-400 font-medium">Model Accuracy (5G KPI)</div>

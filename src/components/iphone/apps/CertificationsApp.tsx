@@ -77,6 +77,8 @@ export const CertificationsApp: React.FC = () => {
               <img
                 src={resolveMediaUrl(flagship.imageSrc, 'assets/certifications')}
                 alt={flagship.title}
+                fetchPriority="high"
+                decoding="async"
                 className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
@@ -111,6 +113,8 @@ export const CertificationsApp: React.FC = () => {
                 <img
                   src={resolveMediaUrl(cert.imageSrc, 'assets/certifications')}
                   alt={cert.title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover rounded-[7px]"
                 />
               ) : (

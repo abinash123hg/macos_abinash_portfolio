@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, Linkedin, Mail, Menu, X } from 'lucide-react';
 import { portfolioData } from '../../data/portfolioData';
+import { sound } from '../../utils/audioHaptics';
 
 interface LandingScreenProps {
   onExplore: () => void;
@@ -13,9 +14,38 @@ const profileImage = 'https://media.licdn.com/dms/image/v2/D4D03AQHu8iauv0OdlA/p
 export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResume }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
+  const [activeVideo, setActiveVideo] = useState<0 | 1>(0);
+  const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)];
+  const videoSwitchingRef = useRef(false);
+  const videoResetTimerRef = useRef<number | null>(null);
+  const videoSource = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_204221_5339e40b-e73d-4ab0-9c65-79c18c66fd50.mp4';
+
+  useEffect(() => () => {
+    if (videoResetTimerRef.current !== null) window.clearTimeout(videoResetTimerRef.current);
+  }, []);
+
+  const handleVideoProgress = (index: 0 | 1) => {
+    if (index !== activeVideo || videoSwitchingRef.current) return;
+    const video = videoRefs[index].current;
+    if (!video || !video.duration || video.duration - video.currentTime > 0.8) return;
+
+    const nextIndex = index === 0 ? 1 : 0;
+    const nextVideo = videoRefs[nextIndex].current;
+    if (!nextVideo) return;
+    videoSwitchingRef.current = true;
+    nextVideo.currentTime = 0;
+    void nextVideo.play();
+    setActiveVideo(nextIndex);
+    videoResetTimerRef.current = window.setTimeout(() => {
+      video.pause();
+      video.currentTime = 0;
+      videoSwitchingRef.current = false;
+    }, 750);
+  };
 
   const enterPortfolio = () => {
     if (isLeaving) return;
+    sound.landingOpenChime();
     setMobileMenuOpen(false);
     setIsLeaving(true);
     onExplore();
@@ -23,9 +53,25 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
 
   return (
     <main className={`foldcraft-landing ${isLeaving ? 'foldcraft-landing--leaving' : ''}`}>
-      <video className="foldcraft-video" autoPlay muted loop playsInline preload="auto" aria-hidden="true">
-        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_204221_5339e40b-e73d-4ab0-9c65-79c18c66fd50.mp4" type="video/mp4" />
-      </video>
+      {[0, 1].map((index) => (
+        <video
+          key={index}
+          ref={videoRefs[index]}
+          className={`foldcraft-video ${activeVideo === index ? 'foldcraft-video--active' : ''}`}
+          autoPlay={index === 0}
+          muted
+          playsInline
+          preload={index === 0 ? 'auto' : 'metadata'}
+          aria-hidden="true"
+          onTimeUpdate={() => handleVideoProgress(index as 0 | 1)}
+          onEnded={(event) => {
+            event.currentTarget.currentTime = 0;
+            void event.currentTarget.play();
+          }}
+        >
+          <source src={videoSource} type="video/mp4" />
+        </video>
+      ))}
       <div className="foldcraft-video-overlay" aria-hidden="true" />
 
       <motion.nav className="foldcraft-nav" initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} aria-label="Portfolio navigation">
@@ -65,11 +111,11 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
         <div className="foldcraft-hero-top">
           <motion.div className="foldcraft-profile" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .15 }}><img src={profileImage} alt={portfolioData.name} referrerPolicy="no-referrer" /></motion.div>
           <motion.p className="foldcraft-eyebrow" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .25 }}>AI · MACHINE LEARNING · DATA ANALYTICS</motion.p>
-          <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .4, duration: .8 }}>Turning data into<br />intelligent solutions.</motion.h1>
-          <motion.p className="foldcraft-hero-role" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5 }}>{portfolioData.name} · AI/ML Engineer · Data Analyst · RAG Systems Specialist</motion.p>
+          <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .4, duration: .8 }}>{portfolioData.name}</motion.h1>
+          <motion.p className="foldcraft-hero-role" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5 }}>AI/ML Engineer · Data Analyst · RAG Systems Specialist</motion.p>
         </div>
         <div className="foldcraft-hero-bottom">
-          <motion.p className="foldcraft-bio" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .7 }}>AI/ML Enthusiast, Data Analyst, and Machine Learning Developer building RAG systems, autonomous AI copilots, and practical solutions for real-world problems.</motion.p>
+          <motion.p className="foldcraft-bio" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .7 }}>Building grounded RAG systems, autonomous AI copilots, and practical machine learning products that turn complex data into clear decisions.</motion.p>
           <motion.div className="foldcraft-cta-row" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .9 }}>
             <button className="foldcraft-primary-cta" onClick={enterPortfolio} disabled={isLeaving}>Explore Work <ArrowRight size={16} /></button>
             <button className="foldcraft-secondary-cta" onClick={onResume || enterPortfolio}>View Resume</button>

@@ -14,6 +14,7 @@ import {
   Camera, 
   Gamepad2, 
   Settings,
+  SlidersHorizontal,
   Phone,
   FileText,
   Search,
@@ -205,7 +206,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
     {
       id: 'systeminfo',
       name: 'System',
-      icon: <Settings className="w-7 h-7 text-white" />,
+      icon: <SlidersHorizontal className="w-7 h-7 text-white" />,
       gradient: 'from-neutral-600 to-neutral-700',
     },
     {
@@ -394,7 +395,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
 
   return (
     <div 
-      className="relative w-full h-full flex flex-col justify-between p-4 pt-1 text-white select-none overflow-hidden font-sans"
+      className="relative w-full h-full flex flex-col justify-between p-4 pt-14 text-white select-none overflow-hidden font-sans"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -438,7 +439,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                     8.32 CGPA
                   </div>
                   <div className="text-[11px] text-white/80 font-medium truncate mt-0.5">
-                    B.Tech AI & ML • CUTM
+                    B.Tech AI/ML • CUTM
                   </div>
                 </div>
               </div>
@@ -463,9 +464,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                 <div>
                   <div className="text-[13px] font-semibold text-white tracking-tight leading-tight">
                     Open portfolio summary
-                  </div>
-                  <div className="text-[10.5px] text-emerald-300 font-mono mt-0.5">
-                    5,000 Small-Cells OK
                   </div>
                 </div>
               </div>

@@ -37,13 +37,14 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
     togglePlayMusic, 
     nextMusicTrack,
     prevMusicTrack,
-    openApp
+    openApp,
+    toggleFlashlight
   } = useDevice();
   const [airplaneMode, setAirplaneMode] = useState(false);
   const [wifiEnabled, setWifiEnabled] = useState(true);
   const [bluetoothEnabled, setBluetoothEnabled] = useState(true);
   const [cellularEnabled, setCellularEnabled] = useState(true);
-  const [flashlightEnabled, setFlashlightEnabled] = useState(false);
+  const flashlightEnabled = settings.flashlightOn;
 
   const touchStartY = useRef<number | null>(null);
 
@@ -79,7 +80,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
       onClick={handleClose}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="absolute inset-0 z-50 bg-black/60 backdrop-blur-3xl p-5 flex flex-col justify-between select-none font-sans text-white overflow-y-auto animate-in fade-in zoom-in-95 duration-200 cursor-default"
+      className="absolute inset-0 z-30 bg-black/60 backdrop-blur-3xl p-5 pt-16 pb-10 flex flex-col justify-between select-none font-sans text-white overflow-y-auto animate-in fade-in zoom-in-95 duration-200 cursor-default"
     >
       {/* Top Header */}
       <div 
@@ -280,7 +281,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
         <button
           onClick={() => {
             sound.tap();
-            setFlashlightEnabled(!flashlightEnabled);
+            void toggleFlashlight();
           }}
           className={`p-3 rounded-[20px] backdrop-blur-2xl border border-white/15 flex items-center gap-2.5 transition-all cursor-pointer shadow-lg active:scale-95 ${
             flashlightEnabled

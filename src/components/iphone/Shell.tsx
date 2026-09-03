@@ -151,10 +151,10 @@ export const Shell: React.FC = () => {
   };
 
   return (
-    <div className="relative flex items-center justify-center w-full h-full min-h-[100dvh] md:min-h-0 p-0 md:p-3 select-none overflow-hidden">
+    <div className="relative flex items-center justify-center w-full h-[100dvh] min-h-0 md:h-full md:min-h-0 p-0 md:p-3 select-none overflow-hidden">
       {/* iPhone Screen Shell - Edge-to-edge on mobile, perfectly scaled aspect ratio on desktop/laptop */}
       <div 
-        className="relative w-full h-full min-h-[100dvh] aspect-auto md:w-auto md:h-[min(852px,calc(100vh-32px))] md:aspect-[393/852] md:max-w-[95vw] md:rounded-[54px] md:p-2.5 md:shadow-[0_25px_70px_rgba(0,0,0,0.9)] md:ring-1 md:ring-neutral-700/80 flex flex-col justify-between overflow-hidden bg-black shrink-0"
+        className="relative w-full h-[100dvh] min-h-0 aspect-auto md:w-auto md:h-[min(852px,calc(100vh-32px))] md:aspect-[393/852] md:max-w-[95vw] md:rounded-[54px] md:p-2.5 md:shadow-[0_25px_70px_rgba(0,0,0,0.9)] md:ring-1 md:ring-neutral-700/80 flex flex-col justify-between overflow-hidden bg-black shrink-0"
         style={{
           boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.1)',
         }}
@@ -187,9 +187,11 @@ export const Shell: React.FC = () => {
           </div>
 
           {/* Screen Content Layers */}
-          <div className="relative flex-1 min-h-0 w-full overflow-hidden will-change-transform">
+          <div className="absolute inset-0 z-10 min-h-0 w-full overflow-hidden flex flex-col will-change-transform">
             {isLocked ? (
-              <LandingScreen onExplore={handleLandingExplore} />
+              <div className="iphone-lock-screen w-full h-full">
+                <LandingScreen onExplore={handleLandingExplore} />
+              </div>
             ) : showQuickSettings ? (
               <div className="relative h-full w-full overflow-hidden">
                 <ControlCenter onClose={() => setShowQuickSettings(false)} />
@@ -209,7 +211,7 @@ export const Shell: React.FC = () => {
             ) : phoneScreen === 'switcher' ? (
               <AppSwitcher />
             ) : activeAppId ? (
-              <div className="w-full h-full animate-in fade-in zoom-in-95 duration-150 will-change-transform">
+              <div className="absolute inset-0 z-10 w-full h-full min-h-0 flex flex-col animate-in fade-in zoom-in-95 duration-150 will-change-transform">
                 {renderActiveApp()}
               </div>
             ) : (

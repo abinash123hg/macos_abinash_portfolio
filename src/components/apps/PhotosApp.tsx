@@ -13,12 +13,12 @@ import {
   Share2, 
   Trash2,
   Monitor,
-  Lock,
-  Layers,
   Check,
   RotateCcw,
   Maximize2,
   Camera
+  ,ChevronLeft
+  ,ChevronRight
 } from 'lucide-react';
 import { sound } from '../../utils/audioHaptics';
 import { resolveMediaUrl } from '../../utils/mediaResolver';
@@ -52,6 +52,19 @@ export const PhotosApp: React.FC = () => {
 
   const favoritesCount = mediaItems.filter(isItemFavorite).length;
   const certificatesCount = mediaItems.filter(m => m.category === 'Certificates').length;
+  const activeMediaIndex = activeMedia ? filteredMedia.findIndex(item => item.id === activeMedia.id) : -1;
+
+  const showPreviousMedia = () => {
+    if (activeMediaIndex < 0) return;
+    sound.tap();
+    setActiveMedia(filteredMedia[(activeMediaIndex - 1 + filteredMedia.length) % filteredMedia.length]);
+  };
+
+  const showNextMedia = () => {
+    if (activeMediaIndex < 0) return;
+    sound.tap();
+    setActiveMedia(filteredMedia[(activeMediaIndex + 1) % filteredMedia.length]);
+  };
 
   const handleSetWallpaper = (target: 'mac-desktop' | 'mac-lock' | 'mac-both') => {
     if (!activeMedia) return;
@@ -236,7 +249,7 @@ export const PhotosApp: React.FC = () => {
                 setActiveMedia(null);
                 setShowWallpaperDialog(false);
               }}
-              className="absolute top-4 right-4 p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-neutral-300 hover:text-white cursor-pointer"
+              className="absolute -top-3 -right-3 p-2 rounded-full bg-neutral-700/95 hover:bg-neutral-600 text-neutral-200 hover:text-white cursor-pointer shadow-lg border border-white/15"
             >
               <X className="w-4 h-4" />
             </button>
@@ -248,6 +261,20 @@ export const PhotosApp: React.FC = () => {
                 alt={activeMedia.title}
                 className="w-full h-full object-contain"
               />
+              <button
+                onClick={showPreviousMedia}
+                aria-label="Previous photo"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center cursor-pointer shadow-lg border border-white/15"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={showNextMedia}
+                aria-label="Next photo"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center cursor-pointer shadow-lg border border-white/15"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
               <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-md text-xs font-semibold text-white border border-white/10">
                 {activeMedia.category}
               </div>
@@ -318,29 +345,13 @@ export const PhotosApp: React.FC = () => {
                   )}
                 </div>
 
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 gap-2">
                   <button
                     onClick={() => handleSetWallpaper('mac-desktop')}
                     className="p-2.5 rounded-lg bg-white/10 hover:bg-[#007aff] text-neutral-200 hover:text-white flex flex-col items-center gap-1 text-xs font-medium transition-all cursor-pointer"
                   >
                     <Monitor className="w-4 h-4" />
                     <span>Desktop</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleSetWallpaper('mac-lock')}
-                    className="p-2.5 rounded-lg bg-white/10 hover:bg-[#007aff] text-neutral-200 hover:text-white flex flex-col items-center gap-1 text-xs font-medium transition-all cursor-pointer"
-                  >
-                    <Lock className="w-4 h-4" />
-                    <span>Lock Screen</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleSetWallpaper('mac-both')}
-                    className="p-2.5 rounded-lg bg-white/10 hover:bg-[#007aff] text-neutral-200 hover:text-white flex flex-col items-center gap-1 text-xs font-medium transition-all cursor-pointer"
-                  >
-                    <Layers className="w-4 h-4" />
-                    <span>Both</span>
                   </button>
                 </div>
               </div>

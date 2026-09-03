@@ -414,6 +414,29 @@ class SoundFX {
     }
   }
 
+  landingOpenChime() {
+    try {
+      this.init();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      [392, 523.25, 659.25].forEach((frequency, index) => {
+        const oscillator = this.ctx!.createOscillator();
+        const gain = this.ctx!.createGain();
+        const start = now + index * 0.1;
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(frequency, start);
+        gain.gain.setValueAtTime(0.045 * this.volume, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.5);
+        oscillator.connect(gain);
+        gain.connect(this.ctx!.destination);
+        oscillator.start(start);
+        oscillator.stop(start + 0.5);
+      });
+    } catch {
+      // Audio might be blocked until the user interacts with the page.
+    }
+  }
+
   deleteTrash() {
     try {
       this.init();

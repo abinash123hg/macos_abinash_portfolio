@@ -114,7 +114,7 @@ export const FinderWindow: React.FC = () => {
 
     // Experience & Academics
     { id: 'file-internpe', name: 'InternPe Internship', type: 'file', appId: 'experience', iconType: 'work', badgeColor: 'from-purple-500 to-indigo-600' },
-    { id: 'file-cutm', name: 'B.Tech CSE AI & ML', type: 'file', appId: 'education', iconType: 'work', badgeColor: 'from-blue-600 to-indigo-800' },
+    { id: 'file-cutm', name: 'B.Tech AI/ML', type: 'file', appId: 'education', iconType: 'work', badgeColor: 'from-blue-600 to-indigo-800' },
 
     // Documents & Contact
     { id: 'file-resume-pdf', name: 'Resume.pdf', type: 'pdf', appId: 'recruiter', iconType: 'pdf' },

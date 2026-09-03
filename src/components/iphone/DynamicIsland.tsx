@@ -49,17 +49,8 @@ export const DynamicIsland: React.FC = () => {
   const iphoneTracks = musicTracks.slice(0, 2);
   const [internalExpanded, setInternalExpanded] = useState(false);
   const isExpanded = dynamicIsland.expanded || internalExpanded;
-
-  useEffect(() => {
-    if (!isExpanded) return;
-
-    const dismissTimer = window.setTimeout(() => {
-      setInternalExpanded(false);
-      setDynamicIslandExpanded(false);
-    }, 1000);
-
-    return () => window.clearTimeout(dismissTimer);
-  }, [isExpanded, setDynamicIslandExpanded]);
+  const mode = dynamicIsland.mode;
+  const isMusic = mode === 'music' || (mode === 'idle' && isPlayingMusic);
 
   const handleIslandClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -78,17 +69,16 @@ export const DynamicIsland: React.FC = () => {
     coverUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80'
   };
 
-  const mode = dynamicIsland.mode;
     const displayDuration = playback.duration || parseDuration(track.duration);
     const progress = displayDuration > 0 ? Math.min(100, (playback.currentTime / displayDuration) * 100) : 0;
 
     useEffect(() => {
+      if (!isExpanded || !isMusic) return;
       const updatePlayback = () => setPlayback(sound.getTrackProgress());
       updatePlayback();
       const interval = window.setInterval(updatePlayback, 250);
       return () => window.clearInterval(interval);
-    }, [track.id, isPlayingMusic]);
-  const isMusic = mode === 'music' || (mode === 'idle' && isPlayingMusic);
+    }, [isExpanded, isMusic, track.id]);
   const modeIcon = mode === 'camera'
     ? <Camera className="h-5 w-5" />
     : mode === 'ai'
@@ -116,7 +106,7 @@ export const DynamicIsland: React.FC = () => {
     <div className="absolute top-2 left-1/2 -translate-x-1/2 z-50 flex items-start justify-center pointer-events-auto">
       <div
         onClick={handleIslandClick}
-        className={`bg-black text-white transition-[width,min-height,border-radius,padding] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] flex items-center shadow-2xl cursor-pointer select-none border border-white/10 will-change-transform overflow-hidden ${
+        className={`bg-black text-white transition-[width,min-height,border-radius,padding] duration-150 ease-out flex items-center shadow-2xl cursor-pointer select-none border border-white/10 will-change-[width,height] overflow-hidden ${
           isExpanded
             ? 'w-[calc(100vw-32px)] max-w-[360px] min-h-[112px] p-4 rounded-[30px] flex-col justify-between'
             : 'w-[126px] h-[37px] px-3 rounded-full justify-between hover:scale-[1.03] active:scale-95'

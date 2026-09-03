@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode, useCallback } from 'react';
 import { 
   DeviceMode, 
   WindowState, 
@@ -42,7 +42,7 @@ export const DEFAULT_MUSIC_TRACKS: MusicTrack[] = [
     id: 'track-tokyo-funk',
     title: 'Tokyo Funk Commercial Promo',
     artist: 'FAS Sounds',
-    album: 'Tokyo Neon Nights',
+    album: 'Commercial Promo Funk',
     duration: '2:30',
     coverUrl: 'assets/photos/26640376.jpg',
     audioUrl: 'assets/music/fassounds-tokyo-funk-commercial-promo-funk-423844.mp3',
@@ -128,6 +128,7 @@ interface DeviceContextType {
   // System State & Settings
   settings: SystemSettings;
   updateSettings: (updates: Partial<SystemSettings>) => void;
+  toggleFlashlight: () => Promise<void>;
   theme: 'dark' | 'light' | 'system';
   setTheme: (theme: 'dark' | 'light' | 'system') => void;
   resolvedTheme: 'dark' | 'light';
@@ -142,6 +143,7 @@ interface DeviceContextType {
 
   // Photos & Media State
   mediaItems: MediaItem[];
+  addMediaItem: (item: MediaItem) => void;
   favorites: Record<string, boolean>;
   toggleFavorite: (id: string) => void;
 
@@ -540,6 +542,7 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     mode: 'photo',
     isRecording: false
   });
+  const flashlightStreamRef = useRef<MediaStream | null>(null);
 
   // Desktop Window Manager
   const [windows, setWindows] = useState<Record<string, WindowState>>(DEFAULT_WINDOWS);
@@ -547,9 +550,14 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const [activeDesktopWindowId, setActiveDesktopWindowId] = useState<string | null>('about');
 
   // Settings & Wallpapers
+  const storedWallpaperIndex = typeof window !== 'undefined'
+    ? Number(window.localStorage.getItem('abinash-wallpaper-index'))
+    : NaN;
   const [settings, setSettings] = useState<SystemSettings>({
     theme: 'dark',
-    wallpaperIndex: 0,
+    wallpaperIndex: Number.isInteger(storedWallpaperIndex) && storedWallpaperIndex >= 0 && storedWallpaperIndex <= 3
+      ? storedWallpaperIndex
+      : 0,
     wallpapers: {
       macDesktop: null,
       macLock: null,
@@ -611,8 +619,20 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     };
   }, []);
 
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('abinash-wallpaper-index', String(settings.wallpaperIndex));
+    } catch {
+      // Storage may be unavailable in private browsing or embedded previews.
+    }
+  }, [settings.wallpaperIndex]);
+
   // Dynamic Media Items & Favorites State
   const [mediaItems, setMediaItems] = useState<MediaItem[]>(() => portfolioData.media || []);
+
+  const addMediaItem = useCallback((item: MediaItem) => {
+    setMediaItems(prev => [item, ...prev]);
+  }, []);
   const [favorites, setFavorites] = useState<Record<string, boolean>>(() => ({
     'breaking-bad': true,
     'dark-knight': true,
@@ -1151,6 +1171,33 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     sound.tap();
   }, []);
 
+  const toggleFlashlight = useCallback(async () => {
+    if (settings.flashlightOn) {
+      flashlightStreamRef.current?.getTracks().forEach(track => track.stop());
+      flashlightStreamRef.current = null;
+      setSettings(prev => ({ ...prev, flashlightOn: false }));
+      sound.tap();
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices?.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+      const track = stream?.getVideoTracks()[0];
+      const capabilities = track?.getCapabilities() as MediaTrackCapabilities & { torch?: boolean };
+      if (!track || !capabilities.torch) {
+        stream?.getTracks().forEach(item => item.stop());
+        setSettings(prev => ({ ...prev, flashlightOn: true }));
+      } else {
+        await track.applyConstraints({ advanced: [{ torch: true } as MediaTrackConstraintSet] });
+        flashlightStreamRef.current = stream;
+        setSettings(prev => ({ ...prev, flashlightOn: true }));
+      }
+    } catch {
+      setSettings(prev => ({ ...prev, flashlightOn: true }));
+    }
+    sound.tap();
+  }, [settings.flashlightOn]);
+
   const setTheme = useCallback((newTheme: 'dark' | 'light' | 'system') => {
     updateSettings({ theme: newTheme });
   }, [updateSettings]);
@@ -1217,6 +1264,7 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         activeDesktopWindowId,
         settings,
         updateSettings,
+        toggleFlashlight,
         theme: settings.theme,
         setTheme,
         resolvedTheme,
@@ -1229,6 +1277,7 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         setWallpaper,
         resetWallpaper,
         mediaItems,
+        addMediaItem,
         favorites,
         toggleFavorite,
         trashItems,

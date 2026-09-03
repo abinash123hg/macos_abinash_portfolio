@@ -11,10 +11,10 @@ import {
   X, 
   Trash2, 
   Smartphone, 
-  Lock, 
-  Layers, 
   Check, 
   Share 
+  ,ChevronLeft
+  ,ChevronRight
 } from 'lucide-react';
 import { sound } from '../../../utils/audioHaptics';
 import { resolveMediaUrl } from '../../../utils/mediaResolver';
@@ -32,6 +32,7 @@ export const PhotosApp: React.FC = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<MediaItem | null>(null);
   const [showWallpaperSheet, setShowWallpaperSheet] = useState(false);
   const [wallpaperFeedback, setWallpaperFeedback] = useState<string | null>(null);
+  const swipeStartX = React.useRef<number | null>(null);
 
   const isItemFavorite = (item: MediaItem) => {
     return favorites[item.id] !== undefined ? favorites[item.id] : !!item.favorite;
@@ -65,6 +66,18 @@ export const PhotosApp: React.FC = () => {
     moveToTrash(item, 'photo');
     setSelectedPhoto(null);
     setShowWallpaperSheet(false);
+  };
+
+  const selectedPhotoIndex = selectedPhoto ? photos.findIndex(item => item.id === selectedPhoto.id) : -1;
+  const showPreviousPhoto = () => {
+    if (selectedPhotoIndex < 0) return;
+    sound.tap();
+    setSelectedPhoto(photos[(selectedPhotoIndex - 1 + photos.length) % photos.length]);
+  };
+  const showNextPhoto = () => {
+    if (selectedPhotoIndex < 0) return;
+    sound.tap();
+    setSelectedPhoto(photos[(selectedPhotoIndex + 1) % photos.length]);
   };
 
   return (
@@ -113,6 +126,8 @@ export const PhotosApp: React.FC = () => {
                   <img
                     src={imageSrc}
                     alt={item.title}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
@@ -144,7 +159,18 @@ export const PhotosApp: React.FC = () => {
 
       {/* Fullscreen iOS Photo Viewer Modal */}
       {selectedPhoto && (
-        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl flex flex-col justify-between p-4 animate-in fade-in zoom-in-95 duration-200 text-white">
+        <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl flex flex-col justify-between p-4 animate-in fade-in zoom-in-95 duration-200 text-white"
+          onTouchStart={(event) => { swipeStartX.current = event.touches[0]?.clientX ?? null; }}
+          onTouchEnd={(event) => {
+            if (swipeStartX.current === null) return;
+            const deltaX = (event.changedTouches[0]?.clientX ?? swipeStartX.current) - swipeStartX.current;
+            swipeStartX.current = null;
+            if (Math.abs(deltaX) < 45) return;
+            if (deltaX < 0) showNextPhoto();
+            else showPreviousPhoto();
+          }}
+        >
           {/* Header */}
           <div className="flex items-center justify-between pt-2">
             <span className="text-xs font-semibold text-white/80 line-clamp-1 max-w-[200px]">
@@ -174,12 +200,18 @@ export const PhotosApp: React.FC = () => {
 
           {/* Central Image View */}
           <div className="my-auto flex flex-col items-center text-center p-2">
-            <div className="w-full max-h-[300px] aspect-4/3 rounded-2xl overflow-hidden bg-black/50 border border-white/10 flex items-center justify-center shadow-2xl mb-3">
+            <div className="relative w-full h-[min(64dvh,560px)] rounded-2xl overflow-hidden bg-black/50 border border-white/10 flex items-center justify-center shadow-2xl mb-3">
               <img
                 src={resolveMediaUrl(selectedPhoto.thumbnail || selectedPhoto.url)}
                 alt={selectedPhoto.title}
                 className="w-full h-full object-contain"
               />
+              <button onClick={showPreviousPhoto} aria-label="Previous photo" className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/70 text-white flex items-center justify-center cursor-pointer">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button onClick={showNextPhoto} aria-label="Next photo" className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/70 text-white flex items-center justify-center cursor-pointer">
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
             <h3 className="text-[17px] font-bold text-white tracking-tight">
               {selectedPhoto.title}
@@ -202,29 +234,13 @@ export const PhotosApp: React.FC = () => {
                   )}
                 </div>
 
-                <div className="grid grid-cols-3 gap-2">
-                  <button
-                    onClick={() => handleSetWallpaper('ios-lock')}
-                    className="p-2.5 rounded-xl bg-white/10 hover:bg-[#007AFF] active:bg-[#007AFF] text-white text-[11px] font-medium flex flex-col items-center gap-1 cursor-pointer transition-colors"
-                  >
-                    <Lock className="w-4 h-4" />
-                    <span>Lock Screen</span>
-                  </button>
-
+                <div className="grid grid-cols-1 gap-2">
                   <button
                     onClick={() => handleSetWallpaper('ios-home')}
                     className="p-2.5 rounded-xl bg-white/10 hover:bg-[#007AFF] active:bg-[#007AFF] text-white text-[11px] font-medium flex flex-col items-center gap-1 cursor-pointer transition-colors"
                   >
                     <Smartphone className="w-4 h-4" />
                     <span>Home Screen</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleSetWallpaper('ios-both')}
-                    className="p-2.5 rounded-xl bg-white/10 hover:bg-[#007AFF] active:bg-[#007AFF] text-white text-[11px] font-medium flex flex-col items-center gap-1 cursor-pointer transition-colors"
-                  >
-                    <Layers className="w-4 h-4" />
-                    <span>Both</span>
                   </button>
                 </div>
               </div>

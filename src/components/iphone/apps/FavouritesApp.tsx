@@ -57,7 +57,7 @@ export const FavouritesApp: React.FC = () => {
       {tab === 'shows' && (
         <div className="space-y-4 pb-8">
           <div className="grid grid-cols-2 gap-2.5">
-            {shows.map((show) => (
+            {shows.map((show, index) => (
               <div
                 key={show.id}
                 onClick={() => {
@@ -71,6 +71,9 @@ export const FavouritesApp: React.FC = () => {
                   <img
                     src={resolveMediaUrl(show.posterFileName, 'assets/favorites')}
                     alt={show.title}
+                    loading={index < 4 ? 'eager' : 'lazy'}
+                    fetchPriority={index < 4 ? 'high' : 'low'}
+                    decoding="async"
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
                       (e.currentTarget as HTMLElement).style.display = 'none';
@@ -208,6 +211,7 @@ export const FavouritesApp: React.FC = () => {
               <img
                 src={resolveMediaUrl(selectedShow.posterFileName, 'assets/favorites')}
                 alt={selectedShow.title}
+                decoding="async"
                 className="absolute inset-0 w-full h-full object-cover"
                 onError={(e) => {
                   (e.currentTarget as HTMLElement).style.display = 'none';

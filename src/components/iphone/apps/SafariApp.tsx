@@ -43,7 +43,7 @@ export const SafariApp: React.FC = () => {
     {
       title: 'Centurion University (CUTM)',
       url: 'https://cutm.ac.in',
-      desc: 'B.Tech CSE (AI & ML) Department',
+      desc: 'B.Tech AI/ML Department',
       iconBg: 'bg-blue-600',
     },
   ];

@@ -36,10 +36,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
     return () => clearInterval(interval);
   }, [settings.use24HourClock]);
 
-  const textColor =
-    variant === 'dark'
-      ? 'text-neutral-900'
-      : 'text-white';
+  const textColor = 'text-white';
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
@@ -69,9 +66,11 @@ export const StatusBar: React.FC<StatusBarProps> = ({
     <div
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className={`w-full h-11 px-6 flex items-center justify-between text-xs z-40 select-none relative ${textColor} cursor-pointer`}
+      className={`w-full h-11 px-6 flex items-center justify-between text-xs z-40 select-none relative ${textColor} cursor-pointer bg-transparent`}
       style={{
         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
+        color: '#ffffff',
+        textShadow: '0 1px 2px rgba(0,0,0,0.65)',
       }}
     >
       {/* Left: Time (Interactive to trigger notification center) */}
@@ -111,7 +110,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
                   ? 'bg-[#FF3B30]'
                   : settings.lowPowerMode
                   ? 'bg-[#FFCC00]'
-                  : 'bg-[#34C759]'
+                  : 'bg-[linear-gradient(90deg,#00d4ff_0%,#007aff_45%,#a855f7_100%)]'
               }`}
               style={{ width: `${Math.min(100, Math.max(10, settings.batteryLevel))}%` }}
             />

@@ -54,7 +54,7 @@ export const AboutApp: React.FC = () => {
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{portfolioData.name}</h1>
             <span className="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
-              3rd-Year B.Tech AI & ML
+              B.Tech AI/ML
             </span>
           </div>
 

@@ -31,7 +31,7 @@ app.use(express.static(path.join(process.cwd(), "public")));
 app.get("/api/health", (_req, res) => {
   res.json({
     status: "ok",
-    system: "Abinash OS & iOS 18 Hub",
+    system: "Abinash OS & iOS Hub",
     timestamp: new Date().toISOString()
   });
 });
@@ -50,7 +50,7 @@ app.post("/api/chat", async (req, res) => {
 ## Your knowledge base (use ONLY this info; do not invent anything)
 
 - Name: Abinash
-- Education: 3rd-year B.Tech CSE (AI & ML), Centurion University (CUTM), CGPA 8.32
+- Education: B.Tech AI/ML, Centurion University (CUTM), CGPA 8.32
 - Target roles: Data Analyst, AI/ML Engineer, LLM/RAG Engineer, Analytics Engineer
 - Location & availability: Bhubaneswar, Odisha, India. Open to full-time roles & high-impact opportunities immediately / upon graduation.
 - Contact: email = swainabinash839@gmail.com, phone = +91-7077475818
@@ -155,7 +155,7 @@ app.post("/api/chat", async (req, res) => {
       let reply = "Hello! I am Abinash's AI Portfolio Assistant. I'm here to help recruiters and hiring teams explore Abinash's technical background, ML projects, skills, and role fit. What would you like to know?";
 
       if (q.includes("30 second") || q.includes("tell me about") || q.includes("who is abinash") || q.includes("summary") || q.includes("overview")) {
-        reply = "Abinash is a 3rd-year B.Tech CSE (AI & ML) student at Centurion University (CUTM) with an 8.32 CGPA, focused on predictive ML, telemetry analytics, and intelligent systems.\n\n• **Core Strengths:** End-to-end data pipelines, Random Forest classification, and agentic AI workflows.\n• **Flagship Work:** 5G Small-Cell KPI Management (96.2% accuracy across 5,000 telemetry records) and SafeDrive AI.\n• **Credentials:** Oracle Certified Associate in Agentic AI, Tata GenAI Analytics, and Deloitte Forensic Analytics.\n• **Target Roles:** Data Analyst, AI/ML Engineer, LLM/RAG Engineer, and Analytics Engineer.\n\nIf you'd like, I can share project deep dives or connect you directly with Abinash at swainabinash839@gmail.com.";
+        reply = "Abinash is pursuing B.Tech AI/ML at Centurion University (CUTM) with an 8.32 CGPA, focused on predictive ML, telemetry analytics, and intelligent systems.\n\n• **Core Strengths:** End-to-end data pipelines, Random Forest classification, and agentic AI workflows.\n• **Flagship Work:** 5G Small-Cell KPI Management (96.2% accuracy across 5,000 telemetry records) and SafeDrive AI.\n• **Credentials:** Oracle Certified Associate in Agentic AI, Tata GenAI Analytics, and Deloitte Forensic Analytics.\n• **Target Roles:** Data Analyst, AI/ML Engineer, LLM/RAG Engineer, and Analytics Engineer.\n\nIf you'd like, I can share project deep dives or connect you directly with Abinash at swainabinash839@gmail.com.";
       } else if (q.includes("role") || q.includes("fit") || q.includes("position") || q.includes("job")) {
         reply = "Abinash is a strong fit for the following roles:\n\n• **Data Analyst:** Strong proficiency in SQL, Pandas, NumPy, statistical hypothesis testing, and exploratory data analysis.\n• **AI/ML Engineer:** Hands-on experience with Scikit-learn, Random Forest classification/regression, model evaluation (accuracy, F1), and feature engineering.\n• **LLM/RAG Engineer:** Certified in Oracle Agentic AI with hands-on knowledge in prompt engineering, RAG retrieval concepts, and AI copilot integration.\n• **Analytics Engineer:** Skilled in transforming raw telemetry records into interactive Streamlit dashboards and actionable decision metrics.\n\nHe is open to full-time roles and internships. Would you like his contact details?";
       } else if (q.includes("project") || q.includes("5g") || q.includes("safedrive") || q.includes("top project")) {
@@ -171,9 +171,9 @@ app.post("/api/chat", async (req, res) => {
       } else if (q.includes("ml vs") || q.includes("software engineering") || q.includes("engineering")) {
         reply = "Abinash bridges machine learning and practical application engineering:\n\n• **ML Depth:** Strong in mathematical feature engineering, Random Forest hyperparameter tuning, model evaluation (accuracy, precision, recall, F1), and statistical testing.\n• **Software & Delivery:** Comfortable building full end-to-end data pipelines: ingestion → cleaning → modeling → interactive Streamlit dashboards and web UI integration.\n\nHe can both train reliable models and deliver them into production dashboards.";
       } else if (q.includes("education") || q.includes("college") || q.includes("university") || q.includes("cutm") || q.includes("cgpa")) {
-        reply = "Abinash is currently a 3rd-year B.Tech student in Computer Science & Engineering (AI & ML) at Centurion University of Technology and Management (CUTM), Bhubaneswar, holding an impressive **CGPA of 8.32 / 10.0**.";
+        reply = "Abinash is pursuing B.Tech AI/ML at Centurion University of Technology and Management (CUTM), Bhubaneswar, holding an impressive **CGPA of 8.32 / 10.0**.";
       } else {
-        reply = "Abinash is a 3rd-year B.Tech CSE (AI & ML) candidate at Centurion University (CGPA 8.32), specializing in predictive ML, 5G telemetry analytics, and agentic AI systems.\n\nFeel free to ask about his 5G KPI project, SafeDrive AI, technical skills, or hiring availability. If you need details not covered here, you can reach him directly at swainabinash839@gmail.com.";
+        reply = "Abinash is pursuing B.Tech AI/ML at Centurion University (CGPA 8.32), specializing in predictive ML, 5G telemetry analytics, and agentic AI systems.\n\nFeel free to ask about his 5G KPI project, SafeDrive AI, technical skills, or hiring availability. If you need details not covered here, you can reach him directly at swainabinash839@gmail.com.";
       }
 
       res.json({ reply });
@@ -193,7 +193,7 @@ app.post("/api/chat", async (req, res) => {
   } catch (error: any) {
     console.error("Gemini API Error:", error);
     res.json({
-      reply: "Abinash is a Data Analyst Intern & AI/ML Engineer with a 8.32 CGPA in B.Tech CSE (AI & ML) at Centurion University. He specializes in Python, SQL, predictive modeling, 5G SLA management, and accident prediction systems. Feel free to explore the apps on screen!"
+      reply: "Abinash is a Data Analyst Intern & AI/ML Engineer with a 8.32 CGPA in B.Tech AI/ML at Centurion University. He specializes in Python, SQL, predictive modeling, 5G SLA management, and accident prediction systems. Feel free to explore the apps on screen!"
     });
   }
 });

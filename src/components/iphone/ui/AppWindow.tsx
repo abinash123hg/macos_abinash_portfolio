@@ -47,7 +47,7 @@ export const AppWindow: React.FC<AppWindowProps> = ({
   };
 
   return (
-    <div className={`w-full h-full flex flex-col ${backgroundClass} text-neutral-900 dark:text-white select-none overflow-hidden font-sans relative`}>
+    <div className={`w-full h-full min-h-0 flex flex-col pt-11 ${backgroundClass} text-neutral-900 dark:text-white select-none overflow-hidden font-sans relative`}>
       {/* iOS 18 Translucent Navigation Bar (48px standard iOS height) */}
       <header className={`w-full h-12 flex-shrink-0 px-3 flex items-center justify-between z-30 select-none ${headerClass}`}>
         {/* Left: Back / Close Action */}
@@ -103,7 +103,7 @@ export const AppWindow: React.FC<AppWindowProps> = ({
       )}
 
       {/* Scrollable Content Container */}
-      <main className={`flex-1 w-full overflow-y-auto overflow-x-hidden ${noPadding ? '' : 'p-4 pb-12'} transition-colors`}>
+      <main className={`flex-1 min-h-0 w-full overflow-y-auto overflow-x-hidden ${noPadding ? '' : 'p-4 pb-12'} transition-colors`}>
         {children}
       </main>
 

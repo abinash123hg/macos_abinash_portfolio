@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AppWindow } from '../ui/AppWindow';
 import { 
   Camera, 
@@ -12,19 +12,70 @@ import {
   Settings 
 } from 'lucide-react';
 import { useDevice } from '../../../context/DeviceContext';
+import { MediaItem } from '../../../types';
 import { sound } from '../../../utils/audioHaptics';
 
 export const CameraApp: React.FC = () => {
-  const { openApp, cameraControl, clickCameraControl } = useDevice();
+  const { openApp, cameraControl, clickCameraControl, addMediaItem } = useDevice();
   const [cameraMode, setCameraMode] = useState<'PHOTO' | 'VIDEO' | 'PORTRAIT' | 'PRO'>('PHOTO');
   const [zoomLevel, setZoomLevel] = useState<'0.5x' | '1x' | '2x' | '5x'>('1x');
   const [flash, setFlash] = useState(false);
   const [shutterEffect, setShutterEffect] = useState(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const [lastCapture, setLastCapture] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const startCamera = async () => {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setCameraError('Camera access is unavailable in this browser');
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+        if (cancelled) {
+          stream.getTracks().forEach(track => track.stop());
+          return;
+        }
+        streamRef.current = stream;
+        if (videoRef.current) videoRef.current.srcObject = stream;
+      } catch {
+        setCameraError('Camera permission is required for live preview');
+      }
+    };
+    startCamera();
+    return () => {
+      cancelled = true;
+      streamRef.current?.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    };
+  }, []);
 
   const handleCapture = () => {
     sound.cameraShutter();
     setShutterEffect(true);
     setTimeout(() => setShutterEffect(false), 150);
+    const video = videoRef.current;
+    if (!video || video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth || 1280;
+    canvas.height = video.videoHeight || 720;
+    canvas.getContext('2d')?.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageUrl = canvas.toDataURL('image/jpeg', 0.9);
+    const capture: MediaItem = {
+      id: `camera-${Date.now()}`,
+      title: `Camera Capture ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+      category: 'Photography',
+      type: 'image',
+      thumbnail: imageUrl,
+      mediaUrl: imageUrl,
+      description: 'Captured with iPhone Camera',
+      year: String(new Date().getFullYear())
+    };
+    addMediaItem(capture);
+    setLastCapture(imageUrl);
   };
 
   return (
@@ -66,6 +117,9 @@ export const CameraApp: React.FC = () => {
           {shutterEffect && (
             <div className="absolute inset-0 bg-black z-30 transition-opacity" />
           )}
+
+          <video ref={videoRef} autoPlay muted playsInline className="absolute inset-0 w-full h-full object-cover" />
+          {cameraError && <div className="absolute inset-0 flex items-center justify-center px-8 text-center text-xs text-neutral-400 bg-neutral-950">{cameraError}</div>}
 
           {/* Viewfinder Composition Grid */}
           <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-25">
@@ -135,7 +189,7 @@ export const CameraApp: React.FC = () => {
             }}
             className="w-11 h-11 rounded-xl bg-neutral-800 overflow-hidden border border-white/20 flex items-center justify-center cursor-pointer active:scale-95 transition-transform"
           >
-            <ImageIcon className="w-5 h-5 text-white/70" />
+            {lastCapture ? <img src={lastCapture} alt="Last camera capture" className="w-full h-full object-cover" /> : <ImageIcon className="w-5 h-5 text-white/70" />}
           </button>
 
           {/* Shutter Button */}

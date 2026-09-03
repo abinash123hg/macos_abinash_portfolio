@@ -25,7 +25,7 @@ export const TerminalApp: React.FC = () => {
           </div>
           <div className="space-y-0.5 text-[11px]">
             <div><span className="text-cyan-400 font-semibold">User:</span> abinash@centurion</div>
-            <div><span className="text-cyan-400 font-semibold">Degree:</span> B.Tech CSE (AI & ML)</div>
+            <div><span className="text-cyan-400 font-semibold">Degree:</span> B.Tech AI/ML</div>
             <div><span className="text-cyan-400 font-semibold">CGPA:</span> 8.32 / 10.0</div>
             <div><span className="text-cyan-400 font-semibold">Flagship ML:</span> 5G SLA (96.2%) & SafeDrive AI</div>
             <div><span className="text-cyan-400 font-semibold">Shell:</span> zsh 5.9 (x86_64-apple-darwin24)</div>
@@ -178,7 +178,7 @@ export const TerminalApp: React.FC = () => {
             </div>
             <div className="space-y-0.5 text-[11px]">
               <div><span className="text-cyan-400 font-semibold">User:</span> abinash@centurion</div>
-              <div><span className="text-cyan-400 font-semibold">Degree:</span> B.Tech CSE (AI & ML)</div>
+              <div><span className="text-cyan-400 font-semibold">Degree:</span> B.Tech AI/ML</div>
               <div><span className="text-cyan-400 font-semibold">CGPA:</span> 8.32 / 10.0</div>
               <div><span className="text-cyan-400 font-semibold">Flagship ML:</span> 5G SLA (96.2%) & SafeDrive AI</div>
             </div>

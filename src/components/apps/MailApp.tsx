@@ -76,7 +76,7 @@ Congratulations on your analytical excellence!`
     starred: false,
     body: `Dear Abinash,
 
-Your current academic performance in the B.Tech CSE (AI & ML) program stands at CGPA 8.32 / 10.0. Keep up the high standard in Machine Learning, Statistical Analysis, and Predictive Modeling coursework.
+Your current academic performance in the B.Tech AI/ML program stands at CGPA 8.32 / 10.0. Keep up the high standard in Machine Learning, Statistical Analysis, and Predictive Modeling coursework.
 
 CUTM Examination & Academic Cell`
   }

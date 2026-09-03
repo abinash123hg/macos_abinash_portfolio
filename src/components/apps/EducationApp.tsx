@@ -53,7 +53,7 @@ export const EducationApp: React.FC = () => {
 
           <div className="flex flex-wrap items-center gap-4 text-[12px] text-neutral-400 mt-2.5">
             <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5" /> 2023 – 2027 (3rd Year Active)
+              <Calendar className="w-3.5 h-3.5" /> 2023 – 2027
             </span>
             <span className="flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5" /> Bhubaneswar, Odisha, India

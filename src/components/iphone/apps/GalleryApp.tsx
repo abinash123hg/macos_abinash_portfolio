@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { AppWindow } from '../ui/AppWindow';
 import { IOSSegmentedControl } from '../ui/IOSSegmentedControl';
-import { portfolioData } from '../../../data/portfolioData';
+import { useDevice } from '../../../context/DeviceContext';
 import { Image as ImageIcon, X, Sparkles, Award, Film, Maximize2 } from 'lucide-react';
 import { sound } from '../../../utils/audioHaptics';
 import { resolveMediaUrl } from '../../../utils/mediaResolver';
 
 export const GalleryApp: React.FC = () => {
+  const { mediaItems } = useDevice();
   const [filter, setFilter] = useState<'all' | 'certs' | 'shows'>('all');
   const [activeMedia, setActiveMedia] = useState<any | null>(null);
 
-  const filteredMedia = portfolioData.media.filter(m => {
+  const filteredMedia = mediaItems.filter(m => {
     if (filter === 'certs') return m.category === 'Certificates';
     if (filter === 'shows') return m.category === 'Movies & Series';
     return true;
@@ -69,6 +70,7 @@ export const GalleryApp: React.FC = () => {
                 poster={resolveMediaUrl(item.thumbnail)}
                 muted
                 playsInline
+                preload="none"
                 className="relative w-full h-full object-cover"
                 onError={(event) => { event.currentTarget.style.display = 'none'; }}
               />
@@ -77,6 +79,7 @@ export const GalleryApp: React.FC = () => {
                 src={resolveMediaUrl(item.thumbnail || item.mediaUrl)}
                 alt={item.title}
                 loading="lazy"
+                decoding="async"
                 className="relative w-full h-full object-cover"
                 onError={(event) => { event.currentTarget.style.display = 'none'; }}
               />
@@ -104,7 +107,7 @@ export const GalleryApp: React.FC = () => {
           </div>
 
           <div className="my-auto flex flex-col items-center text-center p-4">
-            <div className="w-full max-w-[340px] h-56 rounded-3xl bg-white/10 overflow-hidden flex items-center justify-center text-white mb-4 border border-white/20 shadow-2xl">
+            <div className="w-full max-w-[calc(100vw-32px)] h-[min(64dvh,560px)] rounded-3xl bg-white/10 overflow-hidden flex items-center justify-center text-white mb-4 border border-white/20 shadow-2xl">
               {activeMedia.type === 'video' ? (
                 <video
                   src={resolveMediaUrl(activeMedia.mediaUrl || activeMedia.thumbnail)}

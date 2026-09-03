@@ -7,7 +7,7 @@ export const portfolioData: PortfolioData = {
   targetRole: 'LLM Engineer – RAG, AI Assistants & Knowledge Systems',
   availabilityStatus: 'Open to Full-Time Roles & High-Impact Engineering Opportunities',
   aiDisclosure: 'I use AI tools to assist with ideation, drafting, and code scaffolding. All architectural decisions, end-to-end implementations, and evaluation benchmarks are 100% my own.',
-  bio: 'LLM and AI/ML Engineer focused on production-grade RAG architectures, autonomous tool-calling copilots, and cross-platform native UI systems across macOS & iOS. 3rd-year B.Tech CSE (AI & ML) at Centurion University CUTM (8.32 CGPA).',
+  bio: 'LLM and AI/ML Engineer focused on production-grade RAG architectures, autonomous tool-calling copilots, and cross-platform native UI systems across macOS & iOS. B.Tech AI/ML at Centurion University CUTM (8.32 CGPA).',
   aboutEditorial: `I build production-grade Retrieval-Augmented Generation (RAG) pipelines, autonomous AI assistants, and high-performance search systems paired with native-quality user interfaces.
 
 My engineering philosophy centers on strict grounding, measurable evaluation frameworks (Ragas faithfulness, context precision, latency budgets), and zero-compromise UX craftsmanship across macOS Sequoia and iOS 18 paradigms.
@@ -359,7 +359,7 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
       location: 'Bhubaneswar, Odisha, India',
       score: '8.32 / 10.0 CGPA',
       scoreLabel: 'Cumulative Grade Point Average',
-      period: '2023 – 2027 (3rd Year)',
+      period: '2023 – 2027',
       highlights: [
         'Specialization in Artificial Intelligence, Deep Learning, and Large Language Model Systems',
         'Academic coursework in Advanced Data Structures & Algorithms, Database Management, and Information Retrieval',
@@ -986,7 +986,7 @@ Key Projects & Case Studies:
 3. TeamCopilot — Autonomous Incident Triage Copilot (LangGraph agent with dynamic Jira/GitHub tool calling, 68% MTTA reduction)
 4. NeuralRank & Explain (Two-stage Faiss + LambdaMART ranking with streaming LLM attribution, 0.892 NDCG@10)
 
-Education: 3rd-Year B.Tech CSE (AI & ML Specialization) @ Centurion University CUTM (8.32 CGPA)
+Education: B.Tech AI/ML @ Centurion University CUTM (8.32 CGPA)
 Certifications: Oracle Certified Foundations Associate (Agentic AI), Tata GenAI Job Simulation, Deloitte Data Analytics
 
 Contact: swainabinash839@gmail.com | Phone: +91-7077475818 | LinkedIn: https://www.linkedin.com/in/abinash-swain-a941a3330/`

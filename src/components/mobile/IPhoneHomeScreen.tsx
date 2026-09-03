@@ -89,7 +89,7 @@ export const IPhoneHomeScreen: React.FC = () => {
             </div>
             <div>
               <div className="text-[10px] text-neutral-400 font-medium">Centurion Univ</div>
-              <div className="text-xs font-bold text-white leading-tight mt-0.5">B.Tech CSE</div>
+              <div className="text-xs font-bold text-white leading-tight mt-0.5">B.Tech AI/ML</div>
               <div className="text-[9px] text-cyan-400">AI & Machine Learning</div>
             </div>
           </div>

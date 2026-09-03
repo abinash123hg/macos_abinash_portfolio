@@ -60,7 +60,10 @@ export const SettingsApp: React.FC = () => {
             key={w.id}
             onClick={() => {
               sound.tap();
-              updateSettings({ wallpaperIndex: w.id });
+              updateSettings({
+                wallpaperIndex: w.id,
+                wallpapers: { ...settings.wallpapers, iosHome: null }
+              });
             }}
             className={`aspect-3/4 rounded-2xl bg-gradient-to-br ${w.class} p-1.5 flex flex-col justify-end text-white cursor-pointer transition-all ${
               settings.wallpaperIndex === w.id

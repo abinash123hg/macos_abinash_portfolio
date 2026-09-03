@@ -15,7 +15,7 @@ import {
 import { sound } from '../../utils/audioHaptics';
 
 export const IPhoneControlCenter: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const { settings, updateSettings } = useDevice();
+  const { settings, updateSettings, toggleFlashlight } = useDevice();
 
   return (
     <div className="h-full w-full bg-black/85 backdrop-blur-2xl p-5 pt-14 flex flex-col justify-between select-none text-white overflow-y-auto">
@@ -73,7 +73,7 @@ export const IPhoneControlCenter: React.FC<{ onClose: () => void }> = ({ onClose
             <button
               onClick={() => {
                 sound.tap();
-                updateSettings({ flashlightOn: !settings.flashlightOn });
+                void toggleFlashlight();
               }}
               className={`p-2.5 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
                 settings.flashlightOn ? 'bg-white text-black' : 'bg-neutral-800 text-neutral-400'

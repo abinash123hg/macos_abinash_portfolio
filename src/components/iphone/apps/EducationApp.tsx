@@ -42,7 +42,7 @@ export const EducationApp: React.FC = () => {
 
         <div className="flex items-center gap-3 text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">
           <span className="flex items-center gap-1">
-            <Calendar className="w-3.5 h-3.5" /> 2023 – 2027 (3rd Year)
+            <Calendar className="w-3.5 h-3.5" /> 2023 – 2027
           </span>
           <span className="flex items-center gap-1">
             <MapPin className="w-3.5 h-3.5" /> Bhubaneswar, India

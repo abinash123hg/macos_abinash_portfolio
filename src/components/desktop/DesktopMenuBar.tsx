@@ -207,22 +207,6 @@ export const DesktopMenuBar: React.FC<{
                   <Briefcase className="w-3.5 h-3.5 text-emerald-500" />
                 </button>
                 <div className="h-px bg-black/10 dark:bg-white/10 my-1" />
-                {onLockDesktop && (
-                  <button
-                    onClick={() => {
-                      sound.tap();
-                      onLockDesktop();
-                      setAppleMenuOpen(false);
-                    }}
-                    className="w-full text-left px-2.5 py-1 rounded-[6px] hover:bg-[#007aff] hover:text-white transition-colors flex items-center justify-between cursor-pointer"
-                  >
-                    <span>Lock Screen</span>
-                    <span className="flex items-center gap-1 text-[10px] opacity-60 font-mono">
-                      <Lock className="w-3 h-3" />
-                      <span>⌘L</span>
-                    </span>
-                  </button>
-                )}
                 <button
                   onClick={() => {
                     sound.tap();
