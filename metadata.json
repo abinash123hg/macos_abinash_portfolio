@@ -1,0 +1,6 @@
+{
+  "name": "Abinash Swain — macOS & iPhone 15 Portfolio",
+  "description": "Interactive dual-experience portfolio for Abinash Swain (LLM Engineer – RAG, AI Assistants & Knowledge Systems) featuring a full macOS desktop and a pixel-precise iPhone 15 simulator with real-time streaming RAG AI twin.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
