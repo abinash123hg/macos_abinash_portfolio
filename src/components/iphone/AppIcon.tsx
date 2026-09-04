@@ -56,11 +56,11 @@ const AppIconComponent: React.FC<AppIconProps> = ({
       id={`app-icon-${id}`}
       onClick={handleClick}
       aria-label={`Open ${name}`}
-      className="flex flex-col items-center justify-start gap-1.5 focus:outline-none group active:scale-[0.88] transition-transform duration-200 cursor-pointer select-none"
+      className="ios-app-icon flex flex-col items-center justify-start gap-1.5 focus:outline-none group active:scale-[0.88] transition-transform duration-200 cursor-pointer select-none"
     >
       {/* iOS 18 Squircle Icon Container with subtle bevel and shadow */}
       <div
-        className={`relative ${container} bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-md shadow-black/25 ring-1 ring-white/20 group-hover:brightness-105 transition-all overflow-hidden`}
+        className={`ios-app-icon__surface relative ${container} bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-md shadow-black/25 ring-1 ring-white/20 group-hover:brightness-105 transition-all overflow-hidden`}
         style={{
           boxShadow: '0 4px 12px -2px rgba(0, 0, 0, 0.3), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35)',
         }}
@@ -84,7 +84,7 @@ const AppIconComponent: React.FC<AppIconProps> = ({
       {/* App Label */}
       {showLabel && (
         <span
-          className="text-[11.5px] font-medium text-white tracking-tight text-center truncate max-w-[68px] leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
+          className="ios-app-icon__label text-[11.5px] font-medium text-white tracking-tight text-center truncate max-w-[68px] leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
           style={{
             fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
           }}

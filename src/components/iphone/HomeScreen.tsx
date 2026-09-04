@@ -80,7 +80,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       name: 'Projects',
       icon: <FolderGit2 className="w-7 h-7 text-white" />,
       gradient: 'from-sky-500 to-blue-600',
-      badge: '4 AI',
+      badge: 4,
     },
     {
       id: 'skills',
@@ -93,7 +93,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       name: 'Certs',
       icon: <Award className="w-7 h-7 text-white" />,
       gradient: 'from-amber-500 to-orange-600',
-      badge: '4+',
+      badge: 4,
     },
     {
       id: 'experience',
@@ -118,7 +118,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       name: 'Recruiter',
       icon: <FileText className="w-7 h-7 text-white" />,
       gradient: 'from-rose-500 to-red-600',
-      badge: 'Hire',
+      badge: 1,
     },
     {
       id: 'photos',
@@ -177,7 +177,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       name: 'Quiz',
       icon: <Brain className="w-7 h-7 text-white" />,
       gradient: 'from-cyan-500 to-blue-600',
-      badge: '30 Qs',
+      badge: 30,
     },
     {
       id: 'resume',
@@ -395,7 +395,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
 
   return (
     <div 
-      className="relative w-full h-full flex flex-col justify-between p-4 pt-14 text-white select-none overflow-hidden font-sans"
+      className="iphone-home-screen relative w-full h-full flex flex-col justify-between p-4 pt-14 text-white select-none overflow-hidden font-sans"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -426,7 +426,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                   sound.appOpen();
                   openApp('about');
                 }}
-                className="p-3.5 rounded-[22px] bg-white/20 dark:bg-black/35 backdrop-blur-2xl border border-white/25 shadow-lg flex flex-col justify-between cursor-pointer hover:bg-white/25 active:scale-95 transition-all group"
+                className="ios-home-widget p-3.5 rounded-[26px] bg-white/20 dark:bg-black/35 backdrop-blur-2xl border border-white/25 shadow-lg flex flex-col justify-between cursor-pointer hover:bg-white/25 active:scale-95 transition-all group"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-white uppercase tracking-wider">
@@ -452,7 +452,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                   sound.appOpen();
                   openApp('recruiter');
                 }}
-                className="p-3.5 rounded-[22px] bg-gradient-to-br from-blue-600/30 to-indigo-900/40 backdrop-blur-2xl border border-blue-400/30 shadow-lg flex flex-col justify-between cursor-pointer hover:bg-blue-600/40 active:scale-95 transition-all group"
+                className="ios-home-widget p-3.5 rounded-[26px] bg-gradient-to-br from-blue-600/30 to-indigo-900/40 backdrop-blur-2xl border border-blue-400/30 shadow-lg flex flex-col justify-between cursor-pointer hover:bg-blue-600/40 active:scale-95 transition-all group"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1 text-[11px] font-semibold text-cyan-300">
@@ -499,7 +499,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                 sound.appOpen();
                 openApp('certificates');
               }}
-              className="w-full p-3.5 rounded-[22px] bg-gradient-to-r from-amber-500/20 to-orange-600/20 backdrop-blur-2xl border border-amber-400/30 shadow-lg flex items-center justify-between mb-2.5 cursor-pointer active:scale-98 transition-transform"
+              className="ios-home-widget w-full p-3.5 rounded-[26px] bg-gradient-to-r from-amber-500/20 to-orange-600/20 backdrop-blur-2xl border border-amber-400/30 shadow-lg flex items-center justify-between mb-2.5 cursor-pointer active:scale-98 transition-transform"
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-amber-500/30 flex items-center justify-center text-amber-300 border border-amber-400/40 shrink-0">
@@ -569,7 +569,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
             sound.tap();
             onOpenSpotlight();
           }}
-          className="px-3.5 py-1 rounded-full bg-black/30 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-black/40 active:scale-95 transition-all flex items-center gap-1.5 shadow-md cursor-pointer"
+          className="ios-home-search px-3.5 py-1 rounded-full bg-black/30 backdrop-blur-xl border border-white/20 text-white/90 hover:bg-black/40 active:scale-95 transition-all flex items-center gap-1.5 shadow-md cursor-pointer"
         >
           <Search className="w-3 h-3 text-white/70" />
           <span className="text-[11px] font-medium tracking-tight">Search</span>
@@ -577,7 +577,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       </div>
 
       {/* iOS 18 Frosted Glass Bottom Dock */}
-      <div className="w-full p-2.5 rounded-[32px] bg-white/20 dark:bg-black/35 backdrop-blur-3xl border border-white/25 shadow-2xl flex items-center justify-around shrink-0">
+      <div className="ios-home-dock w-full p-2.5 rounded-[32px] bg-white/20 dark:bg-black/35 backdrop-blur-3xl border border-white/25 shadow-2xl flex items-center justify-around shrink-0">
         {dockApps.map((app) => (
           <AppIcon
             key={app.id}

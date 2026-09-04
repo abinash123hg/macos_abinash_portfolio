@@ -33,7 +33,7 @@ export const HomeBar: React.FC<HomeBarProps> = ({ onSwipeUp, className = '', lig
 
   return (
     <div
-      className={`w-full h-7 flex items-center justify-center cursor-pointer select-none z-50 group ${className}`}
+      className={`ios-home-indicator w-full h-7 flex items-center justify-center cursor-pointer select-none z-50 group ${className}`}
       onClick={handleHomeClick}
       onContextMenu={handleContextMenu}
       title="Tap to go Home, Right-click for App Switcher"

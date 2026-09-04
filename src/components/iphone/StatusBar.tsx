@@ -95,7 +95,6 @@ export const StatusBar: React.FC<StatusBarProps> = ({
         className="flex items-center gap-1.5 text-[12px] pr-1.5 hover:opacity-80 active:opacity-60 transition-opacity cursor-pointer"
       >
         <Signal className="w-3.5 h-3.5" />
-        <span className="font-semibold text-[10px] tracking-tighter">5G</span>
         <Wifi className="w-3.5 h-3.5" />
         
         {/* Battery Container */}
