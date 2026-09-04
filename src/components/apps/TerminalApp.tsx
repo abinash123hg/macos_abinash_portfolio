@@ -45,6 +45,10 @@ export const TerminalApp: React.FC = () => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [history]);
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
   const handleCommand = (rawCmd: string) => {
     const cmd = rawCmd.trim().toLowerCase();
     sound.tap();

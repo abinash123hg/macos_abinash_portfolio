@@ -13,11 +13,15 @@ import {
   Smartphone, 
   Check, 
   Share 
+  ,Video
   ,ChevronLeft
   ,ChevronRight
 } from 'lucide-react';
 import { sound } from '../../../utils/audioHaptics';
 import { resolveMediaUrl } from '../../../utils/mediaResolver';
+import { portfolioData } from '../../../data/portfolioData';
+import { VideoAsset } from '../../../types';
+import { NativeVideoPlayer } from '../../common/NativeVideoPlayer';
 
 export const PhotosApp: React.FC = () => {
   const { 
@@ -28,11 +32,13 @@ export const PhotosApp: React.FC = () => {
     setWallpaper 
   } = useDevice();
 
-  const [activeTab, setActiveTab] = useState<'all' | 'photos' | 'favorites' | 'cinema' | 'certificates'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'photos' | 'favorites' | 'cinema' | 'certificates' | 'videos'>('all');
   const [selectedPhoto, setSelectedPhoto] = useState<MediaItem | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<VideoAsset | null>(null);
   const [showWallpaperSheet, setShowWallpaperSheet] = useState(false);
   const [wallpaperFeedback, setWallpaperFeedback] = useState<string | null>(null);
   const swipeStartX = React.useRef<number | null>(null);
+  const videos = portfolioData.videos;
 
   const isItemFavorite = (item: MediaItem) => {
     return favorites[item.id] !== undefined ? favorites[item.id] : !!item.favorite;
@@ -43,6 +49,7 @@ export const PhotosApp: React.FC = () => {
     if (activeTab === 'photos') return item.category === 'Photography';
     if (activeTab === 'cinema') return item.category === 'Movies & Series';
     if (activeTab === 'certificates') return item.category === 'Certificates';
+    if (activeTab === 'videos') return false;
     return true;
   });
 
@@ -94,6 +101,7 @@ export const PhotosApp: React.FC = () => {
           { value: 'favorites', label: 'Favs' },
           { value: 'cinema', label: 'Cinema' },
           { value: 'certificates', label: 'Certs' },
+          { value: 'videos', label: `Videos (${videos.length})` },
         ]}
         value={activeTab}
         onChange={(v) => setActiveTab(v as any)}
@@ -101,7 +109,19 @@ export const PhotosApp: React.FC = () => {
       />
 
       {/* 3-Column Square Grid (iOS 18 Photos Style) */}
-      {photos.length === 0 ? (
+      {activeTab === 'videos' ? (
+        <div className="grid grid-cols-2 gap-1">
+          {videos.map((video) => (
+            <button key={video.id} onClick={() => { sound.tap(); setSelectedVideo(video); }} className="relative aspect-video bg-gradient-to-br from-neutral-950 via-slate-900 to-indigo-950 overflow-hidden text-left text-white cursor-pointer">
+              <div className="absolute inset-0 p-2 flex flex-col justify-between">
+                <span className="text-[8px] uppercase font-bold text-purple-300">{video.category}</span>
+                <span className="self-center rounded-full p-2 bg-purple-600/90 text-xs">&#9654;</span>
+                <span className="text-[10px] font-semibold line-clamp-1">{video.title}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      ) : photos.length === 0 ? (
         <div className="py-16 text-center text-neutral-400">
           <ImageIcon className="w-10 h-10 mx-auto text-neutral-500 mb-2" />
           <p className="text-xs">No photos in this album</p>
@@ -266,6 +286,19 @@ export const PhotosApp: React.FC = () => {
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {selectedVideo && (
+        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl flex items-center justify-center p-3">
+          <div className="w-full max-w-lg relative">
+            <button onClick={() => setSelectedVideo(null)} className="absolute -top-10 right-0 w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center cursor-pointer" aria-label="Close video">
+              <X className="w-4 h-4" />
+            </button>
+            <NativeVideoPlayer fileName={selectedVideo.fileName} title={selectedVideo.title} category={selectedVideo.category} accentColor={selectedVideo.accentColor} autoPlay />
+            <h3 className="text-sm font-bold text-white mt-3">{selectedVideo.title}</h3>
+            <p className="text-xs text-white/70 mt-1">{selectedVideo.description}</p>
           </div>
         </div>
       )}

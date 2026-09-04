@@ -5,23 +5,29 @@ import { portfolioData } from '../../data/portfolioData';
 import { sound } from '../../utils/audioHaptics';
 
 interface LandingScreenProps {
-  onExplore: () => void;
+  onExplore: (destination?: LandingDestination) => void;
   onResume?: () => void;
 }
+
+export type LandingDestination = 'home' | 'about' | 'projects' | 'skills' | 'contact';
 
 const profileImage = 'https://media.licdn.com/dms/image/v2/D4D03AQHu8iauv0OdlA/profile-displayphoto-scale_400_400/B4DZ_ILs1ZIoAk-/0/1785769943899?e=1789603200&v=beta&t=OOZYTjy226VAOPwWen2qM1sN7U2FZai2zeoktl60x-g';
 
 export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResume }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
+  const [activeNav, setActiveNav] = useState<LandingDestination>('home');
+  const [isScrolled, setIsScrolled] = useState(false);
   const [activeVideo, setActiveVideo] = useState<0 | 1>(0);
   const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)];
   const videoSwitchingRef = useRef(false);
   const videoResetTimerRef = useRef<number | null>(null);
+  const transitionTimerRef = useRef<number | null>(null);
   const videoSource = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_204221_5339e40b-e73d-4ab0-9c65-79c18c66fd50.mp4';
 
   useEffect(() => () => {
     if (videoResetTimerRef.current !== null) window.clearTimeout(videoResetTimerRef.current);
+    if (transitionTimerRef.current !== null) window.clearTimeout(transitionTimerRef.current);
   }, []);
 
   const handleVideoProgress = (index: 0 | 1) => {
@@ -43,16 +49,22 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
     }, 750);
   };
 
-  const enterPortfolio = () => {
+  const enterPortfolio = (destination: LandingDestination = 'home') => {
     if (isLeaving) return;
     sound.landingOpenChime();
     setMobileMenuOpen(false);
+    setActiveNav(destination);
     setIsLeaving(true);
-    onExplore();
+    transitionTimerRef.current = window.setTimeout(() => onExplore(destination), 520);
+  };
+
+  const navigateTo = (destination: LandingDestination) => {
+    setActiveNav(destination);
+    enterPortfolio(destination);
   };
 
   return (
-    <main className={`foldcraft-landing ${isLeaving ? 'foldcraft-landing--leaving' : ''}`}>
+    <main className={`foldcraft-landing ${isLeaving ? 'foldcraft-landing--leaving' : ''}`} onScroll={(event) => setIsScrolled(event.currentTarget.scrollTop > 8)}>
       {[0, 1].map((index) => (
         <video
           key={index}
@@ -74,18 +86,18 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
       ))}
       <div className="foldcraft-video-overlay" aria-hidden="true" />
 
-      <motion.nav className="foldcraft-nav" initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} aria-label="Portfolio navigation">
+      <motion.nav className={`foldcraft-nav ${isScrolled ? 'foldcraft-nav--scrolled' : ''}`} initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} aria-label="Portfolio navigation">
         <div className="foldcraft-nav-inner">
-          <button className="foldcraft-wordmark" onClick={() => setMobileMenuOpen(false)} aria-label={`${portfolioData.name} home`}>ABINASH SWAIN</button>
+            <button className={`foldcraft-wordmark ${activeNav === 'home' ? 'foldcraft-nav-item--active' : ''}`} onClick={() => navigateTo('home')} aria-label={`${portfolioData.name} home`}>ABINASH SWAIN</button>
           <div className="foldcraft-desktop-links">
-            <button onClick={() => setMobileMenuOpen(false)}>Home</button>
-            <button onClick={enterPortfolio}>About</button>
-            <button onClick={enterPortfolio}>Projects</button>
-            <button onClick={enterPortfolio}>Skills</button>
-            <a href={`mailto:${portfolioData.email}`}>Contact</a>
+            <button className={activeNav === 'home' ? 'foldcraft-nav-item--active' : ''} onClick={() => navigateTo('home')}>Home</button>
+            <button className={activeNav === 'about' ? 'foldcraft-nav-item--active' : ''} onClick={() => navigateTo('about')}>About Me</button>
+            <button className={activeNav === 'projects' ? 'foldcraft-nav-item--active' : ''} onClick={() => navigateTo('projects')}>Work</button>
+            <button className={activeNav === 'skills' ? 'foldcraft-nav-item--active' : ''} onClick={() => navigateTo('skills')}>Expertise</button>
+            <button className={activeNav === 'contact' ? 'foldcraft-nav-item--active' : ''} onClick={() => navigateTo('contact')}>Contact</button>
           </div>
           <div className="foldcraft-nav-actions">
-            <button className="foldcraft-talk" onClick={onResume || enterPortfolio}>View Portfolio</button>
+            <button className="foldcraft-talk" onClick={() => enterPortfolio('home')}>Enter Portfolio</button>
             <button className="foldcraft-menu-button" onClick={() => setMobileMenuOpen((open) => !open)} aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={mobileMenuOpen}>
               <AnimatePresence mode="wait" initial={false}>
                 {mobileMenuOpen ? <motion.span key="close" initial={{ opacity: 0, rotate: -90, scale: .7 }} animate={{ opacity: 1, rotate: 0, scale: 1 }} exit={{ opacity: 0, rotate: 90, scale: .7 }} transition={{ duration: .3 }}><X size={21} /></motion.span> : <motion.span key="menu" initial={{ opacity: 0, rotate: 90, scale: .7 }} animate={{ opacity: 1, rotate: 0, scale: 1 }} exit={{ opacity: 0, rotate: -90, scale: .7 }} transition={{ duration: .3 }}><Menu size={21} /></motion.span>}
@@ -96,12 +108,12 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
         <AnimatePresence>
           {mobileMenuOpen && <motion.div className="foldcraft-mobile-menu" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: '100svh' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: .5, ease: [0.16, 1, 0.3, 1] }}>
             <div className="foldcraft-mobile-links">
-              <button onClick={() => setMobileMenuOpen(false)}>Home</button>
-              <button onClick={enterPortfolio}>About</button>
-              <button onClick={enterPortfolio}>Projects</button>
-              <button onClick={enterPortfolio}>Skills</button>
-              <a href={`mailto:${portfolioData.email}`} onClick={() => setMobileMenuOpen(false)}>Reach Us</a>
-              <button className="foldcraft-mobile-cta" onClick={onResume || enterPortfolio}>View Portfolio <ArrowRight size={18} /></button>
+              <button onClick={() => navigateTo('home')}>Home</button>
+              <button onClick={() => navigateTo('about')}>About Me</button>
+              <button onClick={() => navigateTo('projects')}>Work</button>
+              <button onClick={() => navigateTo('skills')}>Expertise</button>
+              <button onClick={() => navigateTo('contact')}>Contact</button>
+              <button className="foldcraft-mobile-cta" onClick={() => enterPortfolio('home')}>Enter Portfolio <ArrowRight size={18} /></button>
             </div>
           </motion.div>}
         </AnimatePresence>
@@ -115,10 +127,10 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
           <motion.p className="foldcraft-hero-role" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5 }}>AI/ML Engineer · Data Analyst · RAG Systems Specialist</motion.p>
         </div>
         <div className="foldcraft-hero-bottom">
-          <motion.p className="foldcraft-bio" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .7 }}>Building grounded RAG systems, autonomous AI copilots, and practical machine learning products that turn complex data into clear decisions.</motion.p>
+          <motion.p className="foldcraft-bio" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .7 }}>Building intelligent AI systems, practical machine learning solutions, and data-driven products that turn complex problems into clear outcomes.</motion.p>
           <motion.div className="foldcraft-cta-row" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .9 }}>
-            <button className="foldcraft-primary-cta" onClick={enterPortfolio} disabled={isLeaving}>Explore Work <ArrowRight size={16} /></button>
-            <button className="foldcraft-secondary-cta" onClick={onResume || enterPortfolio}>View Resume</button>
+            <button className="foldcraft-primary-cta" onClick={() => enterPortfolio('projects')} disabled={isLeaving}>Explore Work <ArrowRight size={16} /></button>
+            <button className="foldcraft-secondary-cta" onClick={() => onResume ? onResume() : enterPortfolio('home')}>View Resume</button>
             <a className="foldcraft-secondary-cta" href={`mailto:${portfolioData.email}`}><Mail size={16} /> Email Me</a>
             <a className="foldcraft-secondary-cta" href={portfolioData.linkedin} target="_blank" rel="noreferrer"><Linkedin size={16} /> LinkedIn</a>
           </motion.div>

@@ -577,17 +577,6 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
       year: '2008–2013'
     },
     {
-      id: 'm-2',
-      title: 'The Dark Knight',
-      category: 'Movies & Series',
-      type: 'image',
-      thumbnail: 'assets/favorites/The Dark Knight.jpg',
-      mediaUrl: 'assets/favorites/The Dark Knight.jpg',
-      description: 'Christopher Nolan\'s iconic psychological thriller exploring order and chaos.',
-      favorite: true,
-      year: '2008'
-    },
-    {
       id: 'm-3',
       title: 'The Boys',
       category: 'Movies & Series',
@@ -709,27 +698,6 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
       rtRating: '96',
       themeColor: '#16a34a',
       accentGradient: 'from-emerald-950 via-neutral-900 to-black'
-    },
-    {
-      id: 'dark-knight',
-      title: 'The Dark Knight',
-      years: '2008',
-      year: '2008',
-      creator: 'Christopher Nolan',
-      director: 'Christopher Nolan',
-      badge: 'Legendary',
-      posterFileName: 'src/assets/favorites/The Dark Knight.jpg',
-      poster: 'src/assets/favorites/The Dark Knight.jpg',
-      backdrop: 'src/assets/favorites/The Dark Knight.jpg',
-      description: 'Batman raises the stakes in his war on crime in Gotham City, facing the Joker, a criminal mastermind who wants to plunge the city into anarchy.',
-      dialogue: "Why so serious? Let's put a smile on that face!",
-      viralDialogue: "Why so serious? Let's put a smile on that face!",
-      quoteSpeaker: 'The Joker',
-      dialogueCharacter: 'The Joker',
-      imdbRating: '9.0',
-      rtRating: '94',
-      themeColor: '#0ea5e9',
-      accentGradient: 'from-sky-950 via-slate-950 to-black'
     },
     {
       id: 'the-boys',

@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { DeviceProvider, useDevice } from './context/DeviceContext';
-import { LandingScreen } from './components/common/LandingScreen';
+import { LandingDestination, LandingScreen } from './components/common/LandingScreen';
 import { sound } from './utils/audioHaptics';
 
 const DesktopMenuBar = lazy(() => import('./components/desktop/DesktopMenuBar').then(module => ({ default: module.DesktopMenuBar })));
@@ -12,9 +12,18 @@ const DesktopBackground = lazy(() => import('./components/mac/system/DesktopBack
 const IPhoneFrame = lazy(() => import('./components/mobile/IPhoneFrame').then(module => ({ default: module.IPhoneFrame })));
 
 const PortfolioRoot: React.FC = () => {
-  const { deviceMode, settings, resolvedTheme } = useDevice();
+  const { deviceMode, settings, resolvedTheme, openDesktopWindow } = useDevice();
   const [spotlightOpen, setSpotlightOpen] = useState(false);
   const [isDesktopLocked, setIsDesktopLocked] = useState(true);
+  const [isPortfolioEntering, setIsPortfolioEntering] = useState(false);
+
+  const handleLandingExplore = (destination: LandingDestination = 'home') => {
+    setIsPortfolioEntering(true);
+    setIsDesktopLocked(false);
+    if (destination !== 'home') {
+      openDesktopWindow(destination === 'contact' ? 'mail' : destination);
+    }
+  };
 
   // Global Keyboard Shortcut (Cmd+K for Spotlight)
   useEffect(() => {
@@ -43,10 +52,10 @@ const PortfolioRoot: React.FC = () => {
       }}
     >
       {/* Render View Based on Active Mode */}
-      <Suspense fallback={<LandingScreen onExplore={() => setIsDesktopLocked(false)} />}>
+      <Suspense fallback={<LandingScreen onExplore={handleLandingExplore} />}>
         {deviceMode === 'desktop' ? (
           <DesktopBackground>
-            {isDesktopLocked ? <LandingScreen onExplore={() => setIsDesktopLocked(false)} /> : <div className="fixed inset-0 w-full h-full flex flex-col justify-between overflow-hidden">
+            {isDesktopLocked ? <LandingScreen onExplore={handleLandingExplore} /> : <div className={`fixed inset-0 w-full h-full flex flex-col justify-between overflow-hidden ${isPortfolioEntering ? 'portfolio-rising' : ''}`}>
               <DesktopMenuBar onOpenSpotlight={() => setSpotlightOpen(true)} />
               <DesktopIconsHome />
               <DesktopWindowManager />

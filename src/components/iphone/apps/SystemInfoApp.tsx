@@ -17,6 +17,11 @@ export const SystemInfoApp: React.FC = () => {
   ]);
   const [command, setCommand] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -117,7 +122,10 @@ Location: ${portfolioData.location}`,
       headerClass="bg-neutral-900/90 text-white border-b border-neutral-800"
       noPadding
     >
-      <div className="w-full h-full flex flex-col justify-between bg-black text-emerald-400 font-mono text-[12px] p-3 select-text">
+      <div
+        onClick={() => inputRef.current?.focus()}
+        className="w-full h-full flex flex-col justify-between bg-black text-emerald-400 font-mono text-[12px] p-3 select-text cursor-text"
+      >
         <div className="flex-1 overflow-y-auto space-y-1.5 no-scrollbar">
           {lines.map((line) => (
             <div
@@ -142,6 +150,7 @@ Location: ${portfolioData.location}`,
         <form onSubmit={handleCommand} className="flex items-center gap-2 pt-2 border-t border-neutral-800">
           <span className="text-cyan-400 font-bold">$</span>
           <input
+            ref={inputRef}
             type="text"
             value={command}
             onChange={(e) => setCommand(e.target.value)}

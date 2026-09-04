@@ -17,11 +17,15 @@ import {
   RotateCcw,
   Maximize2,
   Camera
+  ,Video
   ,ChevronLeft
   ,ChevronRight
 } from 'lucide-react';
 import { sound } from '../../utils/audioHaptics';
 import { resolveMediaUrl } from '../../utils/mediaResolver';
+import { portfolioData } from '../../data/portfolioData';
+import { VideoAsset } from '../../types';
+import { NativeVideoPlayer } from '../common/NativeVideoPlayer';
 
 export const PhotosApp: React.FC = () => {
   const { 
@@ -34,6 +38,7 @@ export const PhotosApp: React.FC = () => {
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeMedia, setActiveMedia] = useState<MediaItem | null>(null);
+  const [activeVideo, setActiveVideo] = useState<VideoAsset | null>(null);
   const [showWallpaperDialog, setShowWallpaperDialog] = useState(false);
   const [wallpaperSetSuccess, setWallpaperSetSuccess] = useState<string | null>(null);
 
@@ -52,6 +57,7 @@ export const PhotosApp: React.FC = () => {
 
   const favoritesCount = mediaItems.filter(isItemFavorite).length;
   const certificatesCount = mediaItems.filter(m => m.category === 'Certificates').length;
+  const videos = portfolioData.videos;
   const activeMediaIndex = activeMedia ? filteredMedia.findIndex(item => item.id === activeMedia.id) : -1;
 
   const showPreviousMedia = () => {
@@ -139,6 +145,16 @@ export const PhotosApp: React.FC = () => {
         </button>
 
         <button
+          onClick={() => { sound.tap(); setSelectedCategory('videos'); }}
+          className={`px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
+            selectedCategory === 'videos' ? 'bg-purple-600 text-white shadow-xs' : 'hover:bg-white/5 text-neutral-300'
+          }`}
+        >
+          <Video className="w-4 h-4" />
+          <span>Videos ({videos.length})</span>
+        </button>
+
+        <button
           onClick={() => { sound.tap(); setSelectedCategory('certificates'); }}
           className={`px-3 py-2 rounded-lg text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
             selectedCategory === 'certificates' ? 'bg-emerald-600 text-white shadow-xs' : 'hover:bg-white/5 text-neutral-300'
@@ -162,6 +178,8 @@ export const PhotosApp: React.FC = () => {
                 ? 'Certifications' 
                 : selectedCategory === 'movies' 
                 ? 'Cinema & TV' 
+                : selectedCategory === 'videos'
+                ? 'Videos'
                 : 'Photography'}
             </h2>
             <p className="text-xs text-neutral-400">{filteredMedia.length} Visual Items</p>
@@ -169,7 +187,32 @@ export const PhotosApp: React.FC = () => {
           <span className="text-[11px] text-neutral-400 font-mono">Synced with iCloud</span>
         </div>
 
-        {filteredMedia.length === 0 ? (
+        {selectedCategory === 'videos' ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            {videos.map((video) => (
+              <button
+                key={video.id}
+                onClick={() => { sound.tap(); setActiveVideo(video); }}
+                className="group relative aspect-video rounded-xl overflow-hidden bg-neutral-950 border border-white/10 hover:border-purple-500 text-left cursor-pointer"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-neutral-950 via-slate-900 to-indigo-950" />
+                <div className="absolute inset-0 p-3 flex flex-col justify-between text-white">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] uppercase font-bold tracking-wider text-purple-300">{video.category}</span>
+                    <span className="text-[10px] font-mono bg-black/60 px-2 py-0.5 rounded">{video.duration}</span>
+                  </div>
+                  <div className="self-center rounded-full p-3 bg-purple-600/90 group-hover:scale-110 transition-transform">
+                    <span className="text-sm">&#9654;</span>
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold">{video.title}</div>
+                    <div className="text-[10px] text-neutral-300 line-clamp-1">{video.description}</div>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : filteredMedia.length === 0 ? (
           <div className="py-20 flex flex-col items-center justify-center text-center">
             <ImageIcon className="w-12 h-12 text-neutral-600 mb-3" />
             <p className="text-sm text-neutral-400">No items found in this section</p>
@@ -356,6 +399,19 @@ export const PhotosApp: React.FC = () => {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {activeVideo && (
+        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#202022] border border-white/15 rounded-2xl max-w-2xl w-full p-5 shadow-2xl relative">
+            <button onClick={() => setActiveVideo(null)} className="absolute -top-3 -right-3 p-2 rounded-full bg-neutral-700 text-white cursor-pointer" aria-label="Close video">
+              <X className="w-4 h-4" />
+            </button>
+            <NativeVideoPlayer fileName={activeVideo.fileName} title={activeVideo.title} category={activeVideo.category} accentColor={activeVideo.accentColor} autoPlay />
+            <h3 className="text-sm font-bold text-white mt-3">{activeVideo.title}</h3>
+            <p className="text-xs text-neutral-400 mt-1">{activeVideo.description}</p>
           </div>
         </div>
       )}

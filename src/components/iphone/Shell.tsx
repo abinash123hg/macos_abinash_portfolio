@@ -8,7 +8,7 @@ import { ControlCenter } from './ControlCenter';
 import { Spotlight } from './Spotlight';
 import { AppSwitcher } from './AppSwitcher';
 import { IPhoneNotificationCenter } from '../mobile/IPhoneNotificationCenter';
-import { LandingScreen } from '../common/LandingScreen';
+import { LandingDestination, LandingScreen } from '../common/LandingScreen';
 
 // Apps
 import { AboutApp } from './apps/AboutApp';
@@ -55,12 +55,14 @@ export const Shell: React.FC = () => {
     lightPressCameraControl,
     lockPhone,
     unlockPhone
+    ,openApp
   } = useDevice();
 
   const [showControlCenter, setShowControlCenter] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSpotlight, setShowSpotlight] = useState(false);
   const [showQuickSettings, setShowQuickSettings] = useState(false);
+  const [isPortfolioEntering, setIsPortfolioEntering] = useState(false);
   const topSwipeStartY = React.useRef<number | null>(null);
   const topSwipeStartX = React.useRef<number | null>(null);
 
@@ -142,12 +144,16 @@ export const Shell: React.FC = () => {
     }
   };
 
-  const handleLandingExplore = () => {
+  const handleLandingExplore = (destination: LandingDestination = 'home') => {
     setShowQuickSettings(false);
     setShowControlCenter(false);
     setShowNotifications(false);
     setShowSpotlight(false);
+    setIsPortfolioEntering(true);
     unlockPhone();
+    if (destination !== 'home') {
+      window.setTimeout(() => openApp(destination === 'contact' ? 'contact' : destination), 0);
+    }
   };
 
   return (
@@ -187,7 +193,7 @@ export const Shell: React.FC = () => {
           </div>
 
           {/* Screen Content Layers */}
-          <div className="absolute inset-0 z-10 min-h-0 w-full overflow-hidden flex flex-col will-change-transform">
+          <div className={`absolute inset-0 z-10 min-h-0 w-full overflow-hidden flex flex-col will-change-transform ${isPortfolioEntering && !isLocked ? 'portfolio-rising' : ''}`}>
             {isLocked ? (
               <div className="iphone-lock-screen w-full h-full">
                 <LandingScreen onExplore={handleLandingExplore} />

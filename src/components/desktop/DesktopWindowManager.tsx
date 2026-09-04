@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDevice } from '../../context/DeviceContext';
 import { WindowState } from '../../types';
 import { AboutApp } from '../apps/AboutApp';
@@ -41,6 +41,12 @@ export const DesktopWindowManager: React.FC = () => {
 
   const [draggingAppId, setDraggingAppId] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const stopDragging = () => setDraggingAppId(null);
+    window.addEventListener('mouseup', stopDragging);
+    return () => window.removeEventListener('mouseup', stopDragging);
+  }, []);
 
   const handleMouseDown = (appId: string, e: React.MouseEvent) => {
     focusDesktopWindow(appId);
@@ -125,12 +131,17 @@ export const DesktopWindowManager: React.FC = () => {
           >
             {/* macOS Window Titlebar */}
             <div
-              onMouseDown={(e) => !win.isMaximized && handleMouseDown(win.id, e)}
+              onMouseDown={(e) => {
+                if (!win.isMaximized && !(e.target as HTMLElement).closest('button')) {
+                  handleMouseDown(win.id, e);
+                }
+              }}
               className="h-8.5 w-full bg-[#f3f4f6]/90 dark:bg-neutral-900/90 backdrop-blur-2xl border-b border-black/10 flex items-center justify-between px-3.5 select-none cursor-move shrink-0 text-neutral-800 dark:text-neutral-200"
             >
               {/* Traffic Lights */}
               <div className="flex items-center gap-2 group/lights">
                 <button
+                  onMouseDown={(e) => e.stopPropagation()}
                   onClick={(e) => {
                     e.stopPropagation();
                     sound.tap();
@@ -142,6 +153,7 @@ export const DesktopWindowManager: React.FC = () => {
                   <span className="hidden group-hover/lights:inline leading-none">×</span>
                 </button>
                 <button
+                  onMouseDown={(e) => e.stopPropagation()}
                   onClick={(e) => {
                     e.stopPropagation();
                     sound.tap();
@@ -153,6 +165,7 @@ export const DesktopWindowManager: React.FC = () => {
                   <span className="hidden group-hover/lights:inline leading-none">−</span>
                 </button>
                 <button
+                  onMouseDown={(e) => e.stopPropagation()}
                   onClick={(e) => {
                     e.stopPropagation();
                     sound.tap();
