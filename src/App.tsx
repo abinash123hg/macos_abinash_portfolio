@@ -1,6 +1,7 @@
-import React, { lazy, Suspense, useState, useEffect } from 'react';
+import React, { lazy, Suspense, useState, useEffect, useRef } from 'react';
 import { DeviceProvider, useDevice } from './context/DeviceContext';
 import { LandingDestination, LandingScreen } from './components/common/LandingScreen';
+import { DesktopBackground } from './components/mac/system/DesktopBackground';
 import { sound } from './utils/audioHaptics';
 
 const DesktopMenuBar = lazy(() => import('./components/desktop/DesktopMenuBar').then(module => ({ default: module.DesktopMenuBar })));
@@ -8,17 +9,17 @@ const DesktopDock = lazy(() => import('./components/desktop/DesktopDock').then(m
 const DesktopWindowManager = lazy(() => import('./components/desktop/DesktopWindowManager').then(module => ({ default: module.DesktopWindowManager })));
 const DesktopSpotlight = lazy(() => import('./components/desktop/DesktopSpotlight').then(module => ({ default: module.DesktopSpotlight })));
 const DesktopIconsHome = lazy(() => import('./components/desktop/DesktopIconsHome').then(module => ({ default: module.DesktopIconsHome })));
-const DesktopBackground = lazy(() => import('./components/mac/system/DesktopBackground').then(module => ({ default: module.DesktopBackground })));
 const IPhoneFrame = lazy(() => import('./components/mobile/IPhoneFrame').then(module => ({ default: module.IPhoneFrame })));
 
 const PortfolioRoot: React.FC = () => {
   const { deviceMode, settings, resolvedTheme, openDesktopWindow } = useDevice();
   const [spotlightOpen, setSpotlightOpen] = useState(false);
   const [isDesktopLocked, setIsDesktopLocked] = useState(true);
-  const [isPortfolioEntering, setIsPortfolioEntering] = useState(false);
+  const landingTransitionStarted = useRef(false);
 
   const handleLandingExplore = (destination: LandingDestination = 'home') => {
-    setIsPortfolioEntering(true);
+    if (landingTransitionStarted.current) return;
+    landingTransitionStarted.current = true;
     setIsDesktopLocked(false);
     if (destination !== 'home') {
       openDesktopWindow(destination === 'contact' ? 'mail' : destination);
@@ -52,10 +53,10 @@ const PortfolioRoot: React.FC = () => {
       }}
     >
       {/* Render View Based on Active Mode */}
-      <Suspense fallback={<LandingScreen onExplore={handleLandingExplore} showSystemHud={deviceMode === 'desktop'} />}>
+      <Suspense fallback={<div className="fixed inset-0 bg-[#05080d]" aria-hidden="true" />}>
         {deviceMode === 'desktop' ? (
           <DesktopBackground>
-            {isDesktopLocked ? <LandingScreen onExplore={handleLandingExplore} showSystemHud /> : <div className={`fixed inset-0 w-full h-full flex flex-col justify-between overflow-hidden ${isPortfolioEntering ? 'portfolio-rising' : ''}`}>
+            {isDesktopLocked ? <LandingScreen onExplore={handleLandingExplore} showSystemHud /> : <div className="fixed inset-0 w-full h-full flex flex-col justify-between overflow-hidden portfolio-rising">
               <DesktopMenuBar onOpenSpotlight={() => setSpotlightOpen(true)} />
               <DesktopIconsHome />
               <DesktopWindowManager />
