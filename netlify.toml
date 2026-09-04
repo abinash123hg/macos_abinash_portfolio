@@ -1,6 +1,7 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  # The Express server is for local/Replit hosting; Netlify serves the Vite output.
 
 [[redirects]]
   from = "/*"
