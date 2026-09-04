@@ -52,10 +52,10 @@ const PortfolioRoot: React.FC = () => {
       }}
     >
       {/* Render View Based on Active Mode */}
-      <Suspense fallback={<LandingScreen onExplore={handleLandingExplore} />}>
+      <Suspense fallback={<LandingScreen onExplore={handleLandingExplore} showSystemHud={deviceMode === 'desktop'} />}>
         {deviceMode === 'desktop' ? (
           <DesktopBackground>
-            {isDesktopLocked ? <LandingScreen onExplore={handleLandingExplore} /> : <div className={`fixed inset-0 w-full h-full flex flex-col justify-between overflow-hidden ${isPortfolioEntering ? 'portfolio-rising' : ''}`}>
+            {isDesktopLocked ? <LandingScreen onExplore={handleLandingExplore} showSystemHud /> : <div className={`fixed inset-0 w-full h-full flex flex-col justify-between overflow-hidden ${isPortfolioEntering ? 'portfolio-rising' : ''}`}>
               <DesktopMenuBar onOpenSpotlight={() => setSpotlightOpen(true)} />
               <DesktopIconsHome />
               <DesktopWindowManager />
