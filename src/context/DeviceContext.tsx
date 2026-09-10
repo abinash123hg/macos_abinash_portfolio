@@ -555,9 +555,9 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     : NaN;
   const [settings, setSettings] = useState<SystemSettings>({
     theme: 'dark',
-    wallpaperIndex: Number.isInteger(storedWallpaperIndex) && storedWallpaperIndex >= 0 && storedWallpaperIndex <= 3
+    wallpaperIndex: Number.isInteger(storedWallpaperIndex) && storedWallpaperIndex >= 0 && storedWallpaperIndex <= 6
       ? storedWallpaperIndex
-      : 0,
+      : 6,
     wallpapers: {
       macDesktop: null,
       macLock: null,

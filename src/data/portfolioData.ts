@@ -1,4 +1,5 @@
 import { PortfolioData } from '../types';
+import internPeCertificateImage from '../assets/certifications/internpay.png';
 
 export const portfolioData: PortfolioData = {
   name: 'Abinash Swain',
@@ -25,7 +26,7 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
     { label: 'Target Role', value: 'LLM Engineer', subtext: 'RAG & AI Assistants' },
     { label: 'RAG Faithfulness', value: '98.4%', subtext: 'Ragas Verified Score' },
     { label: 'TTFT Latency', value: '< 320ms', subtext: 'SSE Streaming Twin' },
-    { label: 'Certifications', value: '4+', subtext: 'Oracle Agentic AI, Tata, Deloitte' }
+    { label: 'Certifications', value: '6+', subtext: 'Oracle, Adobe, Tata, Deloitte, TutorialsPoint, InternPe' }
   ],
 
   projects: [
@@ -348,6 +349,17 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
       description: 'Completed intensive 6-week online training on TutorialsPoint Academy covering AI-driven inventory demand forecasting, pattern detection algorithms, automated replenishment pipelines, and ISO 9001/27001 compliant workflows.',
       skills: ['Python Inventory AI', 'Demand Forecasting', 'Pattern Detection', 'Workflow Automation'],
       imageSrc: 'assets/certifications/internship_tutorialspoint_page-0001.jpg'
+    },
+    {
+      id: 'cert-internpe-data-analyst',
+      title: 'Data Analyst Internship Certificate',
+      issuer: 'InternPe',
+      date: 'July 15, 2026',
+      badge: 'InternPe Internship',
+      category: 'Industry Training',
+      description: 'Completed a practical data analytics and predictive modeling internship with InternPe, focused on exploratory analysis and machine learning workflows.',
+      skills: ['Data Analytics', 'Exploratory Data Analysis', 'Predictive Modeling', 'Machine Learning'],
+      imageSrc: internPeCertificateImage
     }
   ],
 

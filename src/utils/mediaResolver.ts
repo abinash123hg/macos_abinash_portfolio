@@ -9,6 +9,9 @@ export const resolveMediaUrl = (filename: string, subfolder?: string): string =>
   if (filename.startsWith('http://') || filename.startsWith('https://') || filename.startsWith('data:')) {
     return filename;
   }
+  if (filename.startsWith('/src/assets/') || filename.startsWith('/assets/')) {
+    return filename;
+  }
 
   // Clean filename
   let cleanName = filename.startsWith('/') ? filename.slice(1) : filename;

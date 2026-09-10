@@ -132,6 +132,21 @@ export const CertificationsApp: React.FC = () => {
             subtitle={`${cert.issuer} • ${cert.date}`}
             badge={cert.badge}
             badgeColor="bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-300 border border-blue-200/40"
+            control={
+              <button
+                type="button"
+                aria-label={`View image for ${cert.title}`}
+                title="View certificate image"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  sound.tap();
+                  setSelectedCert(cert);
+                }}
+                className="rounded-full p-1.5 text-blue-500 hover:bg-blue-500/10 hover:text-blue-600 dark:text-blue-300 dark:hover:text-blue-200"
+              >
+                <Eye className="w-4 h-4" />
+              </button>
+            }
             chevron
             onClick={() => {
               sound.tap();

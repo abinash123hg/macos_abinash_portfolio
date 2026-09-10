@@ -39,6 +39,7 @@ import { TrashApp } from './apps/TrashApp';
 import { VideosApp } from './apps/VideosApp';
 import { MusicApp } from './apps/MusicApp';
 import { QuizApp } from '../apps/QuizApp';
+import { UtilityApp } from './apps/UtilityApp';
 
 import { sound } from '../../utils/audioHaptics';
 import { resolveMediaUrl } from '../../utils/mediaResolver';
@@ -104,6 +105,17 @@ export const Shell: React.FC = () => {
       case 'terminal': return <SystemInfoApp />;
       case 'trash': return <TrashApp />;
       case 'videos': return <VideosApp />;
+      case 'clock':
+      case 'calculator':
+      case 'maps':
+      case 'wallet':
+      case 'reminders':
+      case 'voice':
+      case 'journal':
+      case 'shortcuts':
+      case 'weather':
+      case 'phone':
+      case 'messages': return <UtilityApp appId={activeAppId} />;
       default: return <AboutApp />;
     }
   };
@@ -111,13 +123,19 @@ export const Shell: React.FC = () => {
   const getWallpaperGradient = () => {
     switch (settings.wallpaperIndex) {
       case 1:
-        return 'bg-gradient-to-br from-cyan-900 via-blue-950 to-neutral-950';
+        return 'bg-gradient-to-br from-sky-200 via-sky-400 to-indigo-700';
       case 2:
-        return 'bg-gradient-to-br from-purple-950 via-neutral-900 to-black';
+        return 'bg-gradient-to-br from-violet-300 via-indigo-500 to-slate-900';
       case 3:
-        return 'bg-gradient-to-br from-neutral-900 via-black to-neutral-950';
+        return 'bg-gradient-to-br from-slate-300 via-slate-500 to-slate-900';
+      case 4:
+        return 'bg-gradient-to-br from-orange-500 via-rose-600 to-fuchsia-950';
+      case 5:
+        return 'bg-gradient-to-br from-emerald-400 via-teal-700 to-slate-950';
+      case 6:
+        return 'bg-gradient-to-br from-cyan-300 via-blue-600 to-indigo-950';
       default:
-        return 'bg-[radial-gradient(circle_at_14%_12%,#ff8a5b_0%,transparent_38%),radial-gradient(circle_at_86%_18%,#e85bb5_0%,transparent_42%),radial-gradient(circle_at_46%_74%,#9b6be8_0%,transparent_48%),linear-gradient(145deg,#e86b67_0%,#a95dbb_45%,#397db8_100%)]';
+        return 'bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.96)_0%,rgba(166,214,255,0.86)_9%,rgba(99,146,255,0.62)_16%,transparent_30%),radial-gradient(circle_at_80%_18%,rgba(223,195,255,0.92)_0%,rgba(131,108,255,0.72)_18%,transparent_36%),radial-gradient(circle_at_50%_86%,rgba(23,42,88,0.9)_0%,rgba(12,18,35,0.98)_48%,transparent_70%),linear-gradient(160deg,#b9dbff_0%,#7aa7ef_28%,#5967d1_56%,#101b35_100%)]';
     }
   };
 

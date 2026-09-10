@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { sound } from '../../utils/audioHaptics';
 import confetti from 'canvas-confetti';
+import { useDevice } from '../../context/DeviceContext';
 
 export interface RawQuestion {
   id: number;
@@ -320,6 +321,7 @@ interface FormattedQuestion {
 }
 
 export const QuizApp: React.FC = () => {
+  const { closeApp } = useDevice();
   const [activeSection, setActiveSection] = useState<'all' | 'ml' | 'gnn' | 'rag'>('all');
   const [currentIdx, setCurrentIdx] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -453,8 +455,11 @@ export const QuizApp: React.FC = () => {
   return (
     <div className="h-full w-full flex flex-col bg-neutral-950 text-neutral-100 select-text overflow-y-auto">
       {/* Header Bar */}
-      <div className="p-3 sm:p-4 border-b border-neutral-800 bg-neutral-900/60 backdrop-blur-xl flex flex-wrap items-center justify-between gap-3 shrink-0">
-        <div className="flex items-center gap-2.5">
+      <div className="pt-14 p-3 sm:p-4 border-b border-neutral-800 bg-neutral-900/60 backdrop-blur-xl flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <button onClick={closeApp} aria-label="Back to Home" className="rounded-full p-2 text-neutral-300 hover:bg-neutral-800 hover:text-white shrink-0">
+            <ArrowLeft className="w-4 h-4" />
+          </button>
           <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-md shadow-cyan-500/20">
             <Brain className="w-4 h-4" />
           </div>
@@ -470,7 +475,7 @@ export const QuizApp: React.FC = () => {
         </div>
 
         {/* Section Tabs */}
-        <div className="flex items-center gap-1 bg-neutral-900/90 p-1 rounded-xl border border-neutral-800 text-xs">
+        <div className="flex w-full sm:w-auto items-center gap-1 bg-neutral-900/90 p-1 rounded-xl border border-neutral-800 text-xs overflow-x-auto">
           <button
             onClick={() => handleSectionSwitch('all')}
             className={`px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer ${
@@ -538,7 +543,7 @@ export const QuizApp: React.FC = () => {
       </div>
 
       {/* Main Quiz Area */}
-      <div className="flex-1 p-4 sm:p-6 max-w-3xl mx-auto w-full flex flex-col justify-between">
+      <div className="flex-1 p-4 pb-10 sm:p-6 sm:pb-10 max-w-3xl mx-auto w-full flex flex-col justify-between min-w-0">
         {!isQuizCompleted ? (
           <div className="space-y-5">
             {/* Section Tag */}

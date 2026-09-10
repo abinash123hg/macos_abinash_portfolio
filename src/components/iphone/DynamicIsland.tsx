@@ -112,7 +112,7 @@ export const DynamicIsland: React.FC = () => {
             : 'w-[126px] h-[37px] px-3 rounded-full justify-between hover:scale-[1.03] active:scale-95'
         }`}
         style={{
-          boxShadow: '0 12px 36px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.08)',
+          boxShadow: '0 4px 14px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(255, 255, 255, 0.08)',
         }}
       >
         {!isExpanded ? (

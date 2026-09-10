@@ -66,11 +66,11 @@ export const CertificatePreview: React.FC<CertificatePreviewProps> = ({ certific
 
           {/* Certificate Credential Document Preview */}
           {certificate.imageSrc && (
-            <div className="w-full rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-700/80 bg-neutral-950 shadow-md aspect-[4/3] relative">
+            <div className="w-full max-h-[62vh] min-h-[220px] rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-700/80 bg-neutral-950 shadow-md relative flex items-center justify-center">
               <img
                 src={resolveMediaUrl(certificate.imageSrc, 'assets/certifications')}
                 alt={certificate.title}
-                className="w-full h-full object-contain"
+                className="w-full max-h-[62vh] object-contain"
                 onError={(e) => {
                   (e.currentTarget as HTMLElement).style.display = 'none';
                 }}

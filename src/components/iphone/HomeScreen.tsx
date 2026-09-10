@@ -31,7 +31,32 @@ import {
   Bookmark,
   Brain,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Calculator,
+  CloudSun,
+  Map,
+  MessageSquare,
+  Wallet,
+  ClipboardList,
+  Folder,
+  Clock3,
+  Newspaper,
+  TrendingUp,
+  Languages,
+  Ruler,
+  LocateFixed,
+  Lightbulb,
+  ShoppingBag,
+  House,
+  Shield,
+  PenTool,
+  Users,
+  Watch,
+  Tv,
+  Dumbbell,
+  Download,
+  MoreHorizontal,
+  BookOpen
 } from 'lucide-react';
 import { sound } from '../../utils/audioHaptics';
 
@@ -49,7 +74,11 @@ interface HomeAppDef {
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
   const { openApp } = useDevice();
-  const [activePage, setActivePage] = useState<0 | 1>(0);
+  const [activePage, setActivePage] = useState<0 | 1 | 2>(() => {
+    if (typeof window === 'undefined') return 0;
+    const storedPage = Number(window.sessionStorage.getItem('iphone-home-page'));
+    return storedPage === 1 || storedPage === 2 ? storedPage : 0;
+  });
 
   const trackRef = useRef<HTMLDivElement>(null);
   const startXRef = useRef<number | null>(null);
@@ -63,8 +92,12 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
   useEffect(() => {
     if (trackRef.current && !isDraggingRef.current) {
       trackRef.current.style.transition = 'transform 320ms cubic-bezier(0.25, 1, 0.5, 1)';
-      trackRef.current.style.transform = `translate3d(${-activePage * 50}%, 0, 0)`;
+      trackRef.current.style.transform = `translate3d(${-activePage * (100 / 3)}%, 0, 0)`;
     }
+  }, [activePage]);
+
+  useEffect(() => {
+    window.sessionStorage.setItem('iphone-home-page', String(activePage));
   }, [activePage]);
 
   // Page 1: Main Portfolio Apps & Core Showcases
@@ -125,12 +158,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       name: 'Photos',
       icon: <Image className="w-7 h-7 text-white" />,
       gradient: 'from-pink-500 via-rose-500 to-amber-500',
-    },
-    {
-      id: 'terminal',
-      name: 'Terminal',
-      icon: <Terminal className="w-7 h-7 text-emerald-400" />,
-      gradient: 'from-neutral-900 to-neutral-950',
     },
     {
       id: 'camera',
@@ -204,12 +231,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       gradient: 'from-blue-400 to-blue-600',
     },
     {
-      id: 'systeminfo',
-      name: 'System',
-      icon: <SlidersHorizontal className="w-7 h-7 text-white" />,
-      gradient: 'from-neutral-600 to-neutral-700',
-    },
-    {
       id: 'settings',
       name: 'Settings',
       icon: <Settings className="w-7 h-7 text-neutral-300" />,
@@ -220,12 +241,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       name: 'Gallery',
       icon: <Image className="w-7 h-7 text-white" />,
       gradient: 'from-cyan-500 to-blue-600',
-    },
-    {
-      id: 'trash',
-      name: 'Trash',
-      icon: <Trash2 className="w-7 h-7 text-white" />,
-      gradient: 'from-neutral-500 to-neutral-700',
     },
     {
       id: 'chatbot',
@@ -270,6 +285,21 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
     },
   ];
 
+  const utilityApps: HomeAppDef[] = [
+    { id: 'phone', name: 'Phone', icon: <Phone className="w-7 h-7 text-white" />, gradient: 'from-[#35c759] to-[#1f9f48]' },
+    { id: 'messages', name: 'Messages', icon: <MessageSquare className="w-7 h-7 text-white" />, gradient: 'from-[#4ccc7a] to-[#2aa95f]' },
+    { id: 'weather', name: 'Weather', icon: <CloudSun className="w-7 h-7 text-white" />, gradient: 'from-[#5bb2ff] to-[#2a79d7]' },
+    { id: 'clock', name: 'Clock', icon: <Clock3 className="w-7 h-7 text-white" />, gradient: 'from-[#2f2f31] to-[#1a1a1d]' },
+    { id: 'calculator', name: 'Calculator', icon: <Calculator className="w-7 h-7 text-white" />, gradient: 'from-[#5f646c] to-[#2b2d31]' },
+    { id: 'maps', name: 'Maps', icon: <Map className="w-7 h-7 text-white" />, gradient: 'from-[#4ec7a5] to-[#2d8f7d]' },
+    { id: 'wallet', name: 'Wallet', icon: <Wallet className="w-7 h-7 text-white" />, gradient: 'from-[#1d1f22] to-[#0d1013]' },
+    { id: 'reminders', name: 'Reminders', icon: <ClipboardList className="w-7 h-7 text-white" />, gradient: 'from-[#f3a34e] to-[#db7d26]' },
+    { id: 'files', name: 'Files', icon: <Folder className="w-7 h-7 text-white" />, gradient: 'from-[#4f8cff] to-[#2c60d6]' },
+    { id: 'voice', name: 'Voice Memos', icon: <Radio className="w-7 h-7 text-white" />, gradient: 'from-[#ff5c5c] to-[#ff4141]' },
+    { id: 'journal', name: 'Journal', icon: <BookOpen className="w-7 h-7 text-white" />, gradient: 'from-[#f3c76d] to-[#e0a63d]' },
+    { id: 'shortcuts', name: 'Shortcuts', icon: <Sparkles className="w-7 h-7 text-white" />, gradient: 'from-[#9b6ae8] to-[#7c3aed]' },
+  ];
+
   // Swipe / Gesture Handlers with zero-rerender GPU acceleration
   const handleTouchStart = (e: React.TouchEvent) => {
     startXRef.current = e.touches[0].clientX;
@@ -300,11 +330,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
 
     if (isHorizontalSwipeRef.current && trackRef.current) {
       let offset = deltaX;
-      if ((activePage === 0 && deltaX > 0) || (activePage === 1 && deltaX < 0)) {
+      const maxPage = 2;
+      const pageLimit = (activePage === 0 && deltaX > 0) || (activePage === maxPage && deltaX < 0);
+      if (pageLimit) {
         offset = deltaX * 0.25;
       }
       dragOffsetRef.current = offset;
-      trackRef.current.style.transform = `translate3d(calc(${-activePage * 50}% + ${offset}px), 0, 0)`;
+      trackRef.current.style.transform = `translate3d(calc(${-activePage * (100 / 3)}% + ${offset}px), 0, 0)`;
     }
   };
 
@@ -318,14 +350,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       }
 
       if (isHorizontalSwipeRef.current) {
-        if (offset < -35 && activePage === 0) {
+        if (offset < -35 && activePage < 2) {
           sound.tap();
-          setActivePage(1);
-        } else if (offset > 35 && activePage === 1) {
+          setActivePage((prev) => (prev + 1) as 0 | 1 | 2);
+        } else if (offset > 35 && activePage > 0) {
           sound.tap();
-          setActivePage(0);
+          setActivePage((prev) => (prev - 1) as 0 | 1 | 2);
         } else if (trackRef.current) {
-          trackRef.current.style.transform = `translate3d(${-activePage * 50}%, 0, 0)`;
+          trackRef.current.style.transform = `translate3d(${-activePage * (100 / 3)}%, 0, 0)`;
         }
       }
     }
@@ -358,11 +390,13 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
 
     if (isHorizontalSwipeRef.current && trackRef.current) {
       let offset = deltaX;
-      if ((activePage === 0 && deltaX > 0) || (activePage === 1 && deltaX < 0)) {
+      const maxPage = 2;
+      const pageLimit = (activePage === 0 && deltaX > 0) || (activePage === maxPage && deltaX < 0);
+      if (pageLimit) {
         offset = deltaX * 0.25;
       }
       dragOffsetRef.current = offset;
-      trackRef.current.style.transform = `translate3d(calc(${-activePage * 50}% + ${offset}px), 0, 0)`;
+      trackRef.current.style.transform = `translate3d(calc(${-activePage * (100 / 3)}% + ${offset}px), 0, 0)`;
     }
   };
 
@@ -376,14 +410,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       }
 
       if (isHorizontalSwipeRef.current) {
-        if (offset < -35 && activePage === 0) {
+        if (offset < -35 && activePage < 2) {
           sound.tap();
-          setActivePage(1);
-        } else if (offset > 35 && activePage === 1) {
+          setActivePage((prev) => (prev + 1) as 0 | 1 | 2);
+        } else if (offset > 35 && activePage > 0) {
           sound.tap();
-          setActivePage(0);
+          setActivePage((prev) => (prev - 1) as 0 | 1 | 2);
         } else if (trackRef.current) {
-          trackRef.current.style.transform = `translate3d(${-activePage * 50}%, 0, 0)`;
+          trackRef.current.style.transform = `translate3d(${-activePage * (100 / 3)}%, 0, 0)`;
         }
       }
     }
@@ -408,17 +442,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       <div className="flex-1 w-full overflow-hidden relative touch-pan-y">
         <div 
           ref={trackRef}
-          className="flex flex-row w-[200%] h-full will-change-transform"
+          className="flex flex-row w-[300%] h-full will-change-transform"
           style={{
-            transform: `translate3d(${-activePage * 50}%, 0, 0)`,
+            transform: `translate3d(${-activePage * (100 / 3)}%, 0, 0)`,
             transition: 'transform 320ms cubic-bezier(0.25, 1, 0.5, 1)'
           }}
         >
           {/* ================= PAGE 1 ================= */}
-          <div className="w-1/2 h-full flex flex-col justify-between px-1">
-            {/* Top Widgets */}
+          <div className="w-1/3 h-full flex flex-col justify-between px-1">
             <div className="w-full grid grid-cols-2 gap-3 mb-2.5">
-              {/* Widget 1: Profile & Quick Bio */}
               <div
                 onClick={(e) => {
                   if (Math.abs(dragOffsetRef.current) > 8) return;
@@ -429,22 +461,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                 className="ios-home-widget p-3.5 rounded-[26px] bg-white/20 dark:bg-black/35 backdrop-blur-2xl border border-white/25 shadow-lg flex flex-col justify-between cursor-pointer hover:bg-white/25 active:scale-95 transition-all group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-white uppercase tracking-wider">
-                    Abinash Swain
-                  </span>
+                  <span className="text-[11px] font-bold text-white uppercase tracking-wider">Abinash Swain</span>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 </div>
                 <div>
-                  <div className="text-[20px] font-bold text-white tracking-tight leading-tight">
-                    8.32 CGPA
-                  </div>
-                  <div className="text-[11px] text-white/80 font-medium truncate mt-0.5">
-                    B.Tech AI/ML • CUTM
-                  </div>
+                  <div className="text-[20px] font-bold text-white tracking-tight leading-tight">8.32 CGPA</div>
+                  <div className="text-[11px] text-white/80 font-medium truncate mt-0.5">B.Tech AI/ML • CUTM</div>
                 </div>
               </div>
 
-              {/* Widget 2: Recruiter Brief */}
               <div
                 onClick={(e) => {
                   if (Math.abs(dragOffsetRef.current) > 8) return;
@@ -462,14 +487,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                   <span className="text-[10px] text-white/70 font-mono">96.2%</span>
                 </div>
                 <div>
-                  <div className="text-[13px] font-semibold text-white tracking-tight leading-tight">
-                    Open portfolio summary
-                  </div>
+                  <div className="text-[13px] font-semibold text-white tracking-tight leading-tight">Open portfolio summary</div>
                 </div>
               </div>
             </div>
 
-            {/* 4-Column App Grid Page 1 */}
             <div className="grid grid-cols-4 gap-x-3 gap-y-3.5 px-0.5 py-0.5">
               {primaryApps.map((app) => (
                 <div key={app.id} className="flex justify-center">
@@ -490,34 +512,65 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
           </div>
 
           {/* ================= PAGE 2 ================= */}
-          <div className="w-1/2 h-full flex flex-col justify-between px-1">
-            {/* Top Widget Page 2 */}
-            <div 
-              onClick={(e) => {
-                if (Math.abs(dragOffsetRef.current) > 8) return;
-                e.stopPropagation();
-                sound.appOpen();
-                openApp('certificates');
-              }}
-              className="ios-home-widget w-full p-3.5 rounded-[26px] bg-gradient-to-r from-amber-500/20 to-orange-600/20 backdrop-blur-2xl border border-amber-400/30 shadow-lg flex items-center justify-between mb-2.5 cursor-pointer active:scale-98 transition-transform"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-amber-500/30 flex items-center justify-center text-amber-300 border border-amber-400/40 shrink-0">
-                  <Award className="w-5 h-5" />
+          <div className="w-1/3 h-full flex flex-col justify-between px-1">
+            <div className="grid grid-cols-2 gap-3 mb-2.5">
+              <div className="ios-home-widget p-3.5 rounded-[26px] bg-gradient-to-br from-emerald-500/35 to-cyan-900/45 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-white uppercase tracking-wider">Skills</span>
+                  <TrendingUp className="w-4 h-4 text-emerald-200" />
                 </div>
-                <div className="text-left min-w-0">
-                  <div className="text-[13px] font-bold text-white truncate">Oracle Agentic AI Certified</div>
-                  <div className="text-[11px] text-amber-200 truncate">Associate Credentials & Tata GenAI</div>
+                <div>
+                  <div className="text-[20px] font-bold text-white tracking-tight leading-tight">AI / ML</div>
+                  <div className="text-[11px] text-white/80 font-medium mt-0.5">Core strengths</div>
                 </div>
               </div>
-              <span className="text-[11px] font-semibold text-white/90 px-2.5 py-1 rounded-full bg-white/10 shrink-0">
-                View
-              </span>
+              <div className="ios-home-widget p-3.5 rounded-[26px] bg-gradient-to-br from-amber-500/35 to-rose-900/45 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-white uppercase tracking-wider">Library</span>
+                  <BookOpen className="w-4 h-4 text-amber-200" />
+                </div>
+                <div>
+                  <div className="text-[20px] font-bold text-white tracking-tight leading-tight">6+</div>
+                  <div className="text-[11px] text-white/80 font-medium mt-0.5">Certificates</div>
+                </div>
+              </div>
             </div>
-
-            {/* 4-Column App Grid Page 2 */}
             <div className="grid grid-cols-4 gap-x-3 gap-y-3.5 px-0.5 py-0.5">
               {secondaryApps.map((app) => (
+                <div key={app.id} className="flex justify-center">
+                  <AppIcon
+                    id={app.id}
+                    name={app.name}
+                    icon={app.icon}
+                    gradient={app.gradient}
+                    badge={app.badge}
+                    onClick={() => {
+                      if (Math.abs(dragOffsetRef.current) > 8) return;
+                      openApp(app.id);
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ================= PAGE 3 ================= */}
+          <div className="w-1/3 h-full flex flex-col justify-between px-1">
+            <div className="ios-home-widget p-3.5 rounded-[26px] bg-gradient-to-br from-sky-500/35 to-blue-900/45 mb-2.5 flex flex-col justify-between">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1 text-[11px] font-bold text-white uppercase tracking-wider">
+                  <CloudSun className="w-4 h-4 text-sky-200" />
+                  <span>Bhubaneswar</span>
+                </div>
+                <span className="text-[10px] text-white/70">Today</span>
+              </div>
+              <div className="flex items-end justify-between mt-3">
+                <div className="text-[28px] font-semibold text-white tracking-tight leading-none">28°</div>
+                <div className="text-right text-[11px] text-white/80 font-medium">Partly cloudy<br />Good day to explore</div>
+              </div>
+            </div>
+            <div className="grid grid-cols-4 gap-x-3 gap-y-3.5 px-0.5 py-0.5 mt-1">
+              {utilityApps.map((app) => (
                 <div key={app.id} className="flex justify-center">
                   <AppIcon
                     id={app.id}
@@ -559,6 +612,16 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
             aria-label="Page 2"
             className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
               activePage === 1 ? 'bg-white w-5 shadow-sm' : 'bg-white/40 w-2 hover:bg-white/60'
+            }`}
+          />
+          <button
+            onClick={() => {
+              sound.tap();
+              setActivePage(2);
+            }}
+            aria-label="Page 3"
+            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+              activePage === 2 ? 'bg-white w-5 shadow-sm' : 'bg-white/40 w-2 hover:bg-white/60'
             }`}
           />
         </div>

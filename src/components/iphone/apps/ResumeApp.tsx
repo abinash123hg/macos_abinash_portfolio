@@ -53,6 +53,7 @@ CERTIFICATIONS:
 2. Tata - GenAI Powered Data Analytics
 3. Deloitte - Data Analytics Job Simulation
 4. AI-Powered Smart Inventory Management (Skill India / NSDC)
+5. Data Analyst Internship Certificate (InternPe)
     `;
 
     const blob = new Blob([resumeText], { type: 'text/plain;charset=utf-8' });

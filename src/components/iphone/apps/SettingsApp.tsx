@@ -1,6 +1,5 @@
 import React from 'react';
 import { AppWindow } from '../ui/AppWindow';
-import { IOSCard } from '../ui/IOSCard';
 import { IOSList, IOSListItem } from '../ui/IOSList';
 import { IOSSectionHeader } from '../ui/IOSSectionHeader';
 import { 
@@ -14,7 +13,13 @@ import {
   Info, 
   ShieldCheck, 
   Zap, 
-  Layers 
+  Layers,
+  Wifi,
+  Bluetooth,
+  Plane,
+  Focus,
+  Cloud,
+  MapPin
 } from 'lucide-react';
 import { useDevice } from '../../../context/DeviceContext';
 import { portfolioData } from '../../../data/portfolioData';
@@ -28,6 +33,9 @@ export const SettingsApp: React.FC = () => {
     { id: 1, name: 'Cyan Aurora', class: 'from-cyan-900 via-blue-950 to-neutral-950' },
     { id: 2, name: 'Midnight Purple', class: 'from-purple-950 via-neutral-900 to-black' },
     { id: 3, name: 'Titanium Graphite', class: 'from-neutral-900 via-black to-neutral-950' },
+    { id: 4, name: 'Sunset Coral', class: 'from-orange-500 via-rose-600 to-fuchsia-950' },
+    { id: 5, name: 'Emerald Coast', class: 'from-emerald-400 via-teal-700 to-slate-950' },
+    { id: 6, name: 'Ocean Glass', class: 'from-cyan-300 via-blue-600 to-indigo-950' },
   ];
 
   return (
@@ -54,7 +62,7 @@ export const SettingsApp: React.FC = () => {
 
       {/* Wallpaper Themes */}
       <IOSSectionHeader title="Wallpaper & Aesthetics" />
-      <div className="grid grid-cols-4 gap-2 mb-4">
+      <div className="grid grid-cols-3 gap-2 mb-4">
         {wallpapers.map((w) => (
           <button
             key={w.id}
@@ -127,6 +135,20 @@ export const SettingsApp: React.FC = () => {
             </button>
           }
         />
+      </IOSList>
+
+      <IOSSectionHeader title="Connectivity & Focus" />
+      <IOSList>
+        <IOSListItem icon={<Wifi className="w-4 h-4" />} iconBg="bg-blue-500" title="Wi-Fi" subtitle={settings.wifiEnabled ? 'Portfolio Network' : 'Off'} control={<button onClick={() => updateSettings({ wifiEnabled: !settings.wifiEnabled })} className={`w-11 h-6 rounded-full relative ${settings.wifiEnabled ? 'bg-[#34C759]' : 'bg-neutral-300 dark:bg-neutral-700'}`}><div className={`w-5 h-5 rounded-full bg-white shadow-md absolute top-0.5 transition-transform ${settings.wifiEnabled ? 'left-5.5' : 'left-0.5'}`} /></button>} />
+        <IOSListItem icon={<Bluetooth className="w-4 h-4" />} iconBg="bg-sky-500" title="Bluetooth" subtitle={settings.bluetoothEnabled ? 'Discoverable' : 'Off'} control={<button onClick={() => updateSettings({ bluetoothEnabled: !settings.bluetoothEnabled })} className={`w-11 h-6 rounded-full relative ${settings.bluetoothEnabled ? 'bg-[#34C759]' : 'bg-neutral-300 dark:bg-neutral-700'}`}><div className={`w-5 h-5 rounded-full bg-white shadow-md absolute top-0.5 transition-transform ${settings.bluetoothEnabled ? 'left-5.5' : 'left-0.5'}`} /></button>} />
+        <IOSListItem icon={<Plane className="w-4 h-4" />} iconBg="bg-orange-500" title="Airplane Mode" subtitle={settings.airplaneMode ? 'Wireless radios off' : 'Ready to connect'} control={<button onClick={() => updateSettings({ airplaneMode: !settings.airplaneMode })} className={`w-11 h-6 rounded-full relative ${settings.airplaneMode ? 'bg-[#34C759]' : 'bg-neutral-300 dark:bg-neutral-700'}`}><div className={`w-5 h-5 rounded-full bg-white shadow-md absolute top-0.5 transition-transform ${settings.airplaneMode ? 'left-5.5' : 'left-0.5'}`} /></button>} />
+        <IOSListItem icon={<Focus className="w-4 h-4" />} iconBg="bg-purple-500" title="Focus Mode" subtitle={settings.focusMode ? 'Portfolio focus active' : 'Off'} control={<button onClick={() => updateSettings({ focusMode: !settings.focusMode })} className={`w-11 h-6 rounded-full relative ${settings.focusMode ? 'bg-[#34C759]' : 'bg-neutral-300 dark:bg-neutral-700'}`}><div className={`w-5 h-5 rounded-full bg-white shadow-md absolute top-0.5 transition-transform ${settings.focusMode ? 'left-5.5' : 'left-0.5'}`} /></button>} />
+      </IOSList>
+
+      <IOSSectionHeader title="Privacy & Sync" />
+      <IOSList>
+        <IOSListItem icon={<MapPin className="w-4 h-4" />} iconBg="bg-emerald-500" title="Location Services" subtitle="Used by Maps and Weather" value="On" />
+        <IOSListItem icon={<Cloud className="w-4 h-4" />} iconBg="bg-cyan-500" title="iCloud Sync" subtitle={settings.iCloudSync ? 'Synced across devices' : 'Paused'} control={<button onClick={() => updateSettings({ iCloudSync: !settings.iCloudSync })} className={`w-11 h-6 rounded-full relative ${settings.iCloudSync ? 'bg-[#34C759]' : 'bg-neutral-300 dark:bg-neutral-700'}`}><div className={`w-5 h-5 rounded-full bg-white shadow-md absolute top-0.5 transition-transform ${settings.iCloudSync ? 'left-5.5' : 'left-0.5'}`} /></button>} />
       </IOSList>
 
       {/* Device Specifications */}

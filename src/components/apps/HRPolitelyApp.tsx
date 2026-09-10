@@ -218,7 +218,7 @@ export const HRPolitelyApp: React.FC = () => {
               </div>
               <div className="p-3 rounded-xl bg-neutral-900 border border-white/10">
                 <div className="text-[10px] text-neutral-400 font-medium">Certifications</div>
-                <div className="text-[14px] font-bold text-purple-400 mt-0.5">4+ Credentials</div>
+                <div className="text-[14px] font-bold text-purple-400 mt-0.5">6+ Credentials</div>
                 <div className="text-[9.5px] text-neutral-400 mt-0.5">Oracle, Tata, Deloitte</div>
               </div>
             </div>
