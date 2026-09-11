@@ -588,11 +588,11 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       removeEventListener: (type: string, listener: EventListener) => void;
     };
 
-    const getBattery = (navigator as Navigator & {
+    const batteryNavigator = navigator as Navigator & {
       getBattery?: () => Promise<BatteryManagerLike>;
-    }).getBattery;
+    };
 
-    if (!getBattery) return;
+    if (!batteryNavigator.getBattery) return;
 
     let battery: BatteryManagerLike | null = null;
     const updateBattery = () => {
@@ -604,7 +604,7 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       }));
     };
 
-    getBattery().then((availableBattery) => {
+    batteryNavigator.getBattery().then((availableBattery) => {
       battery = availableBattery;
       updateBattery();
       battery.addEventListener('levelchange', updateBattery);

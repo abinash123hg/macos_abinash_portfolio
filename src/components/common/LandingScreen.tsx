@@ -44,19 +44,19 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
     window.addEventListener('offline', handleOffline);
 
     type BatteryManager = EventTarget & { level: number; addEventListener: (type: string, listener: EventListener) => void; removeEventListener: (type: string, listener: EventListener) => void };
-    const getBattery = (navigator as Navigator & { getBattery?: () => Promise<BatteryManager> }).getBattery;
+    const batteryNavigator = navigator as Navigator & { getBattery?: () => Promise<BatteryManager> };
     let battery: BatteryManager | null = null;
     const updateBattery = (event?: Event) => {
       const target = (event?.currentTarget || battery) as BatteryManager | null;
       if (target) setBatteryPercent(Math.round(target.level * 100));
     };
 
-    if (getBattery) {
-      void getBattery().then((result) => {
+    if (batteryNavigator.getBattery) {
+      void batteryNavigator.getBattery().then((result) => {
         battery = result;
         updateBattery();
         battery.addEventListener('levelchange', updateBattery);
-      });
+      }).catch(() => {});
     }
 
     return () => {
