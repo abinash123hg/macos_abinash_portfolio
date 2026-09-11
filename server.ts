@@ -17,8 +17,9 @@ const escapeHtml = (value: string) => value
   .replace(/>/g, "&gt;")
   .replace(/"/g, "&quot;")
   .replace(/'/g, "&#039;");
-const contactAttempts = new Map<string, number>();
-const contactLimitMs = 30_000;
+const contactAttempts = new Map<string, { count: number; resetAt: number }>();
+const contactDailyLimit = 2;
+const contactWindowMs = 24 * 60 * 60 * 1000;
 const apiError = (res: express.Response, status: number, code: string, message: string) => {
   res.status(status).json({ success: false, error: { code, message } });
 };
@@ -71,13 +72,14 @@ app.post("/api/contact", async (req, res) => {
   }
 
   const clientIp = req.ip || req.socket.remoteAddress || "unknown";
-  const lastAttempt = contactAttempts.get(clientIp) || 0;
-  if (Date.now() - lastAttempt < contactLimitMs) {
+  const now = Date.now();
+  const usage = contactAttempts.get(clientIp);
+  const activeUsage = usage && usage.resetAt > now ? usage : { count: 0, resetAt: now + contactWindowMs };
+  if (activeUsage.count >= contactDailyLimit) {
+    res.set("Retry-After", String(Math.ceil((activeUsage.resetAt - now) / 1000)));
     apiError(res, 429, "RATE_LIMITED", "Too many requests. Please wait a moment and try again.");
     return;
   }
-  contactAttempts.set(clientIp, Date.now());
-
   const values = [name, email, subject, message];
   if (values.some(value => typeof value !== "string" || !value.trim())) {
     apiError(res, 422, "VALIDATION_ERROR", "Some information is missing or invalid.");
@@ -127,6 +129,7 @@ app.post("/api/contact", async (req, res) => {
       return;
     }
 
+    contactAttempts.set(clientIp, { count: activeUsage.count + 1, resetAt: activeUsage.resetAt });
     apiSuccess(res);
   } catch (error) {
     console.error("Contact email error:", error);

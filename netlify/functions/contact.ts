@@ -4,8 +4,9 @@ const escapeHtml = (value: string) => value
   .replace(/>/g, "&gt;")
   .replace(/"/g, "&quot;")
   .replace(/'/g, "&#039;");
-const contactAttempts = new Map<string, number>();
-const contactLimitMs = 30_000;
+const contactAttempts = new Map<string, { count: number; resetAt: number }>();
+const contactDailyLimit = 2;
+const contactWindowMs = 24 * 60 * 60 * 1000;
 const apiError = (status: number, code: string, message: string) => Response.json({ success: false, error: { code, message } }, { status });
 
 export default async (request: Request) => {
@@ -19,12 +20,12 @@ export default async (request: Request) => {
   }
 
   const clientIp = request.headers.get("x-nf-client-connection-ip") || "unknown";
-  const lastAttempt = contactAttempts.get(clientIp) || 0;
-  if (Date.now() - lastAttempt < contactLimitMs) {
-    return apiError(429, "RATE_LIMITED", "Too many requests. Please wait a moment and try again.");
+  const now = Date.now();
+  const usage = contactAttempts.get(clientIp);
+  const activeUsage = usage && usage.resetAt > now ? usage : { count: 0, resetAt: now + contactWindowMs };
+  if (activeUsage.count >= contactDailyLimit) {
+    return new Response(JSON.stringify({ success: false, error: { code: "RATE_LIMITED", message: "Too many requests. Please wait a moment and try again." } }), { status: 429, headers: { "Retry-After": String(Math.ceil((activeUsage.resetAt - now) / 1000)), "Content-Type": "application/json" } });
   }
-  contactAttempts.set(clientIp, Date.now());
-
   const values = [name, email, subject, message];
   if (values.some(value => typeof value !== "string" || !value.trim())) {
     return apiError(422, "VALIDATION_ERROR", "Some information is missing or invalid.");
@@ -73,5 +74,6 @@ export default async (request: Request) => {
     return apiError(502, "BAD_GATEWAY", "A connected service returned an invalid response.");
   }
 
+  contactAttempts.set(clientIp, { count: activeUsage.count + 1, resetAt: activeUsage.resetAt });
   return Response.json({ success: true });
 };
