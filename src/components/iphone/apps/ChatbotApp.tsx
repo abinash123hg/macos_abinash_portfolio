@@ -1,15 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { AppWindow } from '../ui/AppWindow';
-import { 
-  Sparkles, 
-  Send, 
-  Bot, 
-  User, 
-  Radio, 
-  Award, 
-  Briefcase, 
-  FileText, 
-  CheckCircle2 
+import {
+  Sparkles,
+  Send,
 } from 'lucide-react';
 import { portfolioData } from '../../../data/portfolioData';
 import { sound } from '../../../utils/audioHaptics';
@@ -33,15 +26,17 @@ export const ChatbotApp: React.FC = () => {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const chatAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [messages, isTyping]);
 
   const quickPrompts = [
     'Tell me about Abinash in 30s',
     'What roles is he a fit for?',
-    'Top Projects (5G KPI & SafeDrive)',
+    'Top Projects (MCP & DocuRAG)',
     'Daily Tools & Languages',
     'Has he worked with LLMs/RAG?',
     'How can I hire him?',
@@ -70,9 +65,9 @@ export const ChatbotApp: React.FC = () => {
         body: JSON.stringify({ message: queryText }),
       });
       const data = await res.json();
-      
-      const botReplyText = data.reply || `Abinash is pursuing B.Tech AI/ML at Centurion University (CUTM) with an 8.32 CGPA. Contact him at ${portfolioData.email}.`;
-      
+
+      const botReplyText = data.reply || `Abinash is pursuing B.Tech AI/ML at ${portfolioData.college} with CGPA ${portfolioData.cgpa}. Contact him at ${portfolioData.email}.`;
+
       setMessages(prev => [
         ...prev,
         {
@@ -84,36 +79,22 @@ export const ChatbotApp: React.FC = () => {
       ]);
       sound.tap();
     } catch {
-      let reply = '';
-      const q = queryText.toLowerCase();
-
-      if (q.includes('30s') || q.includes('30 second') || q.includes('tell me about') || q.includes('who is abinash')) {
-        reply = `Abinash is pursuing B.Tech AI/ML at Centurion University (CUTM) with an 8.32 CGPA, focused on predictive ML, telemetry analytics, and intelligent systems.\n\n• Flagship: 5G Small-Cell KPI Management (96.2% accuracy) & SafeDrive AI.\n• Credentials: Oracle Certified Associate in Agentic AI, Tata GenAI, Deloitte Analytics.\n• Fit: Data Analyst, AI/ML Engineer, LLM/RAG Engineer, Analytics Engineer.\n\nContact: ${portfolioData.email} | ${portfolioData.phone}`;
-      } else if (q.includes('role') || q.includes('fit') || q.includes('job') || q.includes('position')) {
-        reply = `Abinash is a strong fit for:\n• Data Analyst (SQL, Pandas, NumPy, statistical testing)\n• AI/ML Engineer (Scikit-learn, Random Forest, model evaluation)\n• LLM/RAG Engineer (Oracle Agentic AI certified, prompt engineering, RAG concepts)\n• Analytics Engineer (Streamlit dashboards, telemetry pipelines)\n\nHe is open to full-time roles and internships immediately.`;
-      } else if (q.includes('5g') || q.includes('kpi') || q.includes('telemetry') || q.includes('project')) {
-        reply = `Abinash's key projects include:\n1. 5G Small-Cell Network KPI Management: 100-estimator Random Forest on 5,000 telemetry records monitoring 10 KPIs across 4 slices (eMBB, URLLC, mMTC, HC) with 96.2% accuracy and 96.5% F1.\n2. SafeDrive AI: Real-time traffic accident severity prediction (Slight, Serious, Fatal) with geospatial risk heatmaps.\n3. CSV Intelligence: Automated conversational EDA tool.\n\nWould you like more technical details?`;
-      } else if (q.includes('skill') || q.includes('tool') || q.includes('language') || q.includes('stack') || q.includes('python')) {
-        reply = `Abinash's core skills:\n• Languages: Python (strong), SQL (MySQL/SQLite)\n• Data & ML: Pandas, NumPy, Scikit-learn, EDA, statistical testing, classification/regression\n• AI/LLM: Agentic AI workflows, RAG concepts, prompt engineering\n• Visualization: Streamlit interactive dashboards\n• Tools: Git/GitHub, Jupyter, VS Code, Google Colab`;
-      } else if (q.includes('llm') || q.includes('rag') || q.includes('agent')) {
-        reply = `Abinash is Oracle Certified in Agentic AI (ID: 103519150AAI26OFA) and completed Tata's GenAI Data Analytics simulation. He works with RAG retrieval concepts, vector similarity grounding, and agentic multi-step tool orchestration.`;
-      } else if (q.includes('hire') || q.includes('contact') || q.includes('email') || q.includes('phone') || q.includes('reach')) {
-        reply = `You can hire or contact Abinash directly:\n• Email: ${portfolioData.email}\n• Phone: ${portfolioData.phone}\n• Location: Bhubaneswar, Odisha, India\n• Availability: Open to full-time roles & high-impact engineering opportunities.`;
-      } else {
-        reply = `Abinash is pursuing B.Tech AI/ML at Centurion University (CUTM) with an 8.32 CGPA. He specializes in predictive ML, telemetry analytics, and AI assistants.\n\nAsk me about his projects, skills, or email him at ${portfolioData.email}.`;
-      }
+      const fallbackReply = `Abinash is pursuing B.Tech AI/ML at ${portfolioData.college} with CGPA ${portfolioData.cgpa}. His portfolio focuses on MLOps & Autonomous Data Agent with MCP and DocuRAG — Multimodal Document RAG & Knowledge Engine.\n\nYou can ask about his projects, skills, tools, certifications, and hiring availability. You can contact him at ${portfolioData.email} or ${portfolioData.phone}.`;
 
       setMessages(prev => [
         ...prev,
         {
           id: (Date.now() + 1).toString(),
           sender: 'bot',
-          text: reply,
+          text: fallbackReply,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         }
       ]);
     } finally {
       setIsTyping(false);
+      setTimeout(() => {
+        chatAreaRef.current?.scrollTo({ top: chatAreaRef.current.scrollHeight, behavior: 'smooth' });
+      }, 40);
     }
   };
 
@@ -128,7 +109,7 @@ export const ChatbotApp: React.FC = () => {
       <div className="w-full h-full flex flex-col justify-between bg-[#F2F2F7] dark:bg-[#000000] text-neutral-900 dark:text-white">
         
         {/* Messages Stream */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        <div ref={chatAreaRef} className="flex-1 overflow-y-auto p-4 space-y-3">
           {messages.map((msg) => {
             const isUser = msg.sender === 'user';
             return (
@@ -180,17 +161,35 @@ export const ChatbotApp: React.FC = () => {
         {/* Input Bar */}
         <div className="w-full p-2.5 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-2xl border-t border-neutral-200/70 dark:border-neutral-800 flex items-center gap-2">
           <input
+            ref={inputRef}
             type="text"
+            autoFocus
             placeholder="Ask about projects, skills, ML models..."
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+              setTimeout(() => {
+                chatAreaRef.current?.scrollTo({ top: chatAreaRef.current.scrollHeight, behavior: 'smooth' });
+              }, 10);
+            }}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSend();
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+            onFocus={() => {
+              setTimeout(() => {
+                chatAreaRef.current?.scrollTo({ top: chatAreaRef.current.scrollHeight, behavior: 'smooth' });
+              }, 120);
             }}
             className="flex-1 h-9 px-3.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-[14px] text-neutral-900 dark:text-white placeholder-neutral-400 outline-none border border-neutral-200 dark:border-neutral-700 focus:border-[#007AFF]"
           />
           <button
-            onClick={() => handleSend()}
+            onClick={() => {
+              handleSend();
+              setTimeout(() => inputRef.current?.focus(), 20);
+            }}
             disabled={!input.trim()}
             className="w-9 h-9 rounded-full bg-[#007AFF] text-white flex items-center justify-center disabled:opacity-40 active:scale-95 transition-transform cursor-pointer"
           >

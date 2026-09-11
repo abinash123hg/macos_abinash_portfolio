@@ -71,7 +71,7 @@ export const AiAssistantApp: React.FC = () => {
       const fallbackReply: ChatMessage = {
         id: `ai-err-${Date.now()}`,
         sender: 'ai',
-        text: "Abinash is pursuing B.Tech AI/ML at Centurion University (CGPA 8.32) targeting Data Analyst, AI/ML Engineer, LLM/RAG, and Analytics roles.\n\n• Top Projects: 5G Small-Cell KPI Management (96.2% accuracy, Random Forest) & SafeDrive AI.\n• Core Stack: Python, SQL, Scikit-learn, Pandas, Streamlit, Agentic AI.\n• Contact: swainabinash839@gmail.com | +91-7077475818.",
+        text: "Abinash is pursuing B.Tech AI/ML at Centurion University (CGPA 8.32) targeting Data Analyst, AI/ML Engineer, LLM/RAG, and Analytics roles.\n\n• Top Projects: MLOps & Autonomous Data Agent with MCP and DocuRAG — Multimodal Document RAG & Knowledge Engine.\n• Core Stack: Python, SQL, Scikit-learn, Pandas, Streamlit, Agentic AI, MCP, ChromaDB, RAG.\n• Contact: swainabinash839@gmail.com | +91-7077475818.",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages(prev => [...prev, fallbackReply]);

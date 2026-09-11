@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import dotenv from "dotenv";
 import { GoogleGenAI } from "@google/genai";
+import { portfolioData } from "./src/data/portfolioData";
 
 dotenv.config();
 
@@ -137,6 +138,48 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
+function buildDeterministicReply(message: string): string {
+  const q = message.toLowerCase();
+
+  if (q.includes("30 second") || q.includes("tell me about") || q.includes("who is abinash") || q.includes("summary") || q.includes("overview")) {
+    return `Abinash is pursuing B.Tech AI/ML at ${portfolioData.college} with CGPA ${portfolioData.cgpa}. He focuses on predictive ML, document intelligence, and agentic AI workflows.\n\nCore strengths: end-to-end data pipelines, trustworthy model evaluation, RAG retrieval, and AI workflow automation.\nFlagship work spans MLOps & Autonomous Data Agent with MCP and DocuRAG — Multimodal Document RAG & Knowledge Engine.\nHe is open to Data Analyst, AI/ML Engineer, LLM/RAG Engineer, and Analytics Engineer roles.\n\nIf you'd like, I can share project deep dives or connect you directly with Abinash at ${portfolioData.email}.`;
+  }
+
+  if (q.includes("role") || q.includes("fit") || q.includes("position") || q.includes("job")) {
+    return `Abinash is a strong fit for several role paths:\n\n• Data Analyst — SQL, Pandas, NumPy, statistical studies, and exploratory analytics.\n• AI/ML Engineer — Scikit-learn, Random Forest workflows, evaluation metrics, and feature pipelines.\n• LLM/RAG Engineer — Agentic AI, prompt engineering, RAG retrieval concepts, and grounded answer systems.\n• Analytics Engineer — Dashboard storytelling, data product thinking, and measurable business insight delivery.\n\nHe is open to full-time roles and internships. Would you like contact details?`;
+  }
+
+  if (q.includes("project") || q.includes("mcp") || q.includes("docurag") || q.includes("top project")) {
+    return `Abinash's top projects are the MLOps & Autonomous Data Agent with MCP and DocuRAG — Multimodal Document RAG & Knowledge Engine.\n\nThe MCP project automates dataset profiling, preprocessing, model training, evaluation, and reporting with Python, Pandas, NumPy, Scikit-learn, ChromaDB, RAG, Ollama, FastMCP, and Streamlit.\n\nDocuRAG focuses on grounded document intelligence with hybrid retrieval, BM25, vector search, cross-encoder reranking, and citation-aware answers.\n\nThese are the strongest proof points for his AI/ML and RAG engineering direction.`;
+  }
+
+  if (q.includes("skill") || q.includes("tool") || q.includes("language") || q.includes("stack") || q.includes("python") || q.includes("sql")) {
+    return `Abinash's technical toolbelt is grounded in practical AI and data workflows:\n\n• Languages: Python and SQL.\n• Data & ML: Pandas, NumPy, Scikit-learn, data profiling, EDA, statistical hypothesis testing, classification and regression, and metric evaluation.\n• AI / LLM: Agentic AI workflows, RAG concepts, prompt engineering, retrieval grounding, and LLM-assisted automation.\n• Visualization and app work: Streamlit dashboards and lightweight web UI demos.\n\nHis toolkit is Git/GitHub, Jupyter, VS Code, and Google Colab.`;
+  }
+
+  if (q.includes("llm") || q.includes("rag") || q.includes("agent") || q.includes("genai") || q.includes("mcp")) {
+    return `Yes, Abinash has direct experience with modern GenAI and agentic workflows.\n\nHe holds the Oracle Certified Foundations Associate in Agentic AI credential and completed the Tata GenAI Powered Data Analytics Job Simulation. His work includes RAG retrieval concepts, vector search, prompt engineering, MCP automation, and multi-step agentic orchestration using grounded context.`;
+  }
+
+  if (q.includes("cert") || q.includes("oracle") || q.includes("tata") || q.includes("deloitte") || q.includes("credential")) {
+    return `Abinash's credentials reflect both technical depth and analytical breadth:\n\n• Oracle Certified Foundations Associate in Agentic AI.\n• Tata GenAI Powered Data Analytics Job Simulation.\n• Deloitte Forensic Analytics.\n• Skill India / NSDC Python Smart Inventory Management.\n\nThese credentials align with his work in AI workflows, analytics, and ML systems.`;
+  }
+
+  if (q.includes("hire") || q.includes("contact") || q.includes("email") || q.includes("phone") || q.includes("available") || q.includes("reach") || q.includes("when")) {
+    return `You can contact Abinash directly through the portfolio channel:\n\n• Email: ${portfolioData.email}\n• Phone: ${portfolioData.phone}\n• Location: ${portfolioData.location}\n• Availability: Open to full-time roles and high-impact engineering opportunities immediately or soon after graduation.\n\nHe is ready for interview discussions and project-fit evaluation.`;
+  }
+
+  if (q.includes("ml vs") || q.includes("software engineering") || q.includes("engineering")) {
+    return `Abinash bridges machine learning and applying data systems to real product workflows.\n\nHis ML strengths include feature work, model training, evaluation metrics, and statistical testing. His software strengths include data pipelines, dashboard generation, and end-to-end workflow delivery with Python and streamlit-style app outputs.`;
+  }
+
+  if (q.includes("education") || q.includes("college") || q.includes("university") || q.includes("cutm") || q.includes("cgpa")) {
+    return `Abinash is pursuing B.Tech AI/ML at ${portfolioData.college} and currently records a CGPA of ${portfolioData.cgpa}.`;
+  }
+
+  return `Abinash is pursuing B.Tech AI/ML at ${portfolioData.college}, with focus areas in predictive ML, RAG systems, agentic workflows, and analytics automation.\n\nYou can ask about his MLOps & Autonomous Data Agent with MCP, DocuRAG, technical skills, or hiring availability. If you need details beyond this answer, reach him at ${portfolioData.email}.`;
+}
+
 // Gemini AI Chat Assistant Endpoint for "Ask Abinash AI"
 app.post("/api/chat", async (req, res) => {
   const { message, conversationHistory = [] } = req.body;
@@ -158,18 +201,15 @@ app.post("/api/chat", async (req, res) => {
 
 ### Key Projects
 
-1. **5G Small-Cell KPI Management System**
-   - Built a 5G Small-Cell Network KPI Management system.
-   - Used a Random Forest classifier with ~100 estimators.
-   - Dataset: ~5,000 small-cell telemetry records.
-   - Monitors 10 critical KPIs across 4 network slices: eMBB, URLLC, mMTC, HC.
-   - Achieved ~96.2% accuracy and ~96.5% F1-score.
-   - Tech: Python, Pandas, NumPy, Scikit-learn, Streamlit for dashboards.
+1. **MLOps & Autonomous Data Agent with MCP**
+   - Built an AI/ML platform with an MCP server for VS Code, Cursor, and Claude Desktop.
+   - Automates dataset profiling, preprocessing, model training, evaluation, RAG-based analysis, and reporting.
+   - Tech stack includes Python, Pandas, NumPy, Scikit-learn, ChromaDB, RAG, Ollama, FastMCP, Streamlit, and Jinja2.
 
-2. **SafeDrive AI – Accident Severity Prediction**
-   - Predicts traffic accident severity: Slight, Serious, Fatal.
-   - Uses real-time geospatial risk heatmaps and alternative route suggestions.
-   - Tech: Python, Scikit-learn, Streamlit, geospatial data.
+2. **DocuRAG — Multimodal Document RAG & Knowledge Engine**
+   - Built a document intelligence engine with hybrid retrieval, BM25 search, vector search, and cross-encoder re-ranking.
+   - Supports grounded document answers, context precision, and citation-aware knowledge retrieval.
+   - Tech stack includes Python, FastAPI, LlamaIndex, Qdrant/ChromaDB, sentence-transformers, BM25, FlashRank, and React.
 
 3. **Additional analytics / ML projects**
    - Use generic descriptions if user asks broadly: "predictive ML, telemetry analytics, interactive dashboards, classification/regression models, EDA, statistical testing".
@@ -251,32 +291,7 @@ app.post("/api/chat", async (req, res) => {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      // Grounded deterministic fallback based on the knowledge base
-      const q = message.toLowerCase();
-      let reply = "Hello! I am Abinash's AI Portfolio Assistant. I'm here to help recruiters and hiring teams explore Abinash's technical background, ML projects, skills, and role fit. What would you like to know?";
-
-      if (q.includes("30 second") || q.includes("tell me about") || q.includes("who is abinash") || q.includes("summary") || q.includes("overview")) {
-        reply = "Abinash is pursuing B.Tech AI/ML at Centurion University (CUTM) with an 8.32 CGPA, focused on predictive ML, telemetry analytics, and intelligent systems.\n\n• **Core Strengths:** End-to-end data pipelines, Random Forest classification, and agentic AI workflows.\n• **Flagship Work:** 5G Small-Cell KPI Management (96.2% accuracy across 5,000 telemetry records) and SafeDrive AI.\n• **Credentials:** Oracle Certified Associate in Agentic AI, Tata GenAI Analytics, and Deloitte Forensic Analytics.\n• **Target Roles:** Data Analyst, AI/ML Engineer, LLM/RAG Engineer, and Analytics Engineer.\n\nIf you'd like, I can share project deep dives or connect you directly with Abinash at swainabinash839@gmail.com.";
-      } else if (q.includes("role") || q.includes("fit") || q.includes("position") || q.includes("job")) {
-        reply = "Abinash is a strong fit for the following roles:\n\n• **Data Analyst:** Strong proficiency in SQL, Pandas, NumPy, statistical hypothesis testing, and exploratory data analysis.\n• **AI/ML Engineer:** Hands-on experience with Scikit-learn, Random Forest classification/regression, model evaluation (accuracy, F1), and feature engineering.\n• **LLM/RAG Engineer:** Certified in Oracle Agentic AI with hands-on knowledge in prompt engineering, RAG retrieval concepts, and AI copilot integration.\n• **Analytics Engineer:** Skilled in transforming raw telemetry records into interactive Streamlit dashboards and actionable decision metrics.\n\nHe is open to full-time roles and internships. Would you like his contact details?";
-      } else if (q.includes("project") || q.includes("5g") || q.includes("safedrive") || q.includes("top project")) {
-        reply = "Here are Abinash's top projects:\n\n1. **5G Small-Cell KPI Management System**\n   - Problem: Proactive SLA compliance monitoring across network slices.\n   - Approach: 100-estimator Random Forest classifier trained on 5,000 small-cell telemetry records monitoring 10 critical KPIs across eMBB, URLLC, mMTC, and HC slices.\n   - Impact: Achieved 96.2% accuracy and 96.5% F1-score with an interactive Streamlit NOC dashboard.\n\n2. **SafeDrive AI – Accident Severity Prediction**\n   - Problem: Real-time traffic hazard identification and injury severity prevention.\n   - Approach: Multi-class Scikit-learn predictive models with real-time geospatial risk heatmaps and dynamic alternate routing.\n   - Impact: Classifies Slight, Serious, and Fatal risk zones on interactive maps.\n\n3. **Analytics & Exploratory Tools**\n   - Built CSV Intelligence for conversational automated EDA and Viral Predictor for content optimization.\n\nWould you like more technical details on any of these systems?";
-      } else if (q.includes("skill") || q.includes("tool") || q.includes("language") || q.includes("stack") || q.includes("python") || q.includes("sql")) {
-        reply = "Abinash's technical toolbelt includes:\n\n• **Languages:** Python (strong), SQL (MySQL/SQLite)\n• **Data & ML:** Pandas, NumPy, Scikit-learn, EDA, statistical hypothesis testing, classification/regression, model evaluation (accuracy, F1-score)\n• **AI / LLM:** Agentic AI workflow orchestration, RAG concepts, prompt engineering, basic LLM integration\n• **Visualization & Apps:** Streamlit interactive dashboards, basic web UI for demos\n• **Tools:** Git/GitHub, Jupyter Notebook, VS Code, Google Colab\n\nHe uses Python and SQL daily for data cleaning, modeling, and dashboard construction.";
-      } else if (q.includes("llm") || q.includes("rag") || q.includes("agent") || q.includes("genai")) {
-        reply = "Yes! Abinash has practical knowledge in modern Generative AI and agentic workflows:\n\n• **Oracle Certified Foundations Associate in Agentic AI** (Credential ID: 103519150AAI26OFA).\n• **Tata GenAI Powered Data Analytics Job Simulation** on LLM data interpretation.\n• **Technical Competencies:** RAG retrieval concepts, vector search foundations, prompt engineering, and agentic multi-step tool orchestration.\n\nHe is actively building AI assistants and knowledge systems to automate complex analytical workflows.";
-      } else if (q.includes("cert") || q.includes("oracle") || q.includes("tata") || q.includes("deloitte") || q.includes("credential")) {
-        reply = "Abinash holds verified industry credentials:\n\n• **Oracle Certified Foundations Associate in Agentic AI** (Credential ID: 103519150AAI26OFA)\n• **Tata:** GenAI Powered Data Analytics Job Simulation\n• **Deloitte:** Forensic Analytics Simulation\n• **Skill India / NSDC:** Python Smart Inventory Management (TutorialsPoint)\n\nAll credentials verify his hands-on competencies in AI workflows, statistical testing, and enterprise analytics.";
-      } else if (q.includes("hire") || q.includes("contact") || q.includes("email") || q.includes("phone") || q.includes("available") || q.includes("reach") || q.includes("when")) {
-        reply = "You can easily hire or contact Abinash directly:\n\n• **Email:** swainabinash839@gmail.com\n• **Phone:** +91-7077475818\n• **Location:** Bhubaneswar, Odisha, India\n• **Availability:** Open to full-time roles and high-impact engineering opportunities immediately / upon graduation.\n\nHe is ready to schedule screening calls and technical interviews right away!";
-      } else if (q.includes("ml vs") || q.includes("software engineering") || q.includes("engineering")) {
-        reply = "Abinash bridges machine learning and practical application engineering:\n\n• **ML Depth:** Strong in mathematical feature engineering, Random Forest hyperparameter tuning, model evaluation (accuracy, precision, recall, F1), and statistical testing.\n• **Software & Delivery:** Comfortable building full end-to-end data pipelines: ingestion → cleaning → modeling → interactive Streamlit dashboards and web UI integration.\n\nHe can both train reliable models and deliver them into production dashboards.";
-      } else if (q.includes("education") || q.includes("college") || q.includes("university") || q.includes("cutm") || q.includes("cgpa")) {
-        reply = "Abinash is pursuing B.Tech AI/ML at Centurion University of Technology and Management (CUTM), Bhubaneswar, holding an impressive **CGPA of 8.32 / 10.0**.";
-      } else {
-        reply = "Abinash is pursuing B.Tech AI/ML at Centurion University (CGPA 8.32), specializing in predictive ML, 5G telemetry analytics, and agentic AI systems.\n\nFeel free to ask about his 5G KPI project, SafeDrive AI, technical skills, or hiring availability. If you need details not covered here, you can reach him directly at swainabinash839@gmail.com.";
-      }
-
+      const reply = buildDeterministicReply(message);
       res.json({ reply });
       return;
     }
@@ -294,7 +309,7 @@ app.post("/api/chat", async (req, res) => {
   } catch (error: any) {
     console.error("Gemini API Error:", error);
     res.json({
-      reply: "Abinash is a Data Analyst Intern & AI/ML Engineer with a 8.32 CGPA in B.Tech AI/ML at Centurion University. He specializes in Python, SQL, predictive modeling, 5G SLA management, and accident prediction systems. Feel free to explore the apps on screen!"
+      reply: "Abinash is pursuing B.Tech AI/ML at Centurion University (CUTM) with CGPA 8.32 and focuses on Data Analyst, AI/ML Engineer, LLM/RAG, and Analytics roles. His current portfolio highlights MLOps & Autonomous Data Agent with MCP and DocuRAG — Multimodal Document RAG & Knowledge Engine. You can reach him at swainabinash839@gmail.com or +91-7077475818."
     });
   }
 });
