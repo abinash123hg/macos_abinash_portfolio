@@ -61,8 +61,6 @@ export const getAssetCandidates = (filename: string): string[] => {
     `/assets/music/${baseName}`,
     `/favorites/${baseName}`,
     `/photos/${baseName}`,
-    `/videos/${baseName}`,
-    `/public/assets/${clean}`,
     `/${baseName}`
   ];
 

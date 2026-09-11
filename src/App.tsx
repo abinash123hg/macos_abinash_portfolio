@@ -3,6 +3,7 @@ import { DeviceProvider, useDevice } from './context/DeviceContext';
 import { LandingDestination, LandingScreen } from './components/common/LandingScreen';
 import { DesktopBackground } from './components/mac/system/DesktopBackground';
 import { sound } from './utils/audioHaptics';
+import { ErrorPage, getPathErrorStatus, PortfolioErrorBoundary } from './components/common/ErrorPage';
 
 const DesktopMenuBar = lazy(() => import('./components/desktop/DesktopMenuBar').then(module => ({ default: module.DesktopMenuBar })));
 const DesktopDock = lazy(() => import('./components/desktop/DesktopDock').then(module => ({ default: module.DesktopDock })));
@@ -69,16 +70,23 @@ const PortfolioRoot: React.FC = () => {
           </div>
         )}
 
-        <DesktopSpotlight isOpen={spotlightOpen} onClose={() => setSpotlightOpen(false)} />
+        {deviceMode === 'desktop' && (
+          <DesktopSpotlight isOpen={spotlightOpen} onClose={() => setSpotlightOpen(false)} />
+        )}
       </Suspense>
     </div>
   );
 };
 
 export default function App() {
+  const pathErrorStatus = getPathErrorStatus();
+  if (pathErrorStatus) return <ErrorPage status={pathErrorStatus} />;
+
   return (
-    <DeviceProvider>
-      <PortfolioRoot />
-    </DeviceProvider>
+    <PortfolioErrorBoundary>
+      <DeviceProvider>
+        <PortfolioRoot />
+      </DeviceProvider>
+    </PortfolioErrorBoundary>
   );
 }

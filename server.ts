@@ -11,6 +11,21 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.use(express.json());
 
+const escapeHtml = (value: string) => value
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;")
+  .replace(/'/g, "&#039;");
+const contactAttempts = new Map<string, number>();
+const contactLimitMs = 30_000;
+const apiError = (res: express.Response, status: number, code: string, message: string) => {
+  res.status(status).json({ success: false, error: { code, message } });
+};
+const apiSuccess = (res: express.Response, data: Record<string, unknown> = {}) => {
+  res.json({ success: true, ...data });
+};
+
 // Serve static assets directly with streaming & range support
 const assetsDir = path.join(process.cwd(), "assets");
 const publicAssetsDir = path.join(process.cwd(), "public/assets");
@@ -29,11 +44,94 @@ app.use(express.static(path.join(process.cwd(), "public")));
 
 // API health endpoint
 app.get("/api/health", (_req, res) => {
-  res.json({
+  apiSuccess(res, {
     status: "ok",
     system: "Abinash OS & iOS Hub",
     timestamp: new Date().toISOString()
   });
+});
+app.all("/api/health", (_req, res) => {
+  res.set("Allow", "GET");
+  apiError(res, 405, "METHOD_NOT_ALLOWED", "This request method is not supported.");
+});
+
+app.all("/api/contact", (req, res, next) => {
+  if (req.method !== "POST") {
+    res.set("Allow", "POST");
+    apiError(res, 405, "METHOD_NOT_ALLOWED", "This request method is not supported.");
+    return;
+  }
+  next();
+});
+app.post("/api/contact", async (req, res) => {
+  const { name, email, subject, message, website } = req.body ?? {};
+  if (typeof website === "string" && website.trim()) {
+    res.status(204).end();
+    return;
+  }
+
+  const clientIp = req.ip || req.socket.remoteAddress || "unknown";
+  const lastAttempt = contactAttempts.get(clientIp) || 0;
+  if (Date.now() - lastAttempt < contactLimitMs) {
+    apiError(res, 429, "RATE_LIMITED", "Too many requests. Please wait a moment and try again.");
+    return;
+  }
+  contactAttempts.set(clientIp, Date.now());
+
+  const values = [name, email, subject, message];
+  if (values.some(value => typeof value !== "string" || !value.trim())) {
+    apiError(res, 422, "VALIDATION_ERROR", "Some information is missing or invalid.");
+    return;
+  }
+
+  if (name.trim().length > 120 || subject.trim().length > 200 || message.trim().length > 5000 || email.trim().length > 254) {
+    apiError(res, 422, "VALIDATION_ERROR", "Some information is missing or invalid.");
+    return;
+  }
+
+  const normalizedEmail = email.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+    apiError(res, 422, "VALIDATION_ERROR", "Some information is missing or invalid.");
+    return;
+  }
+
+  const apiKey = process.env.RESEND_API_KEY;
+  const fromEmail = process.env.MAIL_FROM_EMAIL;
+  if (!apiKey || !fromEmail) {
+    apiError(res, 503, "SERVICE_UNAVAILABLE", "This service is temporarily unavailable. Please try again shortly.");
+    return;
+  }
+
+  try {
+    const resendResponse = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: `${process.env.MAIL_FROM_NAME || "Abinash Swain Portfolio"} <${fromEmail}>`,
+        to: [process.env.CONTACT_RECEIVER_EMAIL || process.env.MAIL_TO_EMAIL || "swainabinash839@gmail.com"],
+        reply_to: normalizedEmail,
+        subject: `Portfolio contact: ${subject.trim()}`,
+        text: `Name: ${name.trim()}\nReply email: ${normalizedEmail}\n\n${message.trim()}`,
+        html: `<p><strong>Name:</strong> ${escapeHtml(name.trim())}</p><p><strong>Reply email:</strong> ${escapeHtml(normalizedEmail)}</p><p>${escapeHtml(message.trim()).replace(/\n/g, "<br>")}</p>`,
+        headers: { "X-Entity-Ref-ID": crypto.randomUUID() },
+      }),
+    });
+
+    if (!resendResponse.ok) {
+      const errorBody = await resendResponse.text();
+      console.error("Resend API Error:", errorBody);
+      apiError(res, 502, "BAD_GATEWAY", "A connected service returned an invalid response.");
+      return;
+    }
+
+    apiSuccess(res);
+  } catch (error) {
+    console.error("Contact email error:", error);
+    apiError(res, 502, "BAD_GATEWAY", "A connected service returned an invalid response.");
+  }
 });
 
 // Gemini AI Chat Assistant Endpoint for "Ask Abinash AI"
@@ -41,7 +139,7 @@ app.post("/api/chat", async (req, res) => {
   const { message, conversationHistory = [] } = req.body;
 
   if (!message || typeof message !== "string") {
-    res.status(400).json({ error: "Message is required" });
+    apiError(res, 422, "VALIDATION_ERROR", "Some information is missing or invalid.");
     return;
   }
 
@@ -196,6 +294,26 @@ app.post("/api/chat", async (req, res) => {
       reply: "Abinash is a Data Analyst Intern & AI/ML Engineer with a 8.32 CGPA in B.Tech AI/ML at Centurion University. He specializes in Python, SQL, predictive modeling, 5G SLA management, and accident prediction systems. Feel free to explore the apps on screen!"
     });
   }
+});
+app.all("/api/chat", (_req, res) => {
+  res.set("Allow", "POST");
+  apiError(res, 405, "METHOD_NOT_ALLOWED", "This request method is not supported.");
+});
+app.all("/api/*", (_req, res) => {
+  apiError(res, 404, "NOT_FOUND", "The requested resource could not be found.");
+});
+
+app.use((error: unknown, _req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (res.headersSent) {
+    next(error);
+    return;
+  }
+  if (error instanceof SyntaxError) {
+    apiError(res, 400, "BAD_REQUEST", "Please check the information and try again.");
+    return;
+  }
+  console.error("Unhandled API error:", error);
+  apiError(res, 500, "INTERNAL_SERVER_ERROR", "Something went wrong on our side. Please try again later.");
 });
 
 async function startServer() {

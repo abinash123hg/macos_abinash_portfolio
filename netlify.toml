@@ -4,6 +4,11 @@
   # The Express server is for local/Replit hosting; Netlify serves the Vite output.
 
 [[redirects]]
+  from = "/api/contact"
+  to = "/.netlify/functions/contact"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

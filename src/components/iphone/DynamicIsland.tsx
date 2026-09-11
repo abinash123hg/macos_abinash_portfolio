@@ -52,6 +52,10 @@ export const DynamicIsland: React.FC = () => {
   const mode = dynamicIsland.mode;
   const isMusic = mode === 'music' || (mode === 'idle' && isPlayingMusic);
 
+  useEffect(() => {
+    if (!dynamicIsland.expanded) setInternalExpanded(false);
+  }, [dynamicIsland.expanded]);
+
   const handleIslandClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     sound.tap();
@@ -194,6 +198,7 @@ export const DynamicIsland: React.FC = () => {
                 step="0.1"
                 value={Math.min(playback.currentTime, displayDuration || 0)}
                 onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
                 onChange={(e) => sound.seekTrack(Number(e.target.value))}
                 aria-label="Song progress"
                 className="h-1.5 w-full accent-rose-500 cursor-pointer"

@@ -33,27 +33,16 @@ SUMMARY:
 ${portfolioData.aboutEditorial}
 
 EDUCATION:
-- B.Tech in Computer Science & Engineering (AI & ML) - CGPA: 8.32
-  Centurion University of Technology and Management (2023 - 2027)
-- Higher Secondary Education - 78% (2021 - 2023)
-  Royal Higher Secondary Education
+${portfolioData.education.map(item => `- ${item.degree} - ${item.score}\n  ${item.institution} (${item.period})`).join('\n')}
 
 EXPERIENCE:
-- AI/ML Intern | InternPe (Aug 2026 - Sep 2026) [Offer ID: IPI#87258]
-  * Machine learning predictive pipelines & exploratory data analysis (EDA).
-- AI & Data Analysis Trainee | TutorialsPoint Academy / NSDC (May 2026 - Jul 2026)
+${portfolioData.experience.map(item => `- ${item.role} | ${item.company} (${item.period})\n${item.responsibilities.map(responsibility => `  * ${responsibility}`).join('\n')}`).join('\n')}
 
 PROJECTS:
-1. 5G Small-Cell Network KPI Management (96.2% Accuracy, Random Forest, Streamlit)
-2. SafeDrive AI - Traffic Accident Severity Predictor & Hotspot Mapping
-3. CSV Intelligence & Automated EDA Platform
+${portfolioData.projects.slice(0, 3).map((project, index) => `${index + 1}. ${project.title} - ${project.description}`).join('\n')}
 
 CERTIFICATIONS:
-1. Oracle Certified Foundations Associate - Agentic AI (ID: 103519150AAI26OFA)
-2. Tata - GenAI Powered Data Analytics
-3. Deloitte - Data Analytics Job Simulation
-4. AI-Powered Smart Inventory Management (Skill India / NSDC)
-5. Data Analyst Internship Certificate (InternPe)
+${portfolioData.certificates.map((certificate, index) => `${index + 1}. ${certificate.title} - ${certificate.issuer}${certificate.credentialId ? ` (ID: ${certificate.credentialId})` : ''}`).join('\n')}
     `;
 
     const blob = new Blob([resumeText], { type: 'text/plain;charset=utf-8' });
@@ -121,10 +110,10 @@ CERTIFICATIONS:
           </h4>
           <div className="text-[12.5px]">
             <div className="font-semibold text-neutral-900 dark:text-white">
-              B.Tech in CSE (AI & Machine Learning) — 8.32 CGPA
+              {portfolioData.education[0]?.degree} — {portfolioData.education[0]?.score}
             </div>
             <div className="text-neutral-500 text-[11.5px]">
-              Centurion University of Technology and Management (2023 – 2027)
+              {portfolioData.education[0]?.institution} ({portfolioData.education[0]?.period})
             </div>
           </div>
         </div>
@@ -135,17 +124,19 @@ CERTIFICATIONS:
             <Briefcase className="w-3.5 h-3.5 text-purple-500" /> Professional Experience
           </h4>
           <div className="space-y-2 text-[12px]">
-            <div>
-              <div className="font-semibold text-neutral-900 dark:text-white">
-                AI/ML Intern — InternPe
+            {portfolioData.experience.map((experience) => (
+              <div key={experience.id}>
+                <div className="font-semibold text-neutral-900 dark:text-white">
+                  {experience.role} — {experience.company}
+                </div>
+                <div className="text-neutral-500 text-[11px] mb-1">
+                  {experience.period} • {experience.location}
+                </div>
+                <p className="text-neutral-600 dark:text-neutral-300 leading-snug">
+                  {experience.responsibilities[0]}
+                </p>
               </div>
-              <div className="text-neutral-500 text-[11px] mb-1">
-                Aug 2026 – Sep 2026 • Remote
-              </div>
-              <p className="text-neutral-600 dark:text-neutral-300 leading-snug">
-                Engineered automated feature pipelines and validated predictive models using stratified K-Fold cross validation.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
 
@@ -155,22 +146,12 @@ CERTIFICATIONS:
             <Sparkles className="w-3.5 h-3.5 text-blue-500" /> Flagship Projects
           </h4>
           <div className="space-y-2 text-[12px]">
-            <div>
-              <div className="font-semibold text-neutral-900 dark:text-white">
-                5G Small-Cell KPI Management System (96.2% Acc)
+            {portfolioData.projects.slice(0, 2).map((project) => (
+              <div key={project.id}>
+                <div className="font-semibold text-neutral-900 dark:text-white">{project.title}</div>
+                <p className="text-neutral-600 dark:text-neutral-300 leading-snug text-[11.5px]">{project.description}</p>
               </div>
-              <p className="text-neutral-600 dark:text-neutral-300 leading-snug text-[11.5px]">
-                Random Forest classifier evaluating 5,000 telemetry records across 4 network slices with real-time SLA anomaly monitoring.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-neutral-900 dark:text-white">
-                SafeDrive AI — Risk Severity Predictor
-              </div>
-              <p className="text-neutral-600 dark:text-neutral-300 leading-snug text-[11.5px]">
-                Multi-class collision risk predictor with geospatial hotspot mapping.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
 
@@ -180,9 +161,9 @@ CERTIFICATIONS:
             <Award className="w-3.5 h-3.5 text-amber-500" /> Certifications
           </h4>
           <div className="text-[11.5px] space-y-1 text-neutral-700 dark:text-neutral-300">
-            <div>• <strong>Oracle Certified Associate</strong> — Agentic AI (103519150AAI26OFA)</div>
-            <div>• <strong>Tata</strong> — GenAI Powered Data Analytics</div>
-            <div>• <strong>Deloitte</strong> — Data Analytics Job Simulation</div>
+            {portfolioData.certificates.slice(0, 3).map((certificate) => (
+              <div key={certificate.id}>• <strong>{certificate.issuer}</strong> — {certificate.title}</div>
+            ))}
           </div>
         </div>
       </div>
@@ -205,7 +186,7 @@ CERTIFICATIONS:
           icon={<Download className="w-4 h-4" />}
           onClick={handleDownload}
         >
-          Download Resume (TXT/PDF)
+          Download Resume (TXT)
         </IOSButton>
       </div>
     </AppWindow>

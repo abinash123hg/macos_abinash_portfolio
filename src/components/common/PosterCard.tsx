@@ -17,19 +17,29 @@ export const PosterCard: React.FC<PosterCardProps> = ({ show, onSelect, classNam
   const handleCopyQuote = (e: React.MouseEvent) => {
     e.stopPropagation();
     sound.tap();
-    navigator.clipboard.writeText(`${show.dialogue} — ${show.quoteSpeaker}`);
+    void navigator.clipboard?.writeText(`${show.dialogue} — ${show.quoteSpeaker}`).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const primarySrc = resolveMediaUrl(show.posterFileName, 'assets/favorites');
+  const handleSelect = () => {
+    sound.tap();
+    onSelect?.(show);
+  };
 
   return (
     <div
-      onClick={() => {
-        sound.tap();
-        onSelect?.(show);
+      onClick={handleSelect}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          handleSelect();
+        }
       }}
+      role={onSelect ? 'button' : undefined}
+      tabIndex={onSelect ? 0 : undefined}
+      aria-label={onSelect ? `Open ${show.title}` : undefined}
       className={`group relative flex flex-col rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-800 hover:border-neutral-700 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer ${className}`}
     >
       {/* Poster Media Box */}
@@ -115,6 +125,7 @@ export const PosterCard: React.FC<PosterCardProps> = ({ show, onSelect, classNam
           </div>
           <button
             onClick={handleCopyQuote}
+            aria-label={`Copy quote from ${show.title}`}
             title="Copy iconic quote"
             className="p-1 rounded-md bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white transition-colors shrink-0 cursor-pointer"
           >

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { portfolioData } from '../../data/portfolioData';
+import { useDevice } from '../../context/DeviceContext';
 import { sound } from '../../utils/audioHaptics';
 
 interface HistoryItem {
@@ -9,6 +10,7 @@ interface HistoryItem {
 }
 
 export const TerminalApp: React.FC = () => {
+  const { requestMailCompose } = useDevice();
   const [inputVal, setInputVal] = useState('');
   const [history, setHistory] = useState<HistoryItem[]>([
     {
@@ -162,7 +164,7 @@ export const TerminalApp: React.FC = () => {
       case 'contact':
         outputNode = (
           <div className="text-xs space-y-1 font-mono">
-            <div>Email: <a href={`mailto:${portfolioData.email}`} className="text-cyan-400 underline">{portfolioData.email}</a></div>
+            <div>Email: <button type="button" onClick={requestMailCompose} className="text-cyan-400 underline cursor-pointer">{portfolioData.email}</button></div>
             <div>Phone: {portfolioData.phone}</div>
             <div>GitHub: <a href={portfolioData.github} target="_blank" rel="noreferrer" className="text-cyan-400 underline">{portfolioData.github}</a></div>
             <div>LinkedIn: <a href={portfolioData.linkedin} target="_blank" rel="noreferrer" className="text-cyan-400 underline">{portfolioData.linkedin}</a></div>

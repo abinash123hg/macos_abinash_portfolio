@@ -191,6 +191,7 @@ export const NativeVideoPlayer: React.FC<NativeVideoPlayerProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={togglePlay}
+              aria-label={isPlaying ? 'Pause video' : 'Play video'}
               className="p-1.5 rounded-lg bg-white/15 hover:bg-white/30 text-white cursor-pointer transition-colors"
             >
               {isPlaying ? <Pause className="w-4 h-4 fill-white" /> : <Play className="w-4 h-4 fill-white ml-0.5" />}
@@ -198,6 +199,7 @@ export const NativeVideoPlayer: React.FC<NativeVideoPlayerProps> = ({
 
             <button
               onClick={toggleMute}
+              aria-label={isMuted ? 'Unmute video' : 'Mute video'}
               className="p-1.5 rounded-lg bg-white/15 hover:bg-white/30 text-white cursor-pointer transition-colors"
             >
               {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4" />}
@@ -205,6 +207,7 @@ export const NativeVideoPlayer: React.FC<NativeVideoPlayerProps> = ({
 
             <button
               onClick={cycleSpeed}
+              aria-label={`Playback speed ${playbackSpeed} times; change speed`}
               className="px-2 py-1 rounded-lg bg-white/15 hover:bg-white/30 text-[11px] font-bold font-mono cursor-pointer transition-colors"
             >
               {playbackSpeed}x
@@ -216,6 +219,7 @@ export const NativeVideoPlayer: React.FC<NativeVideoPlayerProps> = ({
               onClick={() => {
                 if (videoRef.current) videoRef.current.currentTime = 0;
               }}
+              aria-label="Replay video"
               title="Replay"
               className="p-1.5 rounded-lg bg-white/15 hover:bg-white/30 text-white cursor-pointer transition-colors"
             >
@@ -224,6 +228,7 @@ export const NativeVideoPlayer: React.FC<NativeVideoPlayerProps> = ({
 
             <button
               onClick={toggleFullscreen}
+              aria-label="Enter fullscreen video"
               title="Fullscreen"
               className="p-1.5 rounded-lg bg-white/15 hover:bg-white/30 text-white cursor-pointer transition-colors"
             >

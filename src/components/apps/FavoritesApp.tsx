@@ -36,9 +36,10 @@ export const FavoritesApp: React.FC = () => {
 
   const handleCopyQuote = (dialogue: string, speaker: string) => {
     sound.tap();
-    navigator.clipboard.writeText(`${dialogue} — ${speaker}`);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    void navigator.clipboard?.writeText(`${dialogue} — ${speaker}`).then(() => {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {});
   };
 
   return (

@@ -21,7 +21,7 @@ import {
 import { useDevice } from '../../context/DeviceContext';
 
 export const AboutApp: React.FC = () => {
-  const { openApp, openDesktopWindow, deviceMode } = useDevice();
+  const { openApp, openDesktopWindow, requestMailCompose, deviceMode } = useDevice();
 
   const handleNavigateProjects = () => {
     if (deviceMode === 'mobile') {
@@ -66,13 +66,17 @@ export const AboutApp: React.FC = () => {
               <MapPin className="w-3.5 h-3.5 text-neutral-500" />
               {portfolioData.location}
             </span>
-            <a 
-              href={`mailto:${portfolioData.email}`} 
-              className="flex items-center gap-1 hover:text-cyan-400 transition-colors"
+            <button
+              type="button"
+              onClick={() => {
+                if (deviceMode === 'mobile') openApp('mail');
+                else requestMailCompose();
+              }}
+              className="flex items-center gap-1 hover:text-cyan-400 transition-colors cursor-pointer"
             >
               <Mail className="w-3.5 h-3.5 text-neutral-500" />
               {portfolioData.email}
-            </a>
+            </button>
             <span className="flex items-center gap-1">
               <Phone className="w-3.5 h-3.5 text-neutral-500" />
               {portfolioData.phone}

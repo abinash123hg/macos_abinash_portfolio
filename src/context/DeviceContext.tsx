@@ -124,6 +124,9 @@ interface DeviceContextType {
   updateWindowPosition: (appId: string, pos: { x: number; y: number }) => void;
   updateWindowSize: (appId: string, size: { width: number; height: number }) => void;
   activeDesktopWindowId: string | null;
+  mailComposeRequested: boolean;
+  requestMailCompose: () => void;
+  clearMailComposeRequest: () => void;
   
   // System State & Settings
   settings: SystemSettings;
@@ -475,9 +478,10 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
     const mediaQuery = window.matchMedia('(max-width: 767px)');
     
-    const updateDeviceMode = (e?: MediaQueryListEvent) => {
-      const isMobile = e ? e.matches : mediaQuery.matches;
-      setDeviceMode(isMobile ? 'mobile' : 'desktop');
+    const isHandheldDevice = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+      || (navigator.maxTouchPoints > 1 && /Macintosh/i.test(navigator.userAgent));
+    const updateDeviceMode = () => {
+      setDeviceMode(isHandheldDevice || mediaQuery.matches ? 'mobile' : 'desktop');
     };
 
     // Initial check synchronization
@@ -492,8 +496,8 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
 
     // Additional listeners for orientation and window resize events
-    window.addEventListener('resize', () => updateDeviceMode());
-    window.addEventListener('orientationchange', () => updateDeviceMode());
+    window.addEventListener('resize', updateDeviceMode);
+    window.addEventListener('orientationchange', updateDeviceMode);
 
     return () => {
       if (mediaQuery.removeEventListener) {
@@ -501,8 +505,8 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       } else {
         mediaQuery.removeListener(updateDeviceMode);
       }
-      window.removeEventListener('resize', () => updateDeviceMode());
-      window.removeEventListener('orientationchange', () => updateDeviceMode());
+      window.removeEventListener('resize', updateDeviceMode);
+      window.removeEventListener('orientationchange', updateDeviceMode);
     };
   }, []);
 
@@ -525,6 +529,7 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     mode: 'idle',
     expanded: false,
   });
+  const dynamicIslandTimerRef = useRef<number | null>(null);
 
   // Camera Control State
   const [cameraControl, setCameraControl] = useState<CameraControlState>({
@@ -547,7 +552,9 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   // Desktop Window Manager
   const [windows, setWindows] = useState<Record<string, WindowState>>(DEFAULT_WINDOWS);
   const [topZIndex, setTopZIndex] = useState(20);
+  const topZIndexRef = useRef(20);
   const [activeDesktopWindowId, setActiveDesktopWindowId] = useState<string | null>('about');
+  const [mailComposeRequested, setMailComposeRequested] = useState(false);
 
   // Settings & Wallpapers
   const storedWallpaperIndex = typeof window !== 'undefined'
@@ -700,11 +707,16 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   // Dynamic Island trigger helper
   const triggerDynamicIsland = useCallback((state: Partial<DynamicIslandState>, autoDismissMs = 3500) => {
+    if (dynamicIslandTimerRef.current !== null) {
+      window.clearTimeout(dynamicIslandTimerRef.current);
+      dynamicIslandTimerRef.current = null;
+    }
     setDynamicIsland(prev => ({ ...prev, ...state, expanded: true }));
     sound.tap();
 
     if (autoDismissMs > 0) {
-      setTimeout(() => {
+      dynamicIslandTimerRef.current = window.setTimeout(() => {
+        dynamicIslandTimerRef.current = null;
         setDynamicIsland(prev => ({ ...prev, expanded: false, mode: 'idle' }));
       }, autoDismissMs);
     }
@@ -1044,7 +1056,9 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   // Desktop Window Controls
   const openDesktopWindow = useCallback((appId: string) => {
     sound.tap();
-    setTopZIndex(z => z + 1);
+    const nextZIndex = topZIndexRef.current + 1;
+    topZIndexRef.current = nextZIndex;
+    setTopZIndex(nextZIndex);
     setWindows(prev => {
       const current = prev[appId] || {
         id: appId,
@@ -1055,7 +1069,7 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         isMaximized: false,
         position: { x: 100 + Math.random() * 80, y: 80 + Math.random() * 60 },
         size: { width: 720, height: 500 },
-        zIndex: topZIndex + 1
+        zIndex: nextZIndex
       };
       return {
         ...prev,
@@ -1063,12 +1077,21 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
           ...current,
           isOpen: true,
           isMinimized: false,
-          zIndex: topZIndex + 1
+          zIndex: nextZIndex
         }
       };
     });
     setActiveDesktopWindowId(appId);
-  }, [topZIndex]);
+  }, []);
+
+  const requestMailCompose = useCallback(() => {
+    setMailComposeRequested(true);
+    openDesktopWindow('mail');
+  }, [openDesktopWindow]);
+
+  const clearMailComposeRequest = useCallback(() => {
+    setMailComposeRequested(false);
+  }, []);
 
   const closeDesktopWindow = useCallback((appId: string) => {
     sound.tap();
@@ -1101,13 +1124,15 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   }, []);
 
   const focusDesktopWindow = useCallback((appId: string) => {
-    setTopZIndex(z => z + 1);
+    const nextZIndex = topZIndexRef.current + 1;
+    topZIndexRef.current = nextZIndex;
+    setTopZIndex(nextZIndex);
     setWindows(prev => ({
       ...prev,
-      [appId]: { ...prev[appId], isMinimized: false, zIndex: topZIndex + 1 }
+      [appId]: { ...prev[appId], isMinimized: false, zIndex: nextZIndex }
     }));
     setActiveDesktopWindowId(appId);
-  }, [topZIndex]);
+  }, []);
 
   const updateWindowPosition = useCallback((appId: string, pos: { x: number; y: number }) => {
     setWindows(prev => ({
@@ -1262,6 +1287,9 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         updateWindowPosition,
         updateWindowSize,
         activeDesktopWindowId,
+        mailComposeRequested,
+        requestMailCompose,
+        clearMailComposeRequest,
         settings,
         updateSettings,
         toggleFlashlight,

@@ -29,9 +29,10 @@ export const RecruiterBriefApp: React.FC = () => {
 
   const handleCopyPitch = () => {
     sound.tap();
-    navigator.clipboard.writeText(summary.pitchText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+    void navigator.clipboard?.writeText(summary.pitchText).then(() => {
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2500);
+    }).catch(() => {});
   };
 
   const domainIcons: Record<string, React.ReactNode> = {

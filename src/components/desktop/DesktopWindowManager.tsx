@@ -35,8 +35,10 @@ export const DesktopWindowManager: React.FC = () => {
     minimizeDesktopWindow, 
     maximizeDesktopWindow, 
     focusDesktopWindow, 
-    updateWindowPosition, 
-    activeDesktopWindowId 
+    updateWindowPosition,
+    activeDesktopWindowId,
+    mailComposeRequested,
+    clearMailComposeRequest
   } = useDevice();
 
   const [draggingAppId, setDraggingAppId] = useState<string | null>(null);
@@ -77,7 +79,7 @@ export const DesktopWindowManager: React.FC = () => {
       case 'certificates': return <CertificatesApp />;
       case 'safari': return <SafariApp />;
       case 'photos': return <PhotosApp />;
-      case 'mail': return <MailApp />;
+      case 'mail': return <MailApp initialCompose={mailComposeRequested} onInitialComposeHandled={clearMailComposeRequest} />;
       case 'terminal': return <TerminalApp />;
       case 'ai': return <AiAssistantApp />;
       case 'camera': return <CameraApp />;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { portfolioData } from '../../data/portfolioData';
 import { 
   Mail, 
@@ -82,17 +82,36 @@ CUTM Examination & Academic Cell`
   }
 ];
 
-export const MailApp: React.FC = () => {
+interface MailAppProps {
+  initialCompose?: boolean;
+  onInitialComposeHandled?: () => void;
+}
+
+export const MailApp: React.FC<MailAppProps> = ({ initialCompose = false, onInitialComposeHandled }) => {
   const [emails, setEmails] = useState<EmailItem[]>(INITIAL_EMAILS);
   const [selectedMailId, setSelectedMailId] = useState<string>(INITIAL_EMAILS[0].id);
-  const [isComposing, setIsComposing] = useState(false);
+  const [isComposing, setIsComposing] = useState(initialCompose);
   
   // Compose form states
   const [composeName, setComposeName] = useState('');
-  const [composeEmail, setComposeEmail] = useState('');
+  const [composeEmail, setComposeEmail] = useState(() => {
+    try {
+      return window.localStorage.getItem('portfolio-compose-email') || '';
+    } catch {
+      return '';
+    }
+  });
   const [composeSubject, setComposeSubject] = useState('');
   const [composeMessage, setComposeMessage] = useState('');
   const [sentSuccess, setSentSuccess] = useState(false);
+  const [sendError, setSendError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [isSending, setIsSending] = useState(false);
+  const composeOpenedAt = useRef(Date.now());
+
+  useEffect(() => {
+    if (initialCompose) onInitialComposeHandled?.();
+  }, [initialCompose, onInitialComposeHandled]);
 
   const selectedMail = emails.find(e => e.id === selectedMailId) || emails[0];
 
@@ -103,16 +122,55 @@ export const MailApp: React.FC = () => {
     setEmails(prev => prev.map(m => m.id === id ? { ...m, unread: false } : m));
   };
 
-  const handleSendCompose = (e: React.FormEvent) => {
+  const handleSendCompose = async (e: React.FormEvent) => {
     e.preventDefault();
     sound.tap();
-    setSentSuccess(true);
-    setTimeout(() => {
-      setSentSuccess(false);
-      setIsComposing(false);
-      setComposeMessage('');
-      setComposeSubject('');
-    }, 2000);
+    setSendError('');
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const errors: Record<string, string> = {};
+    if (composeName.trim().length < 2) errors.name = 'Please enter your name.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(composeEmail.trim())) errors.email = 'Enter a valid email address.';
+    if (composeSubject.trim().length < 3) errors.subject = 'Please add a subject.';
+    if (composeMessage.trim().length < 10) errors.message = 'Please write at least 10 characters.';
+    if (Date.now() - composeOpenedAt.current < 1000) errors.form = 'Please take a moment to review your message.';
+    setFieldErrors(errors);
+    if (Object.keys(errors).length) return;
+    setIsSending(true);
+
+    try {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 12000);
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: composeName,
+          email: composeEmail,
+          subject: composeSubject,
+          message: composeMessage,
+          website: String(formData.get('website') || ''),
+        }),
+        signal: controller.signal,
+      });
+      window.clearTimeout(timeout);
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error?.message || 'Message could not be sent.');
+
+      setSentSuccess(true);
+      window.setTimeout(() => {
+        setSentSuccess(false);
+        setIsComposing(false);
+        setComposeName('');
+        setComposeEmail('');
+        setComposeMessage('');
+        setComposeSubject('');
+      }, 2000);
+    } catch (error) {
+      setSendError(error instanceof DOMException && error.name === 'AbortError' ? 'The request took too long. Please try again.' : error instanceof Error ? error.message : 'Message could not be sent.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -122,6 +180,8 @@ export const MailApp: React.FC = () => {
         <button
           onClick={() => {
             sound.tap();
+            composeOpenedAt.current = Date.now();
+            setFieldErrors({});
             setIsComposing(true);
           }}
           className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-neutral-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-cyan-500/20 mb-3 cursor-pointer"
@@ -153,9 +213,18 @@ export const MailApp: React.FC = () => {
         {/* Quick Contact Info in Mail */}
         <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800 text-[11px] space-y-1 text-neutral-400">
           <div className="font-semibold text-neutral-300">Direct Email:</div>
-          <a href={`mailto:${portfolioData.email}`} className="text-cyan-400 break-all hover:underline block font-mono">
+          <button
+            type="button"
+            onClick={() => {
+              sound.tap();
+              composeOpenedAt.current = Date.now();
+              setFieldErrors({});
+              setIsComposing(true);
+            }}
+            className="text-left text-cyan-400 break-all hover:underline block font-mono cursor-pointer"
+          >
             {portfolioData.email}
-          </a>
+          </button>
           <div>Phone: {portfolioData.phone}</div>
         </div>
       </div>
@@ -210,23 +279,51 @@ export const MailApp: React.FC = () => {
               <div className="p-8 text-center space-y-3">
                 <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto" />
                 <h3 className="text-lg font-bold text-white">Message Ready to Send!</h3>
-                <p className="text-xs text-neutral-400">Opening default mail client for {portfolioData.email}...</p>
+                <p className="text-xs text-neutral-400">Message prepared in Portfolio Mail for {portfolioData.email}.</p>
               </div>
             ) : (
               <form onSubmit={handleSendCompose} className="space-y-3">
+                <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+                {fieldErrors.form && <p role="alert" className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2.5 text-xs text-amber-300">{fieldErrors.form}</p>}
                 <div>
-                  <label className="text-xs font-semibold text-neutral-400 block mb-1">To</label>
+                  <label className="text-xs font-semibold text-neutral-400 block mb-1" htmlFor="mail-from">From (Your Gmail)</label>
                   <input
-                    type="text"
-                    disabled
-                    value={`${portfolioData.name} <${portfolioData.email}>`}
-                    className="w-full p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-xs text-cyan-300 font-mono"
+                    id="mail-from"
+                    type="email"
+                    required
+                    autoComplete="email"
+                    placeholder="you@gmail.com"
+                    value={composeEmail}
+                    onChange={(e) => {
+                      const email = e.target.value;
+                      setComposeEmail(email);
+                      try {
+                        window.localStorage.setItem('portfolio-compose-email', email);
+                      } catch {
+                        // Local storage can be unavailable in private browsing.
+                      }
+                    }}
+                    className="w-full p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-xs text-white focus:outline-none focus:border-cyan-500"
                   />
+                  {fieldErrors.email && <p className="mt-1 text-[11px] text-red-300" role="alert">{fieldErrors.email}</p>}
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-neutral-400 block mb-1">Your Name</label>
+                  <label className="text-xs font-semibold text-neutral-400 block mb-1" htmlFor="mail-to">To</label>
                   <input
+                    id="mail-to"
+                    type="text"
+                    readOnly
+                    value={`${portfolioData.name} <${portfolioData.email}>`}
+                    className="w-full p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-xs text-cyan-300 font-mono focus:outline-none focus:border-cyan-500"
+                  />
+                  {fieldErrors.name && <p className="mt-1 text-[11px] text-red-300" role="alert">{fieldErrors.name}</p>}
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-neutral-400 block mb-1" htmlFor="mail-name">Your Name</label>
+                  <input
+                    id="mail-name"
                     type="text"
                     required
                     placeholder="e.g. Recruiter / Collaborator"
@@ -234,11 +331,13 @@ export const MailApp: React.FC = () => {
                     onChange={(e) => setComposeName(e.target.value)}
                     className="w-full p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-xs text-white focus:outline-none focus:border-cyan-500"
                   />
+                  {fieldErrors.subject && <p className="mt-1 text-[11px] text-red-300" role="alert">{fieldErrors.subject}</p>}
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-neutral-400 block mb-1">Subject</label>
+                  <label className="text-xs font-semibold text-neutral-400 block mb-1" htmlFor="mail-subject">Subject</label>
                   <input
+                    id="mail-subject"
                     type="text"
                     required
                     placeholder="e.g. Data Analyst / AI Engineering Opportunity"
@@ -246,11 +345,13 @@ export const MailApp: React.FC = () => {
                     onChange={(e) => setComposeSubject(e.target.value)}
                     className="w-full p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-xs text-white focus:outline-none focus:border-cyan-500"
                   />
+                  {fieldErrors.message && <p className="mt-1 text-[11px] text-red-300" role="alert">{fieldErrors.message}</p>}
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-neutral-400 block mb-1">Message</label>
+                  <label className="text-xs font-semibold text-neutral-400 block mb-1" htmlFor="mail-message">Message</label>
                   <textarea
+                    id="mail-message"
                     rows={6}
                     required
                     placeholder="Hi Abinash, I was impressed by your 5G SLA management model and SafeDrive AI project..."
@@ -260,14 +361,17 @@ export const MailApp: React.FC = () => {
                   />
                 </div>
 
+                {sendError && <p role="alert" className="rounded-xl border border-red-500/30 bg-red-500/10 p-2.5 text-xs text-red-300">{sendError}</p>}
+
                 <div className="flex justify-end gap-2 pt-2">
-                  <a
-                    href={`mailto:${portfolioData.email}?subject=${encodeURIComponent(composeSubject || 'Connecting from Portfolio')}&body=${encodeURIComponent(composeMessage || '')}`}
+                  <button
+                    type="submit"
+                    disabled={isSending}
                     className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-neutral-950 font-bold text-xs flex items-center gap-1.5 shadow-md cursor-pointer"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    Send via Email Client
-                  </a>
+                    {isSending ? 'Sending message…' : 'Prepare Message'}
+                  </button>
                 </div>
               </form>
             )}

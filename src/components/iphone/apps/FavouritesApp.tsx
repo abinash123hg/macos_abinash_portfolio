@@ -31,9 +31,10 @@ export const FavouritesApp: React.FC = () => {
   const handleCopy = (id: string, dialogue: string, speaker: string, e: React.MouseEvent) => {
     e.stopPropagation();
     sound.tap();
-    navigator.clipboard.writeText(`${dialogue} — ${speaker}`);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
+    void navigator.clipboard?.writeText(`${dialogue} — ${speaker}`).then(() => {
+      setCopiedId(id);
+      window.setTimeout(() => setCopiedId(null), 2000);
+    }).catch(() => {});
   };
 
   return (

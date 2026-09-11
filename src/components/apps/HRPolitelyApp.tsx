@@ -29,7 +29,7 @@ import { useDevice } from '../../context/DeviceContext';
 import { sound } from '../../utils/audioHaptics';
 
 export const HRPolitelyApp: React.FC = () => {
-  const { openDesktopWindow } = useDevice();
+  const { openDesktopWindow, requestMailCompose } = useDevice();
   const [copiedPitch, setCopiedPitch] = useState(false);
   const [copiedContact, setCopiedContact] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'skills' | 'projects' | 'education' | 'contact'>('overview');
@@ -42,16 +42,18 @@ export const HRPolitelyApp: React.FC = () => {
       `Contact: ${portfolioData.email} | ${portfolioData.phone} | ${portfolioData.location}\n` +
       `LinkedIn: ${portfolioData.linkedin}\n` +
       `GitHub: ${portfolioData.github}`;
-    navigator.clipboard.writeText(pitch);
-    setCopiedPitch(true);
-    setTimeout(() => setCopiedPitch(false), 2500);
+    void navigator.clipboard?.writeText(pitch).then(() => {
+      setCopiedPitch(true);
+      window.setTimeout(() => setCopiedPitch(false), 2500);
+    }).catch(() => {});
   };
 
   const handleCopyText = (text: string, type: string) => {
     sound.tap();
-    navigator.clipboard.writeText(text);
-    setCopiedContact(type);
-    setTimeout(() => setCopiedContact(null), 2000);
+    void navigator.clipboard?.writeText(text).then(() => {
+      setCopiedContact(type);
+      window.setTimeout(() => setCopiedContact(null), 2000);
+    }).catch(() => {});
   };
 
   return (
@@ -183,13 +185,15 @@ export const HRPolitelyApp: React.FC = () => {
                   >
                     <Github className="w-4 h-4" />
                   </a>
-                  <a
-                    href={`mailto:${portfolioData.email}`}
-                    className="p-2 rounded-lg bg-white/5 hover:bg-emerald-600 text-neutral-300 transition-colors border border-white/10"
-                    title="Email"
+                  <button
+                    type="button"
+                    onClick={requestMailCompose}
+                    className="p-2 rounded-lg bg-white/5 hover:bg-emerald-600 text-neutral-300 transition-colors border border-white/10 cursor-pointer"
+                    title="Open Portfolio Mail compose"
+                    aria-label="Open Portfolio Mail compose"
                   >
                     <Mail className="w-4 h-4" />
-                  </a>
+                  </button>
                 </div>
               </div>
 
@@ -478,9 +482,9 @@ export const HRPolitelyApp: React.FC = () => {
                     <Mail className="w-4 h-4 text-cyan-400 shrink-0" />
                     <div className="overflow-hidden">
                       <div className="text-[10px] text-neutral-400">Direct Email</div>
-                      <a href={`mailto:${portfolioData.email}`} className="text-[12px] font-semibold text-white truncate block hover:underline">
+                      <button type="button" onClick={requestMailCompose} className="text-left text-[12px] font-semibold text-white truncate block hover:underline cursor-pointer">
                         {portfolioData.email}
-                      </a>
+                      </button>
                     </div>
                   </div>
                   <button

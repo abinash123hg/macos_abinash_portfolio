@@ -22,15 +22,10 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
   const [now, setNow] = useState(() => new Date());
   const [isOnline, setIsOnline] = useState(() => navigator.onLine);
   const [batteryPercent, setBatteryPercent] = useState<number | null>(null);
-  const [activeVideo, setActiveVideo] = useState<0 | 1>(0);
-  const videoRefs = [useRef<HTMLVideoElement>(null), useRef<HTMLVideoElement>(null)];
-  const videoSwitchingRef = useRef(false);
-  const videoResetTimerRef = useRef<number | null>(null);
   const transitionTimerRef = useRef<number | null>(null);
-  const videoSource = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_204221_5339e40b-e73d-4ab0-9c65-79c18c66fd50.mp4';
+  const landingVideoUrl = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_204221_5339e40b-e73d-4ab0-9c65-79c18c66fd50.mp4';
 
   useEffect(() => () => {
-    if (videoResetTimerRef.current !== null) window.clearTimeout(videoResetTimerRef.current);
     if (transitionTimerRef.current !== null) window.clearTimeout(transitionTimerRef.current);
   }, []);
 
@@ -73,25 +68,6 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
   const month = dateParts.find((part) => part.type === 'month')?.value || '';
   const time = new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).format(now);
 
-  const handleVideoProgress = (index: 0 | 1) => {
-    if (index !== activeVideo || videoSwitchingRef.current) return;
-    const video = videoRefs[index].current;
-    if (!video || !video.duration || video.duration - video.currentTime > 0.8) return;
-
-    const nextIndex = index === 0 ? 1 : 0;
-    const nextVideo = videoRefs[nextIndex].current;
-    if (!nextVideo) return;
-    videoSwitchingRef.current = true;
-    nextVideo.currentTime = 0;
-    void nextVideo.play();
-    setActiveVideo(nextIndex);
-    videoResetTimerRef.current = window.setTimeout(() => {
-      video.pause();
-      video.currentTime = 0;
-      videoSwitchingRef.current = false;
-    }, 750);
-  };
-
   const enterPortfolio = (destination: LandingDestination = 'home') => {
     if (isLeaving) return;
     sound.landingOpenChime();
@@ -108,25 +84,17 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
 
   return (
     <main className={`foldcraft-landing ${isLeaving ? 'foldcraft-landing--leaving' : ''}`} onScroll={(event) => setIsScrolled(event.currentTarget.scrollTop > 8)}>
-      {[0, 1].map((index) => (
-        <video
-          key={index}
-          ref={videoRefs[index]}
-          className={`foldcraft-video ${activeVideo === index ? 'foldcraft-video--active' : ''}`}
-          autoPlay={index === 0}
-          muted
-          playsInline
-          preload={index === 0 ? 'metadata' : 'none'}
-          aria-hidden="true"
-          onTimeUpdate={() => handleVideoProgress(index as 0 | 1)}
-          onEnded={(event) => {
-            event.currentTarget.currentTime = 0;
-            void event.currentTarget.play();
-          }}
-        >
-          <source src={videoSource} type="video/mp4" />
-        </video>
-      ))}
+      <video
+        className="foldcraft-video"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-hidden="true"
+      >
+        <source src={landingVideoUrl} type="video/mp4" />
+      </video>
       <div className="foldcraft-video-overlay" aria-hidden="true" />
 
       {showSystemHud && (

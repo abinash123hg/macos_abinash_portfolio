@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { AppWindow } from '../ui/AppWindow';
 import { IOSCard } from '../ui/IOSCard';
 import { IOSList, IOSListItem } from '../ui/IOSList';
@@ -23,10 +23,20 @@ export const MailApp: React.FC = () => {
   const [view, setView] = useState<'inbox' | 'compose'>('inbox');
   const [selectedMail, setSelectedMail] = useState<number | null>(null);
   const [senderName, setSenderName] = useState('');
-  const [senderEmail, setSenderEmail] = useState('');
+  const [senderEmail, setSenderEmail] = useState(() => {
+    try {
+      return window.localStorage.getItem('portfolio-compose-email') || '';
+    } catch {
+      return '';
+    }
+  });
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [sentSuccess, setSentSuccess] = useState(false);
+  const [sendError, setSendError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [isSending, setIsSending] = useState(false);
+  const composeOpenedAt = useRef(Date.now());
 
   const sampleEmails = [
     {
@@ -51,18 +61,55 @@ export const MailApp: React.FC = () => {
     },
   ];
 
-  const handleSendMail = (e: React.FormEvent) => {
+  const handleSendMail = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim()) return;
 
     sound.success();
-    setSentSuccess(true);
-    setTimeout(() => {
-      setSentSuccess(false);
-      setView('inbox');
-      setMessage('');
-      setSubject('');
-    }, 1500);
+    setSendError('');
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const errors: Record<string, string> = {};
+    if (senderName.trim().length < 2) errors.name = 'Please enter your name.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(senderEmail.trim())) errors.email = 'Enter a valid email address.';
+    if (subject.trim().length < 3) errors.subject = 'Please add a subject.';
+    if (message.trim().length < 10) errors.message = 'Please write at least 10 characters.';
+    if (Date.now() - composeOpenedAt.current < 1000) errors.form = 'Please take a moment to review your message.';
+    setFieldErrors(errors);
+    if (Object.keys(errors).length) return;
+    setIsSending(true);
+
+    try {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 12000);
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: senderName,
+          email: senderEmail,
+          subject,
+          message,
+          website: String(formData.get('website') || ''),
+        }),
+        signal: controller.signal,
+      });
+      window.clearTimeout(timeout);
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error?.message || 'Message could not be sent.');
+
+      setSentSuccess(true);
+      window.setTimeout(() => {
+        setSentSuccess(false);
+        setView('inbox');
+        setSenderName('');
+        setMessage('');
+        setSubject('');
+      }, 1500);
+    } catch (error) {
+      setSendError(error instanceof DOMException && error.name === 'AbortError' ? 'The request took too long. Please try again.' : error instanceof Error ? error.message : 'Message could not be sent.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -76,6 +123,8 @@ export const MailApp: React.FC = () => {
           <button
             onClick={() => {
               sound.tap();
+              composeOpenedAt.current = Date.now();
+              setFieldErrors({});
               setView('compose');
             }}
             className="text-[#007AFF] text-[14px] font-semibold cursor-pointer"
@@ -179,35 +228,72 @@ export const MailApp: React.FC = () => {
       ) : (
         /* Compose View */
         <form onSubmit={handleSendMail} className="space-y-3">
+          <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+          {fieldErrors.form && <p role="alert" className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3 text-center text-xs text-amber-700 dark:text-amber-300">{fieldErrors.form}</p>}
           <IOSCard className="space-y-2.5">
-            <div className="flex items-center text-[13px] border-b border-neutral-100 dark:border-neutral-800 pb-2">
-              <span className="w-16 text-neutral-400">To:</span>
-              <span className="font-medium text-neutral-800 dark:text-neutral-200">{portfolioData.email}</span>
-            </div>
-            <div className="flex items-center text-[13px] border-b border-neutral-100 dark:border-neutral-800 pb-2">
-              <span className="w-16 text-neutral-400">Your Name:</span>
+            <div className="border-b border-neutral-100 dark:border-neutral-800 pb-2">
+              <label htmlFor="iphone-mail-from" className="mb-1 block text-[12px] font-semibold text-neutral-400">From (Your Gmail)</label>
               <input
+                id="iphone-mail-from"
+                type="email"
+                required
+                autoComplete="email"
+                placeholder="you@gmail.com"
+                value={senderEmail}
+                onChange={(e) => {
+                  const email = e.target.value;
+                  setSenderEmail(email);
+                  try {
+                    window.localStorage.setItem('portfolio-compose-email', email);
+                  } catch {
+                    // Local storage can be unavailable in private browsing.
+                  }
+                }}
+                className="w-full rounded-lg bg-neutral-100/70 px-2.5 py-2 text-[13px] text-neutral-900 outline-none focus:ring-2 focus:ring-[#007AFF]/40 dark:bg-neutral-800/70 dark:text-white"
+              />
+              {fieldErrors.email && <p className="mt-1 text-[11px] text-red-600 dark:text-red-400" role="alert">{fieldErrors.email}</p>}
+            </div>
+            <div className="border-b border-neutral-100 dark:border-neutral-800 pb-2">
+              <label htmlFor="iphone-mail-to" className="mb-1 block text-[12px] font-semibold text-neutral-400">To</label>
+              <input
+                id="iphone-mail-to"
+                type="text"
+                readOnly
+                value={`${portfolioData.name} <${portfolioData.email}>`}
+                className="w-full rounded-lg bg-neutral-100/70 px-2.5 py-2 text-[13px] font-medium text-neutral-800 outline-none dark:bg-neutral-800/70 dark:text-neutral-200"
+              />
+              {fieldErrors.name && <p className="mt-1 text-[11px] text-red-600 dark:text-red-400" role="alert">{fieldErrors.name}</p>}
+            </div>
+            <div className="border-b border-neutral-100 dark:border-neutral-800 pb-2">
+              <label htmlFor="iphone-mail-name" className="mb-1 block text-[12px] font-semibold text-neutral-400">Your Name</label>
+              <input
+                id="iphone-mail-name"
                 type="text"
                 required
                 placeholder="Recruiter or Hiring Manager"
                 value={senderName}
                 onChange={(e) => setSenderName(e.target.value)}
-                className="flex-1 bg-transparent border-none outline-none text-neutral-900 dark:text-white text-[13px]"
+                className="w-full bg-transparent border-none outline-none text-neutral-900 dark:text-white text-[13px]"
               />
+              {fieldErrors.subject && <p className="mt-1 text-[11px] text-red-600 dark:text-red-400" role="alert">{fieldErrors.subject}</p>}
             </div>
-            <div className="flex items-center text-[13px] border-b border-neutral-100 dark:border-neutral-800 pb-2">
-              <span className="w-16 text-neutral-400">Subject:</span>
+            <div className="border-b border-neutral-100 dark:border-neutral-800 pb-2">
+              <label htmlFor="iphone-mail-subject" className="mb-1 block text-[12px] font-semibold text-neutral-400">Subject</label>
               <input
+                id="iphone-mail-subject"
                 type="text"
                 required
                 placeholder="Job Opportunity / Project Collaboration"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className="flex-1 bg-transparent border-none outline-none text-neutral-900 dark:text-white text-[13px]"
+                className="w-full bg-transparent border-none outline-none text-neutral-900 dark:text-white text-[13px]"
               />
+              {fieldErrors.message && <p className="mt-1 text-[11px] text-red-600 dark:text-red-400" role="alert">{fieldErrors.message}</p>}
             </div>
             <div>
+              <label htmlFor="iphone-mail-message" className="mb-1 block text-[12px] font-semibold text-neutral-400">Message</label>
               <textarea
+                id="iphone-mail-message"
                 required
                 rows={5}
                 placeholder="Write your note or interview proposal here..."
@@ -217,6 +303,8 @@ export const MailApp: React.FC = () => {
               />
             </div>
           </IOSCard>
+
+          {sendError && <p role="alert" className="rounded-2xl border border-red-500/30 bg-red-500/10 p-3 text-center text-xs text-red-600 dark:text-red-400">{sendError}</p>}
 
           {sentSuccess ? (
             <div className="p-3 rounded-2xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-center text-xs font-semibold flex items-center justify-center gap-1.5">
@@ -228,8 +316,9 @@ export const MailApp: React.FC = () => {
               variant="primary"
               icon={<Send className="w-4 h-4" />}
               type="submit"
+              disabled={isSending}
             >
-              Send Message
+              {isSending ? 'Sending message…' : 'Send Message'}
             </IOSButton>
           )}
         </form>

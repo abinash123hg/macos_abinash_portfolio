@@ -29,7 +29,7 @@ export const CertificatePreview: React.FC<CertificatePreviewProps> = ({ certific
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xl flex flex-col justify-end p-2 animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xl flex flex-col justify-end p-2 animate-in fade-in zoom-in-95 duration-200" role="dialog" aria-modal="true" aria-labelledby="certificate-preview-title">
       <div className="w-full max-h-[90vh] bg-white dark:bg-neutral-900 rounded-[28px] border border-neutral-200 dark:border-neutral-800 p-4 overflow-y-auto shadow-2xl flex flex-col justify-between">
         
         {/* Top Close Header */}
@@ -47,6 +47,7 @@ export const CertificatePreview: React.FC<CertificatePreviewProps> = ({ certific
               sound.tap();
               onClose();
             }}
+            aria-label="Close certificate preview"
             className="w-7 h-7 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-500 hover:text-neutral-900 dark:hover:text-white cursor-pointer"
           >
             <X className="w-4 h-4" />
@@ -56,7 +57,7 @@ export const CertificatePreview: React.FC<CertificatePreviewProps> = ({ certific
         {/* Certificate Card Content */}
         <div className="py-4 space-y-4">
           <div>
-            <h2 className="text-[18px] font-bold text-neutral-900 dark:text-white tracking-tight leading-snug">
+            <h2 id="certificate-preview-title" className="text-[18px] font-bold text-neutral-900 dark:text-white tracking-tight leading-snug">
               {certificate.title}
             </h2>
             <p className="text-[13px] font-medium text-[#007AFF] mt-0.5">
