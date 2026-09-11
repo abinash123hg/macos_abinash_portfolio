@@ -41,7 +41,7 @@ export const SettingsApp: React.FC = () => {
   return (
     <AppWindow
       id="settings"
-      title="Settings"
+      title="Abinash Portfolio"
       subtitle="iOS System & Preferences"
       icon={<Settings className="w-4 h-4 text-neutral-400" />}
     >

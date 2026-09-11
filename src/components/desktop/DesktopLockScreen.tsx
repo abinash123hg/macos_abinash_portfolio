@@ -148,7 +148,7 @@ export const DesktopLockScreen: React.FC<{ onUnlock: () => void }> = ({ onUnlock
       {/* Bottom Footer Actions */}
       <div className="text-[11px] text-neutral-500 flex items-center gap-2 font-mono">
         <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-        <span>Portfolio macOS Session • Touch ID or PIN Protected</span>
+        <span>Abinash Portfolio Session • Touch ID or PIN Protected</span>
       </div>
     </div>
   );

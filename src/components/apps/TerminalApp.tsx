@@ -21,7 +21,7 @@ export const TerminalApp: React.FC = () => {
           <div className="text-cyan-400 font-bold">
             <pre className="text-[10px] leading-tight">
 {`    /\_/\  
-   ( o.o )  Abinash OS 15.4
+  ( o.o )  Abinash Portfolio
     > ^ <   Neural Edition`}
             </pre>
           </div>
@@ -178,7 +178,7 @@ export const TerminalApp: React.FC = () => {
             <div className="text-cyan-400 font-bold">
               <pre className="text-[10px] leading-tight">
 {`    /\_/\  
-   ( o.o )  Abinash OS 15.4
+  ( o.o )  Abinash Portfolio
     > ^ <   Neural Edition`}
               </pre>
             </div>

@@ -666,7 +666,7 @@ export const DesktopMenuBar: React.FC<{
                           }}
                           className="w-full text-left px-2.5 py-1 rounded-[6px] hover:bg-[#007aff] hover:text-white transition-colors cursor-pointer flex items-center justify-between"
                         >
-                          <span>macOS Sequoia User Guide</span>
+                          <span>Abinash Portfolio User Guide</span>
                         </button>
                         <button
                           onClick={() => {

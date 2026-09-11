@@ -46,7 +46,7 @@ export const SettingsApp: React.FC = () => {
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
             <Settings className="w-5 h-5 text-cyan-400" />
-            System Settings & Preferences
+            Abinash Portfolio
           </h1>
           <p className="text-xs text-neutral-400 mt-0.5">
             Configure desktop and mobile simulator hardware controls.
