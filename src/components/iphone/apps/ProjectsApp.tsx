@@ -40,7 +40,7 @@ export const ProjectsApp: React.FC = () => {
     return p.category === filter;
   });
 
-  const flagship = portfolioData.projects.find(p => p.id === 'abinash-os-rag') || portfolioData.projects[0];
+  const flagship = portfolioData.projects.find(p => p.id === 'mlops-autonomous-data-agent-mcp') || portfolioData.projects[0];
   const cs = selectedProject?.caseStudy;
 
   return (
@@ -78,10 +78,10 @@ export const ProjectsApp: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-bold text-[#007AFF] uppercase tracking-wider flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" /> Flagship Dual-OS AI Architecture
+                <Sparkles className="w-3.5 h-3.5" /> AI/ML Project
               </span>
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 text-[10.5px] font-mono font-bold">
-                98.4% Faithfulness
+                MCP
               </span>
             </div>
             <h3 className="text-[16px] font-bold text-neutral-900 dark:text-white tracking-tight">
@@ -91,7 +91,7 @@ export const ProjectsApp: React.FC = () => {
               {flagship.subtitle}
             </p>
             <div className="flex items-center justify-between mt-3 pt-2 border-t border-blue-200/50 dark:border-blue-800/40 text-[11.5px] text-[#007AFF] font-semibold">
-              <span>Sub-300ms SSE Twin</span>
+              <span>MLOps Agent</span>
               <span className="flex items-center gap-0.5">Read Case Study <ChevronRight className="w-3 h-3" /></span>
             </div>
           </IOSCard>

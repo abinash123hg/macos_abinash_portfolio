@@ -31,58 +31,62 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
 
   projects: [
     {
-      id: 'abinash-os-rag',
-      title: 'macOS + iOS AI Portfolio with RAG Digital Twin',
-      category: 'LLM & RAG Systems',
-      subtitle: 'Flagship Dual-Ecosystem Native OS Experience with Sub-300ms Streaming RAG Assistant',
-      description: 'Full-stack cross-platform web operating system simulating macOS Sequoia and iOS 18 with a grounded, real-time streaming RAG AI digital twin powering interactive candidate discovery.',
-      longDescription: 'Designed and implemented an end-to-end multi-platform portfolio operating system. Features a complete macOS windowing architecture (draggable/resizable floating windows, live dock magnification, system menu bar, Spotlight search, native widgets) and an iPhone 15 Pro simulator (iOS 18 springboard, interactive Dynamic Island, Action Button, Camera Control, Control Center). Integrated directly with a secure server-side RAG pipeline using Google Gemini 2.5 Flash, vector embeddings, and chunked knowledge retrieval over resume, code repos, and telemetry benchmarks.',
+      id: 'mlops-autonomous-data-agent-mcp',
+      title: 'MLOps & Autonomous Data Agent with MCP',
+      category: 'AI / Machine Learning',
+      subtitle: 'AI/ML platform with an MCP server for VS Code, Cursor, and Claude Desktop.',
+      description: 'AI/ML platform with an MCP server for VS Code, Cursor, and Claude Desktop. Automates dataset profiling, preprocessing, model training, evaluation, and RAG-based analysis.',
+      longDescription: 'Built an AI/ML platform with an MCP server for VS Code, Cursor, and Claude Desktop to automate dataset profiling, preprocessing, model training, evaluation, and RAG-based analysis. The workflow combines automated ML pipelines, task orchestration, vector retrieval, and business-facing HTML and Streamlit reporting artifacts.',
       highlights: [
-        'Dual-architecture desktop (macOS Sequoia) & mobile (iOS 18) responsive ecosystem',
-        'Sub-300ms first-token latency with Server-Sent Events (SSE) token streaming',
-        'Vector similarity grounding over resume, academic benchmarks, and production telemetry',
-        'Zero client-side API key exposure via secured Express backend proxy'
+        'Automated dataset profiling and preprocessing',
+        'ML model training and evaluation',
+        'Hyperparameter tuning',
+        'Random Forest, Gradient Boosting, and MLP models',
+        'ChromaDB-based vector search and RAG',
+        'Local LLM inference using Ollama',
+        'Automated confusion matrices and HTML reports',
+        'Streamlit dashboard generation'
       ],
       metrics: [
-        { label: 'Streaming TTFT Latency', value: '< 320ms' },
-        { label: 'Answer Faithfulness Score', value: '98.4%' },
-        { label: 'Simulated HIG Components', value: '45+ Elements' },
-        { label: 'Ecosystem Platforms', value: 'macOS + iOS 18' }
+        { label: 'Workflow Style', value: 'MLOps' },
+        { label: 'Vector Search', value: 'ChromaDB' },
+        { label: 'LLM Runtime', value: 'Ollama' },
+        { label: 'Interface', value: 'MCP' }
       ],
-      technologies: ['React 18', 'TypeScript', 'Tailwind CSS', 'Gemini 2.5 Flash SDK', 'Express.js', 'Vector DB', 'Server-Sent Events', 'Audio & Haptics'],
+      technologies: ['Python', 'Pandas', 'NumPy', 'Scikit-learn', 'ChromaDB', 'RAG', 'Ollama', 'FastMCP', 'Streamlit', 'Matplotlib', 'Jinja2'],
       githubUrl: 'https://github.com/abinash123hg',
       liveDemoUrl: 'https://ais-dev-clxhguavorwiqmygvyflld-888038745886.asia-east1.run.app',
       featured: true,
       color: '#007aff',
       iconName: 'Sparkles',
       caseStudy: {
-        summary: 'A flagship dual macOS & iOS portfolio ecosystem featuring a streaming RAG digital twin that allows recruiters to interactively query candidate skills, benchmarks, and architectures in sub-300ms.',
-        contextProblem: 'Recruiters and hiring managers spend an average of 6-10 seconds reviewing static text resumes and standard portfolios. They cannot evaluate live conversational abilities, real-time AI latency, or multi-platform UI engineering depth without lengthy screening calls.',
-        role: 'Solo Product Designer & Full-Stack AI Engineer: Designed Apple HIG-compliant macOS and iOS interface systems, architected the RAG retrieval and streaming pipeline, and implemented server-side security proxies.',
+        summary: 'An AI/ML platform using MCP-backed automation for dataset profiling, model experimentation, evaluation, and grounded RAG analysis across real workflow artifacts.',
+        contextProblem: 'Machine learning teams need a repeatable path from raw data to model evaluation, with clear reproducibility and AI-first tooling that can coordinate data preparation, model training, and artifact generation across local and code-centric workflows.',
+        role: 'Solo AI/ML Engineer: Designed an MCP-enabled automation workflow for profiling data, training and evaluating model families, and generating product-facing analytical reports and dashboards.',
         architecturePoints: [
-          { label: 'macOS Desktop Layer', detail: 'Z-index windowing engine with drag/resize boundaries, minimize/maximize springs, dynamic dock parabolic magnification curve, spotlight command bar, and menu bar event coordination.' },
-          { label: 'iOS 18 Mobile Layer', detail: 'Native viewport physics, springboard grid, dynamic safe areas, interactive Dynamic Island expansion states (charging, music, AI streaming, notifications), and swipeable Control Center.' },
-          { label: 'Server-Side RAG & Proxy', detail: 'Express proxy with lazy Gemini 2.5 Flash client initialization, strict grounding prompt templates, context chunk ranking, and Server-Sent Event (SSE) token streaming over HTTP.' }
+          { label: 'MCP Automation Layer', detail: 'Connects IDE-oriented tooling and agentic workflow handoffs for dataset inspection, environment setup, task orchestration, and report generation.' },
+          { label: 'MLOps Pipeline Layer', detail: 'Automates profiling, preprocessing, feature preparation, model training, hyperparameter tuning, and evaluation report generation.' },
+          { label: 'RAG & Analytics Layer', detail: 'Uses ChromaDB vector-search workflows and local Ollama inference for grounded RAG-based data analysis and report synthesis.' }
         ],
         ragDecisions: {
-          ingestionChunking: 'Recursive character and markdown semantic chunking (256-token target chunks with 40-token overlap) preserving tabular metrics, dates, and skill taxonomies.',
-          embeddingVectorDb: 'High-dimensional dense semantic embeddings with cosine similarity scoring over local memory vector store for zero-latency retrieval.',
-          retrievalStrategy: 'Hybrid metadata-filtered top-k retrieval with strict source citation constraints and refusal rules against out-of-domain hallucinations.',
-          promptStreamingStrategy: 'System prompt formatted with Markdown formatting rules, conversational recruiter tone, and SSE delta chunk streaming.'
+          ingestionChunking: 'Document and dataset metadata are organized into traceable profiles that preserve context for model experiments, evaluation artifacts, and RAG analysis outputs.',
+          embeddingVectorDb: 'ChromaDB stores vector representations for retrieval and analytical grounding across project artifacts and reporting workflows.',
+          retrievalStrategy: 'Similarity search and contextual retrieval power grounded analysis across the model and dataset workflow artifacts.',
+          promptStreamingStrategy: 'Structured AI-assisted report generation and retrieval flows are coordinated through MCP and local model execution primitives.'
         },
         challengesTradeoffs: [
-          { challenge: 'Preventing LLM hallucinations about non-existent work experience or credentials', solution: 'Implemented strict negative constraints in system prompt: the digital twin is strictly barred from inventing metrics, companies, or tools outside the verified corpus.', tradeoff: 'Strict grounding limits free-form conversational speculation, which is deliberate for a high-stakes recruiter interview tool.' },
-          { challenge: 'Balancing heavy dual-OS graphics (blur, glassmorphism, animations) with 60 FPS performance', solution: 'Used hardware-accelerated CSS transforms, will-change hints, and memoized window state trees to avoid unnecessary React re-renders.', tradeoff: 'Slightly higher initial bundle size in exchange for silky smooth 60 FPS frame rates across drag operations.' }
+          { challenge: 'Creating a reliable end-to-end ML workflow from unstructured raw data to reproducible evaluation artifacts', solution: 'Implemented automated dataset profiling, preprocessing stages, and model evaluation reports as a unified MLOps workflow.', tradeoff: 'Workflow automation prioritizes reproducibility and evaluation quality over one-off exploratory flexibility.' },
+          { challenge: 'Keeping model experimentation explainable and grounded', solution: 'Added confusion matrices, HTML reports, and vector-backed RAG analysis for observation and interpretation.', tradeoff: 'More structured reporting increases workflow complexity but improves trust and traceability.' }
         ],
         resultsImpact: [
-          { metric: '98.4%', label: 'Ragas Faithfulness Score', businessOutcome: 'Zero fabricated credentials during synthetic automated QA testing over 150 recruiter test prompts.' },
-          { metric: '<320ms', label: 'First Token Latency', businessOutcome: 'Eliminated user perceived wait times through immediate SSE token streaming.' },
-          { metric: '100%', label: 'Zero Key Exposure', businessOutcome: 'Full-stack security posture meeting production enterprise standards.' }
+          { metric: 'MCP', label: 'Workflow Integration', businessOutcome: 'Connected AI/ML automation across VS Code, Cursor, and Claude Desktop-oriented task flows.' },
+          { metric: 'ChromaDB', label: 'Vector Retrieval', businessOutcome: 'Grounded RAG analysis over project knowledge and dataset context.' },
+          { metric: 'Ollama', label: 'Local LLM', businessOutcome: 'Supports privacy-friendly and local execution patterns for automated analysis.' }
         ],
         evalFramework: [
-          { name: 'Ragas Faithfulness', score: '0.984', methodology: 'Evaluated against 150 prompt-response pairs to verify zero claims outside corpus.' },
-          { name: 'Answer Relevance', score: '0.962', methodology: 'BERTScore similarity against human-authored reference portfolio answers.' },
-          { name: 'Latency Budget', score: '318ms TTFT', methodology: 'Median Time to First Token measured across 50 simulated client requests.' }
+          { name: 'Model Evaluation', score: 'Automated', methodology: 'Confusion matrices, reports, and metric monitoring across model runs.' },
+          { name: 'Retrieval Grounding', score: 'ChromaDB', methodology: 'Vector retrieval and RAG context selection for analytical reasoning.' },
+          { name: 'Workflow Automation', score: 'MCP', methodology: 'Task orchestration through structured local and IDE-integrated AI agent flows.' }
         ]
       }
     },
@@ -999,9 +1003,9 @@ Target Role: LLM Engineer – RAG, AI Assistants & Knowledge Systems
 Location: Bhubaneswar, India (Remote-Friendly)
 Status: Open to Full-Time Roles & High-Impact Opportunities
 
-Positioning: Specializing in production RAG pipelines, autonomous tool-calling copilots, and cross-platform native UI systems across macOS & iOS.
+Positioning: Specializing in production RAG pipelines, autonomous tool-calling copilots, and AI/ML automation systems with a focus on MLOps and grounded analysis.
 Key Projects & Case Studies:
-1. macOS + iOS AI Portfolio with RAG Digital Twin (Flagship cross-platform OS with sub-300ms SSE streaming twin, 98.4% Ragas faithfulness)
+1. MLOps & Autonomous Data Agent with MCP (MCP server automation for profiling, preprocessing, model training, evaluation, ChromaDB RAG, Ollama inference, and Streamlit reporting)
 2. DocuRAG — Multimodal Document RAG & Knowledge Engine (Hybrid search + FlashRank cross-encoder, -42% hallucinations)
 3. TeamCopilot — Autonomous Incident Triage Copilot (LangGraph agent with dynamic Jira/GitHub tool calling, 68% MTTA reduction)
 4. NeuralRank & Explain (Two-stage Faiss + LambdaMART ranking with streaming LLM attribution, 0.892 NDCG@10)

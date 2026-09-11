@@ -58,10 +58,10 @@ export const ProjectsApp: React.FC = () => {
     setIsSimulatingRAG(true);
     setSimulatedTokens('');
     
-    const sampleResponse = `Abinash specializes in production-grade RAG architectures with strict evaluation rigor. Key capabilities include:
-1. Hybrid Retrieval (Dense Vector + BM25) combined with Reciprocal Rank Fusion (RRF) and Cross-Encoder re-ranking (FlashRank) reducing hallucinations by 42%.
-2. Agentic Tool Calling using LangGraph state machines for autonomous engineering triage with confidence gating (<80% human escalation).
-3. Ultra-low Latency Delivery: Sub-300ms Time-to-First-Token (TTFT) with Server-Sent Events (SSE) and full-stack security proxies.`;
+    const sampleResponse = `Abinash builds production-minded AI/ML systems with a strong focus on MLOps workflows, model evaluation, and grounded automation. Key capabilities include:
+1. End-to-end dataset profiling, preprocessing, model training, and evaluation pipelines.
+2. MCP-powered automation and agentic workflows across developer environments and AI tooling.
+3. Vector search, RAG analysis, local LLM usage, and reporting dashboards for decision-making.`;
 
     let i = 0;
     const interval = setInterval(() => {
@@ -130,7 +130,7 @@ export const ProjectsApp: React.FC = () => {
                     <div className="font-semibold text-xs truncate">{proj.title}</div>
                     {proj.featured && (
                       <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-medium shrink-0">
-                        {proj.id === 'abinash-os-rag' ? 'Flagship' : 'Featured'}
+                        {proj.id === 'mlops-autonomous-data-agent-mcp' ? 'Flagship' : 'Featured'}
                       </span>
                     )}
                   </div>
@@ -431,15 +431,15 @@ export const ProjectsApp: React.FC = () => {
                 </p>
               </div>
 
-              {selectedProject.id === 'abinash-os-rag' ? (
-                /* RAG Streaming Lab */
+              {selectedProject.id === 'mlops-autonomous-data-agent-mcp' ? (
+                /* MLOps & MCP Automation Lab */
                 <div className="p-5 rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-4">
                   <h3 className="text-sm font-bold text-white flex items-center gap-2">
                     <Bot className="w-4 h-4 text-cyan-400" />
-                    Sub-300ms RAG Streaming Inference Simulation
+                    MLOps & Autonomous Data Agent Simulation
                   </h3>
                   <div className="space-y-2">
-                    <label className="text-xs text-neutral-300 block font-medium">Recruiter Interview Query</label>
+                    <label className="text-xs text-neutral-300 block font-medium">Data Agent Query</label>
                     <div className="flex gap-2">
                       <input
                         type="text"
@@ -453,7 +453,7 @@ export const ProjectsApp: React.FC = () => {
                         className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-neutral-950 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
                       >
                         <Send className="w-3.5 h-3.5" />
-                        <span>Stream Response</span>
+                        <span>Run Agent</span>
                       </button>
                     </div>
                   </div>
@@ -461,8 +461,8 @@ export const ProjectsApp: React.FC = () => {
                   {simulatedTokens && (
                     <div className="p-4 rounded-xl bg-neutral-950 border border-cyan-500/40 space-y-2">
                       <div className="flex items-center justify-between text-[11px] text-neutral-400 pb-2 border-b border-neutral-800">
-                        <span className="text-cyan-400 font-mono">TTFT: 284ms • Ragas Faithfulness: 0.984</span>
-                        <span>Source Chunks: [Resume, DocuRAG, CUTM Transcripts]</span>
+                        <span className="text-cyan-400 font-mono">MCP Workflow • ChromaDB RAG</span>
+                        <span>Artifacts: [Profile, Model, Report]</span>
                       </div>
                       <p className="text-xs text-neutral-200 whitespace-pre-line leading-relaxed font-mono">
                         {simulatedTokens}
