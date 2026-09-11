@@ -3,17 +3,17 @@ import internPeCertificateImage from '../assets/certifications/internpay.png';
 
 export const portfolioData: PortfolioData = {
   name: 'Abinash Swain',
-  title: 'LLM Engineer – RAG, AI Assistants & Knowledge Systems',
-  headline: 'LLM Engineer specializing in Production RAG Pipelines, Autonomous AI Assistants & Native macOS/iOS Systems',
-  targetRole: 'LLM Engineer – RAG, AI Assistants & Knowledge Systems',
-  availabilityStatus: 'Open to Full-Time Roles & High-Impact Engineering Opportunities',
+  title: 'AI/ML Developer (RAG & Neural Networks)',
+  headline: 'AI/ML Developer building RAG systems, neural-network models, and practical predictive pipelines',
+  targetRole: 'AI/ML Developer (RAG & Neural Networks)',
+  availabilityStatus: 'Open to AI/ML internships, technical collaborations, and data science opportunities',
   aiDisclosure: 'I use AI tools to assist with ideation, drafting, and code scaffolding. All architectural decisions, end-to-end implementations, and evaluation benchmarks are 100% my own.',
-  bio: 'LLM and AI/ML Engineer focused on production-grade RAG architectures, autonomous tool-calling copilots, and cross-platform native UI systems across macOS & iOS. B.Tech AI/ML at Centurion University CUTM (8.32 CGPA).',
-  aboutEditorial: `I build production-grade Retrieval-Augmented Generation (RAG) pipelines, autonomous AI assistants, and high-performance search systems paired with native-quality user interfaces.
+  bio: 'B.Tech Computer Science and Engineering student specializing in Artificial Intelligence and Machine Learning at Centurion University of Technology and Management. I build end-to-end machine learning pipelines, neural-network classifiers, RAG systems, and actionable data products.',
+  aboutEditorial: `I am an AI/ML Developer focused on turning complex data into predictive systems and practical insights. My work spans Retrieval-Augmented Generation (RAG), neural networks, supervised learning, exploratory data analysis, and production-minded model workflows.
 
-My engineering philosophy centers on strict grounding, measurable evaluation frameworks (Ragas faithfulness, context precision, latency budgets), and zero-compromise UX craftsmanship across macOS Sequoia and iOS 18 paradigms.
+I am currently expanding my real-world experience through roles at InternPe and TutorialsPoint Academy, while pursuing industry certifications in Agentic AI, Claude platforms, communication, and modern cloud AI tooling.
 
-Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs (Qdrant, pgvector, Faiss), Cross-Encoder Re-ranking, Gemini 2.5 Flash SDK, React 18, and PyTorch. Based in Bhubaneswar, India (Remote-Friendly).`,
+Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering internships, technical collaborations, and data science opportunities.`,
   location: 'Bhubaneswar, Odisha, India',
   email: 'swainabinash839@gmail.com',
   phone: '+91-7077475818',
@@ -23,10 +23,10 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
   college: 'Centurion University of Technology and Management (CUTM)',
   
   quickStats: [
-    { label: 'Target Role', value: 'LLM Engineer', subtext: 'RAG & AI Assistants' },
-    { label: 'RAG Faithfulness', value: '98.4%', subtext: 'Ragas Verified Score' },
-    { label: 'TTFT Latency', value: '< 320ms', subtext: 'SSE Streaming Twin' },
-    { label: 'Certifications', value: '6+', subtext: 'Oracle, Adobe, Tata, Deloitte, TutorialsPoint, InternPe' }
+    { label: 'Current Role', value: 'AI/ML Developer', subtext: 'RAG & Neural Networks' },
+    { label: 'Primary Focus', value: 'Predictive ML', subtext: 'Classification & Regression' },
+    { label: 'RAG Systems', value: 'Active', subtext: 'Vector Search & Grounding' },
+    { label: 'Certifications', value: '8+', subtext: 'Oracle, Anthropic, TCS iON, TutorialsPoint, InternPe' }
   ],
 
   projects: [
@@ -360,6 +360,26 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
       description: 'Completed a practical data analytics and predictive modeling internship with InternPe, focused on exploratory analysis and machine learning workflows.',
       skills: ['Data Analytics', 'Exploratory Data Analysis', 'Predictive Modeling', 'Machine Learning'],
       imageSrc: internPeCertificateImage
+    },
+    {
+      id: 'cert-anthropic-claude-platforms',
+      title: 'Core Claude Platforms, APIs, and AI Agent Automation',
+      issuer: 'Anthropic',
+      date: '2026',
+      badge: 'Anthropic Certified',
+      category: 'Cloud & AI',
+      description: 'Professional certification covering Claude platforms, APIs, and AI agent automation workflows.',
+      skills: ['Claude Platforms', 'Anthropic APIs', 'AI Agent Automation', 'Prompt Engineering']
+    },
+    {
+      id: 'cert-tcs-ion-communication',
+      title: 'Communication and Interview Skills',
+      issuer: 'TCS iON',
+      date: '2026',
+      badge: 'Professional Development',
+      category: 'Industry Training',
+      description: 'Professional development certification focused on communication and interview readiness.',
+      skills: ['Communication', 'Interview Skills', 'Professional Development']
     }
   ],
 
@@ -369,39 +389,36 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
       degree: 'B.Tech in Computer Science & Engineering (AI & ML Specialization)',
       institution: 'Centurion University of Technology and Management (CUTM)',
       location: 'Bhubaneswar, Odisha, India',
-      score: '8.32 / 10.0 CGPA',
-      scoreLabel: 'Cumulative Grade Point Average',
-      period: '2023 – 2027',
+      score: 'Currently pursuing',
+      scoreLabel: 'Computer Science & Engineering',
+      period: 'August 2024 - Present',
       highlights: [
-        'Specialization in Artificial Intelligence, Deep Learning, and Large Language Model Systems',
-        'Academic coursework in Advanced Data Structures & Algorithms, Database Management, and Information Retrieval',
-        'Active contributor in AI/ML student research labs and technical competitive hackathons'
+        'Specialization in Artificial Intelligence and Machine Learning',
+        'Coursework spanning neural networks, predictive modeling, data analysis, and software development'
       ]
     },
     {
       id: 'edu-intermediate',
       degree: 'Higher Secondary School Certificate (+2 Science)',
-      institution: 'Vikash Higher Secondary School',
+      institution: 'Royal Higher Secondary Education, Bhubaneswar',
       location: 'Bhubaneswar, Odisha',
-      score: '78.5%',
-      scoreLabel: 'Council of Higher Secondary Education',
-      period: '2021 – 2023',
+      score: 'Mathematics and Computer Science',
+      scoreLabel: 'Higher Secondary Education',
+      period: 'August 2022 - February 2024',
       highlights: [
-        'Physics, Chemistry, Mathematics, and Computer Science foundation',
-        'Solid quantitative aptitude in linear algebra, probability, and calculus'
+        'Mathematics and Computer Science foundation'
       ]
     },
     {
       id: 'edu-matric',
-      degree: 'Secondary School Examination (Class X)',
-      institution: 'Saraswati Sishu Vidya Mandir',
-      location: 'Bhubaneswar, Odisha',
-      score: '85.2%',
-      scoreLabel: 'Board of Secondary Education',
-      period: '2019 – 2021',
+      degree: 'Matriculation',
+      institution: 'Maa Pandarshila High School, Narendrapur',
+      location: 'Kendrapara, Odisha',
+      score: 'Completed',
+      scoreLabel: 'Secondary Education',
+      period: 'September 2021 - February 2022',
       highlights: [
-        'Distinction in Mathematics and Science',
-        'Active participant in regional science exhibitions and mathematics Olympiads'
+        'Built an early foundation in logical data analysis and technical problem-solving'
       ]
     }
   ],
@@ -409,19 +426,37 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
   experience: [
     {
       id: 'exp-internpe',
-      role: 'Data Analyst & AI Intern',
+      role: 'Data Analyst Intern',
       company: 'InternPe',
-      location: 'Remote',
-      period: 'July 2026 – August 2026',
+      location: 'Bhubaneswar',
+      period: 'August 2026 - Present',
       type: 'Internship',
       offerId: 'INPE0645607',
       responsibilities: [
-        'Architected end-to-end data analytics and predictive modeling pipelines in Python for customer attrition and KPI tracking',
-        'Engineered feature selection and class-imbalance handling workflows resulting in 91.4% ROC-AUC score improvements',
-        'Built automated RAG semantic search prototypes over documentation to reduce developer onboarding time by 40%',
-        'Delivered executive presentation decks with interactive Streamlit and Plotly visualizations'
+        'Build end-to-end data preprocessing and exploratory data analysis workflows',
+        'Develop a breast cancer classification system using Python and neural networks',
+        'Build an IPL match predictor using preprocessing, feature engineering, and one-hot encoding',
+        'Develop used-car price regression and diabetes risk prediction models',
+        'Use Python, Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn, and Google Colab'
       ],
-      skills: ['Python', 'RAG Pipelines', 'Scikit-Learn', 'Pandas', 'Streamlit', 'Data Cleansing', 'Statistical Modeling']
+      skills: ['Python', 'Neural Networks', 'Scikit-Learn', 'Pandas', 'NumPy', 'EDA', 'Predictive Modeling']
+    },
+    {
+      id: 'exp-tutorialspoint',
+      role: 'AI/ML Developer (RAG, Fine-Tuning & Deep Learning)',
+      company: 'TutorialsPoint Academy',
+      location: 'Remote',
+      period: 'June 2026 - Present',
+      type: 'Developer',
+      responsibilities: [
+        'Develop an AI-powered Smart Inventory Management System using deep learning and semantic intelligence',
+        'Execute supervised fine-tuning on open-source LLMs for warehouse terminology and operations tracking',
+        'Design a RAG framework with vector search over corporate inventory logs',
+        'Engineer neural networks for product demand forecasting and safety-stock workflows',
+        'Tune token embeddings and similarity thresholds to improve retrieval precision and reduce hallucinations',
+        'Build data orchestration pipelines for model evaluation and production deployment'
+      ],
+      skills: ['Python', 'RAG', 'Fine-Tuning', 'Deep Learning', 'Vector Databases', 'Embeddings', 'Demand Forecasting']
     }
   ],
 
@@ -432,6 +467,7 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
       icon: 'Sparkles',
       skills: [
         { name: 'RAG Architecture', level: 95, tag: 'Core' },
+        { name: 'RAG & Vector Search', level: 92, tag: 'Core' },
         { name: 'LlamaIndex & LangChain', level: 92, tag: 'Framework' },
         { name: 'Vector DBs (Qdrant/Chroma/Faiss)', level: 90, tag: 'Database' },
         { name: 'Hybrid Search (Dense + BM25)', level: 92, tag: 'Retrieval' },
@@ -448,7 +484,9 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
         { name: 'Function Calling & Tool Schemas', level: 94, tag: 'APIs' },
         { name: 'Gemini 2.5 Flash SDK', level: 96, tag: 'LLM' },
         { name: 'Prompt Engineering & Grounding', level: 95, tag: 'Tuning' },
-        { name: 'Human-in-the-Loop Safeguards', level: 88, tag: 'Safety' }
+        { name: 'Human-in-the-Loop Safeguards', level: 88, tag: 'Safety' },
+        { name: 'Anthropic APIs & MCP', level: 84, tag: 'Advanced AI' },
+        { name: 'Amazon Bedrock & Vertex AI', level: 80, tag: 'Cloud AI' }
       ]
     },
     {
@@ -456,8 +494,9 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
       color: '#34C759',
       icon: 'Brain',
       skills: [
-        { name: 'Python & NumPy', level: 98, tag: 'Language' },
+        { name: 'Python, Java & SQL', level: 96, tag: 'Languages' },
         { name: 'Scikit-Learn & PyTorch', level: 92, tag: 'ML' },
+        { name: 'Neural Networks & Deep Learning', level: 88, tag: 'Deep Learning' },
         { name: 'XGBoost & LambdaMART', level: 88, tag: 'Ranking' },
         { name: 'Pandas & Data Cleansing', level: 95, tag: 'Data' },
         { name: 'Stratified Validation & ROC-AUC', level: 92, tag: 'Metrics' }
@@ -472,7 +511,8 @@ Core proficiencies include Python, TypeScript, LangGraph, LlamaIndex, Vector DBs
         { name: 'Apple HIG Design Systems', level: 94, tag: 'macOS/iOS' },
         { name: 'Tailwind CSS & Motion', level: 95, tag: 'Styling' },
         { name: 'Express.js & SSE Streaming', level: 90, tag: 'Backend' },
-        { name: 'FastAPI & REST APIs', level: 92, tag: 'Backend' }
+        { name: 'FastAPI & REST APIs', level: 92, tag: 'Backend' },
+        { name: 'VS Code & Google Colab', level: 94, tag: 'Tooling' }
       ]
     }
   ],
