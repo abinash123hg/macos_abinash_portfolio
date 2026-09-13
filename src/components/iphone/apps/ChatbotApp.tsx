@@ -60,6 +60,8 @@ export const ChatbotApp: React.FC = () => {
     setIsTyping(true);
 
     try {
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -137,10 +139,16 @@ export const ChatbotApp: React.FC = () => {
           })}
 
           {isTyping && (
-            <div className="flex items-center gap-1.5 p-3 rounded-[20px] rounded-bl-xs bg-white dark:bg-neutral-800 text-neutral-400 max-w-[80px] border border-neutral-200/60 dark:border-neutral-700/60 shadow-xs">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#007AFF] animate-bounce" />
-              <div className="w-1.5 h-1.5 rounded-full bg-[#007AFF] animate-bounce [animation-delay:0.2s]" />
-              <div className="w-1.5 h-1.5 rounded-full bg-[#007AFF] animate-bounce [animation-delay:0.4s]" />
+            <div className="ai-loader-shell">
+              <div className="ai-loader-top">
+                <span className="ai-loader-spark" />
+                <span className="ai-loader-label">Thinking</span>
+              </div>
+              <div className="ai-loader-shimmer">
+                <span className="ai-loader-shimmer-line animate-gemini-loading" />
+                <span className="ai-loader-shimmer-line animate-gemini-loading" />
+                <span className="ai-loader-shimmer-line animate-gemini-loading" />
+              </div>
             </div>
           )}
           <div ref={messagesEndRef} />

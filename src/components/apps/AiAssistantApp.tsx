@@ -52,6 +52,8 @@ export const AiAssistantApp: React.FC = () => {
     setIsLoading(true);
 
     try {
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -147,9 +149,16 @@ export const AiAssistantApp: React.FC = () => {
         })}
 
         {isLoading && (
-          <div className="flex items-center gap-2 text-xs text-neutral-400 bg-neutral-900/60 p-3 rounded-2xl w-fit border border-neutral-800">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
-            <span>Analyzing neural portfolio records...</span>
+          <div className="ai-loader-shell">
+            <div className="ai-loader-top">
+              <span className="ai-loader-spark" />
+              <span className="ai-loader-label">Thinking</span>
+            </div>
+            <div className="ai-loader-shimmer">
+              <span className="ai-loader-shimmer-line animate-gemini-loading" />
+              <span className="ai-loader-shimmer-line animate-gemini-loading" />
+              <span className="ai-loader-shimmer-line animate-gemini-loading" />
+            </div>
           </div>
         )}
 

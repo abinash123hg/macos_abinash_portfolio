@@ -1,4 +1,4 @@
-﻿# Dependencies
+﻿$env:RESEND_API_KEY="PASTE_YOUR_KEY_HERE"; [Environment]::SetEnvironmentVariable("RESEND_API_KEY", $env:RESEND_API_KEY, "User")# Dependencies
 node_modules/
 .pnp
 .pnp.js
