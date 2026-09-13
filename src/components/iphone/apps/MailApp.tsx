@@ -262,7 +262,6 @@ export const MailApp: React.FC = () => {
                 value={`${portfolioData.name} <${portfolioData.email}>`}
                 className="w-full rounded-lg bg-neutral-100/70 px-2.5 py-2 text-[13px] font-medium text-neutral-800 outline-none dark:bg-neutral-800/70 dark:text-neutral-200"
               />
-              {fieldErrors.name && <p className="mt-1 text-[11px] text-red-600 dark:text-red-400" role="alert">{fieldErrors.name}</p>}
             </div>
             <div className="border-b border-neutral-100 dark:border-neutral-800 pb-2">
               <label htmlFor="iphone-mail-name" className="mb-1 block text-[12px] font-semibold text-neutral-400">Your Name</label>
@@ -275,7 +274,7 @@ export const MailApp: React.FC = () => {
                 onChange={(e) => setSenderName(e.target.value)}
                 className="w-full bg-transparent border-none outline-none text-neutral-900 dark:text-white text-[13px]"
               />
-              {fieldErrors.subject && <p className="mt-1 text-[11px] text-red-600 dark:text-red-400" role="alert">{fieldErrors.subject}</p>}
+              {fieldErrors.name && <p className="mt-1 text-[11px] text-red-600 dark:text-red-400" role="alert">{fieldErrors.name}</p>}
             </div>
             <div className="border-b border-neutral-100 dark:border-neutral-800 pb-2">
               <label htmlFor="iphone-mail-subject" className="mb-1 block text-[12px] font-semibold text-neutral-400">Subject</label>
@@ -288,7 +287,7 @@ export const MailApp: React.FC = () => {
                 onChange={(e) => setSubject(e.target.value)}
                 className="w-full bg-transparent border-none outline-none text-neutral-900 dark:text-white text-[13px]"
               />
-              {fieldErrors.message && <p className="mt-1 text-[11px] text-red-600 dark:text-red-400" role="alert">{fieldErrors.message}</p>}
+              {fieldErrors.subject && <p className="mt-1 text-[11px] text-red-600 dark:text-red-400" role="alert">{fieldErrors.subject}</p>}
             </div>
             <div>
               <label htmlFor="iphone-mail-message" className="mb-1 block text-[12px] font-semibold text-neutral-400">Message</label>
@@ -301,6 +300,7 @@ export const MailApp: React.FC = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 className="w-full bg-transparent border-none outline-none text-neutral-900 dark:text-white text-[13px] resize-none pt-1"
               />
+              {fieldErrors.message && <p className="mt-1 text-[11px] text-red-600 dark:text-red-400" role="alert">{fieldErrors.message}</p>}
             </div>
           </IOSCard>
 

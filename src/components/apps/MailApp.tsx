@@ -331,7 +331,7 @@ export const MailApp: React.FC<MailAppProps> = ({ initialCompose = false, onInit
                     onChange={(e) => setComposeName(e.target.value)}
                     className="w-full p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-xs text-white focus:outline-none focus:border-cyan-500"
                   />
-                  {fieldErrors.subject && <p className="mt-1 text-[11px] text-red-300" role="alert">{fieldErrors.subject}</p>}
+                  {fieldErrors.name && <p className="mt-1 text-[11px] text-red-300" role="alert">{fieldErrors.name}</p>}
                 </div>
 
                 <div>
@@ -345,7 +345,7 @@ export const MailApp: React.FC<MailAppProps> = ({ initialCompose = false, onInit
                     onChange={(e) => setComposeSubject(e.target.value)}
                     className="w-full p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-xs text-white focus:outline-none focus:border-cyan-500"
                   />
-                  {fieldErrors.message && <p className="mt-1 text-[11px] text-red-300" role="alert">{fieldErrors.message}</p>}
+                  {fieldErrors.subject && <p className="mt-1 text-[11px] text-red-300" role="alert">{fieldErrors.subject}</p>}
                 </div>
 
                 <div>
@@ -359,6 +359,7 @@ export const MailApp: React.FC<MailAppProps> = ({ initialCompose = false, onInit
                     onChange={(e) => setComposeMessage(e.target.value)}
                     className="w-full p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-xs text-white focus:outline-none focus:border-cyan-500 resize-none"
                   />
+                  {fieldErrors.message && <p className="mt-1 text-[11px] text-red-300" role="alert">{fieldErrors.message}</p>}
                 </div>
 
                 {sendError && <p role="alert" className="rounded-xl border border-red-500/30 bg-red-500/10 p-2.5 text-xs text-red-300">{sendError}</p>}

@@ -92,10 +92,18 @@ export const NativeVideoPlayer: React.FC<NativeVideoPlayerProps> = ({
   const toggleFullscreen = () => {
     sound.tap();
     if (!videoRef.current) return;
+
+    // Avoid requesting HTML fullscreen from the media element itself. In some
+    // mobile Safari/embedded browser flows this can trigger an unwanted page
+    // navigation/reload path instead of keeping the player inside the page.
     if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      videoRef.current.requestFullscreen().catch(() => {});
+      try {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      } catch {
+        // Browser fullscreen API may be unsupported or unavailable.
+      }
     }
   };
 

@@ -1161,17 +1161,16 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   const resolvedTheme = getResolvedTheme(settings.theme);
 
-  // Sync theme to DOM
+  // Sync theme to DOM deterministically so every app/window sees the same HTML class.
   useEffect(() => {
     const applyThemeToDOM = () => {
       const currentResolved = getResolvedTheme(settings.theme);
-      if (currentResolved === 'dark') {
-        document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light');
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.classList.add('light');
-      }
+      const root = document.documentElement;
+      const body = document.body;
+      root.classList.remove('dark', 'light');
+      body.classList.remove('dark', 'light');
+      root.classList.add(currentResolved);
+      body.classList.add(currentResolved);
     };
 
     applyThemeToDOM();

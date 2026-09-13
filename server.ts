@@ -66,8 +66,14 @@ app.all("/api/contact", (req, res, next) => {
   next();
 });
 app.post("/api/contact", async (req, res) => {
-  const { name, email, subject, message, website } = req.body ?? {};
-  if (typeof website === "string" && website.trim()) {
+  const body = req.body ?? {};
+  const name = typeof body.name === "string" ? body.name : "";
+  const email = typeof body.email === "string" ? body.email : "";
+  const subject = typeof body.subject === "string" ? body.subject : "";
+  const message = typeof body.message === "string" ? body.message : "";
+  const website = typeof body.website === "string" ? body.website : "";
+
+  if (website.trim()) {
     res.status(204).end();
     return;
   }
@@ -81,8 +87,9 @@ app.post("/api/contact", async (req, res) => {
     apiError(res, 429, "RATE_LIMITED", "Too many requests. Please wait a moment and try again.");
     return;
   }
+
   const values = [name, email, subject, message];
-  if (values.some(value => typeof value !== "string" || !value.trim())) {
+  if (values.some(value => !value.trim())) {
     apiError(res, 422, "VALIDATION_ERROR", "Some information is missing or invalid.");
     return;
   }

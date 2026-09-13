@@ -1,5 +1,4 @@
 import { PortfolioData } from '../types';
-import internPeCertificateImage from '../assets/certifications/internpay.png';
 
 export const portfolioData: PortfolioData = {
   name: 'Abinash Swain',
@@ -326,7 +325,7 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       category: 'Data Analytics',
       description: 'Completed practical enterprise simulation tasks including exploratory data analysis and risk profiling, predicting delinquency with AI models, business storytelling for collections strategy, and implementing an AI-driven collections system.',
       skills: ['Exploratory Data Analysis', 'Delinquency AI Modeling', 'Business Reporting', 'Data Storytelling'],
-      imageSrc: 'assets/certifications/GenAI Powered Data Analytics Job Simulation_page-0001.jpg'
+      imageSrc: 'https://i.ibb.co/GQYxQ5KV/Gen-AI-Powered-Data-Analytics-Job-Simulation-page-0001.jpg'
     },
     {
       id: 'cert-deloitte-analytics',
@@ -339,7 +338,7 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       category: 'Data Analytics',
       description: 'Completed hands-on practical data simulation covering forensic technology datasets, data cleansing pipelines, forensic analytics, risk modeling, and executive stakeholder presentation.',
       skills: ['Forensic Technology', 'Data Analysis', 'Risk Quantification', 'Corporate Data Integrity'],
-      imageSrc: 'assets/certifications/deloitte_page-0001.jpg'
+      imageSrc: 'https://i.ibb.co/hJ1VG4Qy/deloitte-page-0001.jpg'
     },
     {
       id: 'cert-skill-india-inventory',
@@ -352,7 +351,7 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       category: 'Industry Training',
       description: 'Completed intensive 6-week online training on TutorialsPoint Academy covering AI-driven inventory demand forecasting, pattern detection algorithms, automated replenishment pipelines, and ISO 9001/27001 compliant workflows.',
       skills: ['Python Inventory AI', 'Demand Forecasting', 'Pattern Detection', 'Workflow Automation'],
-      imageSrc: 'assets/certifications/internship_tutorialspoint_page-0001.jpg'
+      imageSrc: 'https://i.ibb.co/W4NbXGh7/internship-tutorialspoint-page-0001.jpg'
     },
     {
       id: 'cert-internpe-data-analyst',
@@ -363,7 +362,7 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       category: 'Industry Training',
       description: 'Completed a practical data analytics and predictive modeling internship with InternPe, focused on exploratory analysis and machine learning workflows.',
       skills: ['Data Analytics', 'Exploratory Data Analysis', 'Predictive Modeling', 'Machine Learning'],
-      imageSrc: internPeCertificateImage
+      imageSrc: 'assets/certifications/internpay.png'
     },
     {
       id: 'cert-anthropic-claude-platforms',
@@ -527,8 +526,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Urban Architecture & Skyline',
       category: 'Photography',
       type: 'image',
-      thumbnail: 'assets/photos/123760.jpg',
-      mediaUrl: 'assets/photos/123760.jpg',
+      thumbnail: 'https://i.ibb.co/v6TpYVfL/123760.jpg',
+      mediaUrl: 'https://i.ibb.co/v6TpYVfL/123760.jpg',
       description: 'Striking metropolitan architectural geometry captured with dramatic dynamic range and perspective.',
       favorite: true,
       year: '2026'
@@ -538,8 +537,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Nature & Landscape Focus',
       category: 'Photography',
       type: 'image',
-      thumbnail: 'assets/photos/1566397.jpg',
-      mediaUrl: 'assets/photos/1566397.jpg',
+      thumbnail: 'https://i.ibb.co/spWGqg5c/1566397.jpg',
+      mediaUrl: 'https://i.ibb.co/spWGqg5c/1566397.jpg',
       description: 'Lush natural landscape highlighting tranquility, natural light, and organic depth.',
       favorite: false,
       year: '2026'
@@ -549,8 +548,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Minimalist Workspace & Code',
       category: 'Photography',
       type: 'image',
-      thumbnail: 'assets/photos/250542.jpg',
-      mediaUrl: 'assets/photos/250542.jpg',
+      thumbnail: 'https://i.ibb.co/4wgZzPJT/250542.jpg',
+      mediaUrl: 'https://i.ibb.co/4wgZzPJT/250542.jpg',
       description: 'Clean engineer workstation aesthetic optimized for high-velocity software development.',
       favorite: true,
       year: '2026'
@@ -560,8 +559,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'AI Neural Lab Aesthetics',
       category: 'Photography',
       type: 'image',
-      thumbnail: 'assets/photos/26640376.jpg',
-      mediaUrl: 'assets/photos/26640376.jpg',
+      thumbnail: 'https://i.ibb.co/KzjzsV0b/26640376.jpg',
+      mediaUrl: 'https://i.ibb.co/KzjzsV0b/26640376.jpg',
       description: 'Atmospheric laboratory setting exploring generative intelligence and machine learning experimentation.',
       favorite: false,
       year: '2026'
@@ -571,8 +570,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Cyberpunk Neon Horizon',
       category: 'Photography',
       type: 'image',
-      thumbnail: 'assets/photos/295657.jpg',
-      mediaUrl: 'assets/photos/295657.jpg',
+      thumbnail: 'https://i.ibb.co/23RYNWtp/295657.jpg',
+      mediaUrl: 'https://i.ibb.co/23RYNWtp/295657.jpg',
       description: 'High-contrast nocturnal streetscape bathed in vibrant magenta and cyan illumination.',
       favorite: true,
       year: '2026'
@@ -582,8 +581,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Atmospheric Sunset Horizon',
       category: 'Photography',
       type: 'image',
-      thumbnail: 'assets/photos/38598.jpg',
-      mediaUrl: 'assets/photos/38598.jpg',
+      thumbnail: 'https://i.ibb.co/G4419xbg/38598.jpg',
+      mediaUrl: 'https://i.ibb.co/G4419xbg/38598.jpg',
       description: 'Warm twilight gradient capturing evening reflections and golden hour tones.',
       favorite: false,
       year: '2026'
@@ -593,8 +592,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Modern Architecture Perspective',
       category: 'Photography',
       type: 'image',
-      thumbnail: 'assets/photos/4512060.jpg',
-      mediaUrl: 'assets/photos/4512060.jpg',
+      thumbnail: 'https://i.ibb.co/KpTV9Kyx/4512060.jpg',
+      mediaUrl: 'https://i.ibb.co/KpTV9Kyx/4512060.jpg',
       description: 'Contemporary facade lines and structural elegance photographed under crisp daylight.',
       favorite: false,
       year: '2026'
@@ -604,8 +603,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Geometric Symmetry & Glass',
       category: 'Photography',
       type: 'image',
-      thumbnail: 'assets/photos/4512081.jpg',
-      mediaUrl: 'assets/photos/4512081.jpg',
+      thumbnail: 'https://i.ibb.co/RkHnSg80/4512081.jpg',
+      mediaUrl: 'https://i.ibb.co/RkHnSg80/4512081.jpg',
       description: 'Intricate glass reflections and mathematical symmetry in modern urban infrastructure.',
       favorite: true,
       year: '2026'
@@ -615,8 +614,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Creative Studio Lighting',
       category: 'Photography',
       type: 'image',
-      thumbnail: 'assets/photos/7310.jpg',
-      mediaUrl: 'assets/photos/7310.jpg',
+      thumbnail: 'https://i.ibb.co/rfNg36p4/7310.jpg',
+      mediaUrl: 'https://i.ibb.co/rfNg36p4/7310.jpg',
       description: 'Controlled studio lighting and deep cinematic shadow contrast.',
       favorite: false,
       year: '2026'
@@ -626,8 +625,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Breaking Bad',
       category: 'Movies & Series',
       type: 'image',
-      thumbnail: 'assets/favorites/breakingbad.jpg',
-      mediaUrl: 'assets/favorites/breakingbad.jpg',
+      thumbnail: 'https://i.ibb.co/t9B3RNG/breakingbad.jpg',
+      mediaUrl: 'https://i.ibb.co/t9B3RNG/breakingbad.jpg',
       description: 'Masterpiece crime drama tracking Walter White\'s transformation into Heisenberg.',
       favorite: true,
       year: '2008–2013'
@@ -637,8 +636,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'The Boys',
       category: 'Movies & Series',
       type: 'image',
-      thumbnail: 'assets/favorites/The Boys.jpg',
-      mediaUrl: 'assets/favorites/The Boys.jpg',
+      thumbnail: 'https://i.ibb.co/kg6kdNCH/The-Boys.jpg',
+      mediaUrl: 'https://i.ibb.co/kg6kdNCH/The-Boys.jpg',
       description: 'Sharp, satirical deconstruction of corporate superhero monopolies.',
       favorite: true,
       year: '2019–Present'
@@ -648,8 +647,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Money Heist (La Casa de Papel)',
       category: 'Movies & Series',
       type: 'image',
-      thumbnail: 'assets/favorites/Money Heist.jpg',
-      mediaUrl: 'assets/favorites/Money Heist.jpg',
+      thumbnail: 'https://i.ibb.co/d4wwqJ4g/Money-Heist.jpg',
+      mediaUrl: 'https://i.ibb.co/d4wwqJ4g/Money-Heist.jpg',
       description: 'High-stakes tactical heist drama engineered by The Professor.',
       favorite: true,
       year: '2017–2021'
@@ -659,8 +658,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Dark',
       category: 'Movies & Series',
       type: 'image',
-      thumbnail: 'assets/favorites/Dark.jpg',
-      mediaUrl: 'assets/favorites/Dark.jpg',
+      thumbnail: 'https://i.ibb.co/qYqjf0mz/Dark.jpg',
+      mediaUrl: 'https://i.ibb.co/qYqjf0mz/Dark.jpg',
       description: 'Complex deterministic time-travel mystery exploring causality loops.',
       favorite: true,
       year: '2017–2020'
@@ -670,8 +669,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Vikings',
       category: 'Movies & Series',
       type: 'image',
-      thumbnail: 'src/assets/favorites/vikings.jpg',
-      mediaUrl: 'src/assets/favorites/vikings.jpg',
+      thumbnail: 'https://i.ibb.co/ch80TC9V/vikings.jpg',
+      mediaUrl: 'https://i.ibb.co/ch80TC9V/vikings.jpg',
       description: 'Epic historical saga charting Ragnar Lothbrok\'s exploration.',
       favorite: true,
       year: '2013-2020'
@@ -692,8 +691,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Tata GenAI Powered Data Analytics Certification',
       category: 'Certificates',
       type: 'image',
-      thumbnail: 'assets/certifications/GenAI Powered Data Analytics Job Simulation_page-0001.jpg',
-      mediaUrl: 'assets/certifications/GenAI Powered Data Analytics Job Simulation_page-0001.jpg',
+      thumbnail: 'https://i.ibb.co/GQYxQ5KV/Gen-AI-Powered-Data-Analytics-Job-Simulation-page-0001.jpg',
+      mediaUrl: 'https://i.ibb.co/GQYxQ5KV/Gen-AI-Powered-Data-Analytics-Job-Simulation-page-0001.jpg',
       description: 'Enterprise credential in exploratory data analysis, delinquency predictive AI modeling, and executive storytelling.',
       favorite: true,
       year: '2026'
@@ -703,8 +702,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Deloitte Data Analytics Forensic Certification',
       category: 'Certificates',
       type: 'image',
-      thumbnail: 'assets/certifications/deloitte_page-0001.jpg',
-      mediaUrl: 'assets/certifications/deloitte_page-0001.jpg',
+      thumbnail: 'https://i.ibb.co/hJ1VG4Qy/deloitte-page-0001.jpg',
+      mediaUrl: 'https://i.ibb.co/hJ1VG4Qy/deloitte-page-0001.jpg',
       description: 'Forensic analytics, corporate data integrity, and high-stakes risk quantification simulation.',
       favorite: true,
       year: '2026'
@@ -714,8 +713,8 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       title: 'Skill India / NSDC AI Inventory Management Certification',
       category: 'Certificates',
       type: 'image',
-      thumbnail: 'assets/certifications/internship_tutorialspoint_page-0001.jpg',
-      mediaUrl: 'assets/certifications/internship_tutorialspoint_page-0001.jpg',
+      thumbnail: 'https://i.ibb.co/W4NbXGh7/internship-tutorialspoint-page-0001.jpg',
+      mediaUrl: 'https://i.ibb.co/W4NbXGh7/internship-tutorialspoint-page-0001.jpg',
       description: 'Skill India and TutorialsPoint Academy certified training in AI-driven predictive replenishment.',
       favorite: true,
       year: '2026'
@@ -742,9 +741,9 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       creator: 'Vince Gilligan',
       director: 'Vince Gilligan',
       badge: 'Masterpiece',
-      posterFileName: 'src/assets/favorites/breakingbad.jpg',
-      poster: 'src/assets/favorites/breakingbad.jpg',
-      backdrop: 'src/assets/favorites/breakingbad.jpg',
+      posterFileName: 'https://i.ibb.co/t9B3RNG/breakingbad.jpg',
+      poster: 'https://i.ibb.co/t9B3RNG/breakingbad.jpg',
+      backdrop: 'https://i.ibb.co/t9B3RNG/breakingbad.jpg',
       description: 'A high school chemistry teacher turned methamphetamine producer partners with a former student to secure his family\'s future as he battles terminal cancer.',
       dialogue: 'I am not in danger, Skyler. I am the danger. A guy opens his door and gets shot, and you think that of me? No! I am the one who knocks!',
       viralDialogue: 'I am not in danger, Skyler. I am the danger. A guy opens his door and gets shot, and you think that of me? No! I am the one who knocks!',
@@ -763,9 +762,9 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       creator: 'Eric Kripke',
       director: 'Eric Kripke',
       badge: 'Dark Comedy',
-      posterFileName: 'src/assets/favorites/The Boys.jpg',
-      poster: 'src/assets/favorites/The Boys.jpg',
-      backdrop: 'src/assets/favorites/The Boys.jpg',
+      posterFileName: 'https://i.ibb.co/kg6kdNCH/The-Boys.jpg',
+      poster: 'https://i.ibb.co/kg6kdNCH/The-Boys.jpg',
+      backdrop: 'https://i.ibb.co/kg6kdNCH/The-Boys.jpg',
       description: 'A group of vigilantes set out to take down corrupt superheroes who abuse their superpowers for personal gain and corporate profit.',
       dialogue: "I'm the Homelander, and I can do whatever the f* I want. No God. The only man in the sky is me.",
       viralDialogue: "I'm the Homelander, and I can do whatever the f* I want. No God. The only man in the sky is me.",
@@ -786,9 +785,9 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       creator: 'Álex Pina',
       director: 'Álex Pina',
       badge: 'Heist Thriller',
-      posterFileName: 'src/assets/favorites/Money Heist.jpg',
-      poster: 'src/assets/favorites/Money Heist.jpg',
-      backdrop: 'src/assets/favorites/Money Heist.jpg',
+      posterFileName: 'https://i.ibb.co/d4wwqJ4g/Money-Heist.jpg',
+      poster: 'https://i.ibb.co/d4wwqJ4g/Money-Heist.jpg',
+      backdrop: 'https://i.ibb.co/d4wwqJ4g/Money-Heist.jpg',
       description: 'An unusual group of robbers attempt to carry out the most perfect robbery in Spanish history - stealing 2.4 billion euros from the Royal Mint.',
       dialogue: "Death can be the greatest opportunity of your life. We're not going to rob the money, we're going to print it.",
       viralDialogue: "Death can be the greatest opportunity of your life. We're not going to rob the money, we're going to print it.",
@@ -807,9 +806,9 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       creator: 'Baran bo Odar & Jantje Friese',
       director: 'Baran bo Odar & Jantje Friese',
       badge: 'Sci-Fi Mystery',
-      posterFileName: 'src/assets/favorites/Dark.jpg',
-      poster: 'src/assets/favorites/Dark.jpg',
-      backdrop: 'src/assets/favorites/Dark.jpg',
+      posterFileName: 'https://i.ibb.co/qYqjf0mz/Dark.jpg',
+      poster: 'https://i.ibb.co/qYqjf0mz/Dark.jpg',
+      backdrop: 'https://i.ibb.co/qYqjf0mz/Dark.jpg',
       description: 'A family saga with a supernatural twist, set in a German town where the disappearance of two young children exposes relationships among four families and a time travel conspiracy.',
       dialogue: "The end is the beginning, and the beginning is the end. The question isn't where, the question is when.",
       viralDialogue: "The end is the beginning, and the beginning is the end. The question isn't where, the question is when.",
@@ -828,9 +827,9 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
       creator: 'Michael Hirst',
       director: 'Michael Hirst',
       badge: 'Epic Drama',
-      posterFileName: 'src/assets/favorites/vikings.jpg',
-      poster: 'src/assets/favorites/vikings.jpg',
-      backdrop: 'src/assets/favorites/vikings.jpg',
+      posterFileName: 'https://i.ibb.co/ch80TC9V/vikings.jpg',
+      poster: 'https://i.ibb.co/ch80TC9V/vikings.jpg',
+      backdrop: 'https://i.ibb.co/ch80TC9V/vikings.jpg',
       description: 'Vikings transports us to the brutal and mysterious world of Ragnar Lothbrok, a Viking warrior and farmer who yearns to explore and raid the distant shores across the ocean.',
       dialogue: "I hope that one day our gods can become friends. The gods are man's creation, to give answers that they are too afraid to give themselves.",
       viralDialogue: "I hope that one day our gods can become friends. The gods are man's creation, to give answers that they are too afraid to give themselves.",
@@ -847,7 +846,7 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
     {
       id: 'vid-149947',
       title: 'Cinematic Video 01',
-      fileName: 'assets/video/149947-797491657_medium.mp4',
+      fileName: 'https://video-public.canva.com/VAG7bsrNzM4/v/ivhinfa2sk.mp4',
       duration: '0:10',
       category: 'Cinematic',
       description: 'High-definition 1080p motion video demonstration.',
@@ -857,7 +856,7 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
     {
       id: 'vid-172475',
       title: 'Cinematic Video 02',
-      fileName: 'assets/video/172475-847499816_medium.mp4',
+      fileName: 'https://cdn.pixabay.com/video/2018/01/06/13704-250154065_large.mp4',
       duration: '0:30',
       category: 'Cinematic',
       description: 'Widescreen landscape and creative motion sequence.',
@@ -867,7 +866,7 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
     {
       id: 'vid-178501',
       title: 'Cinematic Video 03',
-      fileName: 'assets/video/178501-860033423_medium.mp4',
+      fileName: 'https://cdn.pixabay.com/video/2026/06/20/359535_tiny.mp4',
       duration: '0:30',
       category: 'Cinematic',
       description: 'Atmospheric visual reel with ambient sound design.',
@@ -877,7 +876,7 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
     {
       id: 'vid-34301',
       title: 'Cinematic Video 04',
-      fileName: 'assets/video/34301-400974283_medium.mp4',
+      fileName: 'https://cdn.pixabay.com/video/2021/02/17/65494-514501826_tiny.mp4',
       duration: '0:13',
       category: 'Cinematic',
       description: 'High-definition dynamic visual and motion showcase.',
@@ -887,7 +886,7 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
     {
       id: 'vid-48569',
       title: 'Cinematic Video 05',
-      fileName: 'assets/video/48569-454825064_medium.mp4',
+      fileName: 'https://cdn.pixabay.com/video/2021/02/17/65494-514501826_tiny.mp4',
       duration: '0:10',
       category: 'Cinematic',
       description: 'Ultra-high resolution 1440p creative visual showcase.',

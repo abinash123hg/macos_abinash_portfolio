@@ -4,6 +4,7 @@ import {
   Sparkles,
   Send,
 } from 'lucide-react';
+import { chatbotDataset } from '../../../data/chatbotDataset';
 import { portfolioData } from '../../../data/portfolioData';
 import { sound } from '../../../utils/audioHaptics';
 
