@@ -194,7 +194,7 @@ export const Shell: React.FC = () => {
     setShowSpotlight(false);
     setIsPortfolioEntering(true);
     unlockPhone();
-    if (destination !== 'home') {
+    if (destination !== 'home' && destination !== 'work') {
       window.setTimeout(() => openApp(destination === 'contact' ? 'contact' : destination), 0);
     }
   };
