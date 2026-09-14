@@ -239,6 +239,8 @@ export const PhotosApp: React.FC = () => {
                     <img 
                       src={imageSrc} 
                       alt={m.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
                         // fallback to styled gradient card if direct image file missing

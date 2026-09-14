@@ -143,6 +143,8 @@ export const MusicApp: React.FC = () => {
                         <img 
                           src={resolveMediaUrl(track.coverUrl)} 
                           alt={track.title}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover"
                           onError={(e) => { e.currentTarget.style.display = 'none'; }}
                         />

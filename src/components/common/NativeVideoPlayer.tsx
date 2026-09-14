@@ -138,6 +138,7 @@ export const NativeVideoPlayer: React.FC<NativeVideoPlayerProps> = ({
           }}
           onClick={togglePlay}
           playsInline
+          preload="none"
           className="w-full h-full object-contain cursor-pointer max-h-[70vh]"
         />
 

@@ -732,9 +732,13 @@
   inset: -8%;
   background: radial-gradient(circle, rgba(66, 223, 197, 0.2), transparent);
   animation: drift 8s ease-in-out infinite alternate;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .portfolio-photo-frame img {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -1708,6 +1712,10 @@
 
 @media (max-width: 767px) {
   body { overflow-x: hidden; }
+
+  .iphone-lock-screen .portfolio-photo-frame::before {
+    opacity: 0.08;
+  }
 
   .iphone-lock-screen .portfolio-landing .portfolio-section {
     padding: 48px 16px;

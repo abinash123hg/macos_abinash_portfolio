@@ -4,9 +4,34 @@
  * across flexible directory structures without rigid path dependencies.
  */
 
+const LOCAL_MEDIA_ALIASES: Record<string, string> = {
+  'Gen-AI-Powered-Data-Analytics-Job-Simulation-page-0001.jpg': '/assets/certifications/GenAI Powered Data Analytics Job Simulation_page-0001.jpg',
+  'deloitte-page-0001.jpg': '/assets/certifications/deloitte_page-0001.jpg',
+  'internship-tutorialspoint-page-0001.jpg': '/assets/certifications/internship_tutorialspoint_page-0001.jpg',
+  'breakingbad.jpg': '/assets/favorites/breakingbad.jpg',
+  'Dark.jpg': '/assets/favorites/Dark.jpg',
+  'Money-Heist.jpg': '/assets/favorites/Money Heist.jpg',
+  'The-Boys.jpg': '/assets/favorites/The Boys.jpg',
+  'vikings.jpg': '/assets/favorites/vikings.jpg',
+  '123760.jpg': '/assets/photos/123760.jpg',
+  '1566397.jpg': '/assets/photos/1566397.jpg',
+  '250542.jpg': '/assets/photos/250542.jpg',
+  '26640376.jpg': '/assets/photos/26640376.jpg',
+  '295657.jpg': '/assets/photos/295657.jpg',
+  '38598.jpg': '/assets/photos/38598.jpg',
+  '4512060.jpg': '/assets/photos/4512060.jpg',
+  '4512081.jpg': '/assets/photos/4512081.jpg',
+  '7310.jpg': '/assets/photos/7310.jpg',
+};
+
 export const resolveMediaUrl = (filename: string, subfolder?: string): string => {
   if (!filename) return '';
-  if (filename.startsWith('http://') || filename.startsWith('https://') || filename.startsWith('data:')) {
+  if (filename.startsWith('http://') || filename.startsWith('https://')) {
+    const remoteName = decodeURIComponent(filename.split('?')[0].split('/').pop() || '');
+    if (LOCAL_MEDIA_ALIASES[remoteName]) return LOCAL_MEDIA_ALIASES[remoteName];
+    return filename;
+  }
+  if (filename.startsWith('data:')) {
     return filename;
   }
   if (filename.startsWith('/src/assets/') || filename.startsWith('/assets/')) {
