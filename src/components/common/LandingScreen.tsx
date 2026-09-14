@@ -1,12 +1,15 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import {
   ArrowDown,
+  BrainCircuit,
+  Database,
   Download,
   Github,
   Linkedin,
   Mail,
   Menu,
   Moon,
+  SearchCode,
   Sparkles,
   Sun,
   X,
@@ -214,6 +217,30 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
               Available for AI/ML opportunities
             </div>
           </div>
+
+          {showSystemHud && (
+            <aside className="portfolio-hero-snapshot" aria-label="AI systems snapshot">
+              <div className="portfolio-hero-snapshot__topline">
+                <span className="portfolio-hero-snapshot__status"><i /> SYSTEMS ONLINE</span>
+                <span className="portfolio-hero-snapshot__code">AB / 01</span>
+              </div>
+              <div className="portfolio-hero-snapshot__heading">
+                <Sparkles size={18} />
+                <div>
+                  <span>Current focus</span>
+                  <strong>Practical AI systems</strong>
+                </div>
+              </div>
+              <div className="portfolio-hero-snapshot__rows">
+                <div><BrainCircuit size={17} /><span>LLM applications</span><b>ACTIVE</b></div>
+                <div><SearchCode size={17} /><span>RAG &amp; knowledge</span><b>READY</b></div>
+                <div><Database size={17} /><span>ML &amp; analytics</span><b>BUILD</b></div>
+              </div>
+              <div className="portfolio-hero-snapshot__footer">
+                <span>From data</span><span className="portfolio-hero-snapshot__line" /><span>to decisions</span>
+              </div>
+            </aside>
+          )}
 
           {!showSystemHud && (
             <div className="portfolio-hero-photo-wrap">
