@@ -33,6 +33,7 @@ const PROFILE_IMAGE_384 = '/assets/images/abinash-profile-384.webp';
 const profileImageSrcSet = `${PROFILE_IMAGE_192} 1x, ${PROFILE_IMAGE_384} 2x`;
 
 export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResume, showSystemHud = false }) => {
+  const landingRef = useRef<HTMLDivElement>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState<LandingDestination>('home');
   const [isLeaving, setIsLeaving] = useState(false);
@@ -76,13 +77,19 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
 
   const navigateTo = (destination: LandingDestination) => {
     setActiveNav(destination);
-    if (destination === 'work') {
-      const work = document.getElementById('work');
-      if (work) work.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-      const target = document.getElementById(destination);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    let attempts = 0;
+    const scrollToTarget = () => {
+      const target = landingRef.current?.querySelector<HTMLElement>(`#${destination}`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      if (attempts < 20) {
+        attempts += 1;
+        window.setTimeout(scrollToTarget, 50);
+      }
+    };
+    scrollToTarget();
     setMobileMenuOpen(false);
   };
 
@@ -95,7 +102,7 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
   };
 
   return (
-    <div className={`portfolio-landing portfolio-landing--${landingTheme}`}>
+    <div ref={landingRef} className={`portfolio-landing portfolio-landing--${landingTheme}`}>
       <a className="skip-link" href="#main-content">Skip to content</a>
       {shouldLoadVideo && (
         <video className="portfolio-video" autoPlay muted loop playsInline preload="none" aria-hidden="true">

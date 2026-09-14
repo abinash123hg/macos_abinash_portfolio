@@ -190,6 +190,22 @@ const certifications = [
   },
 ];
 
+const handleCardPointerMove = (event: React.PointerEvent<HTMLElement>) => {
+  if (event.pointerType === 'touch' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const card = event.currentTarget;
+  const bounds = card.getBoundingClientRect();
+  const x = (event.clientX - bounds.left) / bounds.width;
+  const y = (event.clientY - bounds.top) / bounds.height;
+  card.style.setProperty('--card-rotate-x', `${(0.5 - y) * 8}deg`);
+  card.style.setProperty('--card-rotate-y', `${(x - 0.5) * 8}deg`);
+};
+
+const resetCardTilt = (event: React.PointerEvent<HTMLElement>) => {
+  const card = event.currentTarget;
+  card.style.setProperty('--card-rotate-x', '0deg');
+  card.style.setProperty('--card-rotate-y', '0deg');
+};
+
 interface LandingSectionsProps {
   showSystemHud?: boolean;
 }
@@ -242,7 +258,7 @@ export const LandingSections: React.FC<LandingSectionsProps> = ({ showSystemHud 
           {expertise.map((item, index) => {
             const Icon = item.icon;
             return (
-              <article className="portfolio-expertise-card" key={item.title}>
+              <article className="portfolio-expertise-card tilt-card" key={item.title} onPointerMove={handleCardPointerMove} onPointerLeave={resetCardTilt}>
                 <span className="portfolio-card-number">0{index + 1}</span>
                 <span className="portfolio-expertise-icon"><Icon size={24} /></span>
                 <h3>{item.title}</h3>
@@ -258,7 +274,7 @@ export const LandingSections: React.FC<LandingSectionsProps> = ({ showSystemHud 
           </div>
           <div className="portfolio-expertise-ml-data-grid">
             {mlDataAreas.map((item) => (
-              <article className="portfolio-expertise-ml-data-card" key={item.title}>
+              <article className="portfolio-expertise-ml-data-card tilt-card" key={item.title} onPointerMove={handleCardPointerMove} onPointerLeave={resetCardTilt}>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </article>
@@ -274,7 +290,7 @@ export const LandingSections: React.FC<LandingSectionsProps> = ({ showSystemHud 
         </div>
         <div className="portfolio-systems-grid">
           {systems.map((item, index) => (
-            <article className="portfolio-system-card" key={item.title}>
+            <article className="portfolio-system-card tilt-card" key={item.title} onPointerMove={handleCardPointerMove} onPointerLeave={resetCardTilt}>
               <span className="portfolio-system-card__number">0{index + 1}</span>
               <div className="portfolio-system-card__content">
                 <h3>{item.title}</h3>
@@ -292,7 +308,7 @@ export const LandingSections: React.FC<LandingSectionsProps> = ({ showSystemHud 
         </div>
         <div className="portfolio-workflow-grid">
           {workflow.map((item) => (
-            <article className="portfolio-workflow-step" key={item.step}>
+            <article className="portfolio-workflow-step tilt-card" key={item.step} onPointerMove={handleCardPointerMove} onPointerLeave={resetCardTilt}>
               <span className="portfolio-workflow-step__number">{item.step}</span>
               <div className="portfolio-workflow-step__content">
                 <span className="portfolio-workflow-step__name">{item.name}</span>
@@ -311,7 +327,7 @@ export const LandingSections: React.FC<LandingSectionsProps> = ({ showSystemHud 
         </div>
         <div className="portfolio-project-grid">
           {projects.map((project) => (
-            <article className="portfolio-project-card" key={project.name}>
+            <article className="portfolio-project-card tilt-card" key={project.name} onPointerMove={handleCardPointerMove} onPointerLeave={resetCardTilt}>
               <div className="portfolio-project-preview">
                 <div className="portfolio-project-preview__top">
                   <span className="portfolio-project-number">{project.projectNumber}</span>
@@ -360,7 +376,7 @@ export const LandingSections: React.FC<LandingSectionsProps> = ({ showSystemHud 
           {experience.map((item) => {
             const Icon = item.icon;
             return (
-              <article className="portfolio-experience-card" key={item.title}>
+                <article className="portfolio-experience-card tilt-card" key={item.title} onPointerMove={handleCardPointerMove} onPointerLeave={resetCardTilt}>
                 <span className="portfolio-experience-icon"><Icon size={24} /></span>
                 <div>
                   <span className="portfolio-experience-title">{item.title}</span>
@@ -382,7 +398,7 @@ export const LandingSections: React.FC<LandingSectionsProps> = ({ showSystemHud 
         </div>
         <div className="portfolio-certification-grid">
           {certifications.map((item) => (
-            <article className="portfolio-certification-card" key={item.title}>
+            <article className="portfolio-certification-card tilt-card" key={item.title} onPointerMove={handleCardPointerMove} onPointerLeave={resetCardTilt}>
               <div className="portfolio-certification-card__body">
                 <span className="portfolio-certification-issuer">{item.organization}</span>
                 <h3 className="portfolio-certification-title">{item.title}</h3>
