@@ -967,6 +967,11 @@
   margin-top: 1rem;
 }
 
+.portfolio-about-focus {
+  display: grid;
+  gap: 0.8rem;
+}
+
 .portfolio-expertise-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1513,6 +1518,7 @@
 
 /* Shared landing card treatment for repeated rectangular content blocks. */
 .portfolio-landing .portfolio-profile-facts div,
+.portfolio-landing .portfolio-focus-card,
 .portfolio-landing .portfolio-expertise-card,
 .portfolio-landing .portfolio-system-card,
 .portfolio-landing .portfolio-workflow-step,
@@ -1526,6 +1532,7 @@
 }
 
 .portfolio-landing .portfolio-profile-facts div:hover,
+.portfolio-landing .portfolio-focus-card:hover,
 .portfolio-landing .portfolio-expertise-card:hover,
 .portfolio-landing .portfolio-system-card:hover,
 .portfolio-landing .portfolio-workflow-step:hover,
@@ -1544,6 +1551,7 @@
 }
 
 .portfolio-landing--day .portfolio-profile-facts div:hover,
+.portfolio-landing--day .portfolio-focus-card:hover,
 .portfolio-landing--day .portfolio-expertise-card:hover,
 .portfolio-landing--day .portfolio-system-card:hover,
 .portfolio-landing--day .portfolio-workflow-step:hover,
@@ -1591,6 +1599,7 @@
 .portfolio-landing--day .portfolio-section-heading p,
 .portfolio-landing--day .portfolio-about-copy p,
 .portfolio-landing--day .portfolio-profile-facts .fact-label,
+.portfolio-landing--day .portfolio-focus-card__body,
 .portfolio-landing--day .portfolio-expertise-card p,
 .portfolio-landing--day .portfolio-system-card__content p,
 .portfolio-landing--day .portfolio-workflow-step__content p,
@@ -1638,6 +1647,7 @@
 
 .portfolio-landing--day .portfolio-capability-grid,
 .portfolio-landing--day .portfolio-capability,
+.portfolio-landing--day .portfolio-focus-card,
 .portfolio-landing--day .portfolio-expertise-card,
 .portfolio-landing--day .portfolio-system-card,
 .portfolio-landing--day .portfolio-workflow-step,
@@ -1647,6 +1657,10 @@
 .portfolio-landing--day .portfolio-contact-box {
   border-color: rgba(8,27,37,0.16);
   background: rgba(255,255,255,0.42);
+}
+
+.portfolio-landing--day .portfolio-focus-card__label {
+  color: #087681;
 }
 
 .portfolio-landing--day .portfolio-about,

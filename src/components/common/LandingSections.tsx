@@ -247,6 +247,20 @@ export const LandingSections: React.FC<LandingSectionsProps> = ({ showSystemHud 
               <div><span className="fact-label">AI/ML Developer — TutorialsPoint</span></div>
             </div>
           </div>
+          <aside className="portfolio-about-focus" aria-label="About focus areas">
+            <div className="portfolio-focus-card">
+              <span className="portfolio-focus-card__label">01 / Intelligence</span>
+              <div className="portfolio-focus-card__body"><BrainCircuit size={20} /> <span>LLM applications and practical AI assistants</span></div>
+            </div>
+            <div className="portfolio-focus-card">
+              <span className="portfolio-focus-card__label">02 / Retrieval</span>
+              <div className="portfolio-focus-card__body"><SearchCode size={20} /> <span>RAG systems, embeddings, and grounded knowledge</span></div>
+            </div>
+            <div className="portfolio-focus-card">
+              <span className="portfolio-focus-card__label">03 / Delivery</span>
+              <div className="portfolio-focus-card__body"><Bot size={20} /> <span>MCP agents, ML workflows, and useful data products</span></div>
+            </div>
+          </aside>
         </div>
       </section>
 <section id="expertise" className="portfolio-section portfolio-expertise">
