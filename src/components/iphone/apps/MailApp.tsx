@@ -95,7 +95,16 @@ export const MailApp: React.FC = () => {
       });
       window.clearTimeout(timeout);
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.error?.message || 'Message could not be sent.');
+      if (!response.ok) {
+        if (response.status === 503) {
+          const encodedSubject = encodeURIComponent(subject.trim());
+          const body = encodeURIComponent(`Name: ${senderName.trim()}\n\n${message.trim()}\n\nReply email: ${senderEmail.trim()}`);
+          window.location.href = `mailto:${portfolioData.email}?subject=${encodedSubject}&body=${body}`;
+          setSendError('Opening your email app because the website mail service is unavailable.');
+          return;
+        }
+        throw new Error(result.error?.message || 'Message could not be sent.');
+      }
 
       setSentSuccess(true);
       window.setTimeout(() => {
