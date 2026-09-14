@@ -200,13 +200,13 @@ export const Shell: React.FC = () => {
   };
 
   return (
-    <div className="relative flex items-center justify-center w-full h-[100dvh] min-h-0 p-0 select-none overflow-hidden">
+    <div className="relative flex items-center justify-center w-full h-[100dvh] min-h-[100svh] p-0 select-none overflow-hidden">
       {/* iPhone Screen Shell: fluid scale for portrait and landscape without locked box geometry */}
       <div 
         className="relative w-full h-[100dvh] min-h-0 aspect-auto md:rounded-[54px] md:p-2.5 md:shadow-[0_25px_70px_rgba(0,0,0,0.9)] md:ring-1 md:ring-neutral-700/80 flex flex-col justify-between overflow-hidden bg-black shrink-0"
         style={{
           width: isLandscape ? 'min(960px, calc(100vw - 24px))' : 'min(420px, calc(100vw - 16px))',
-          height: isLandscape ? 'min(420px, calc(100dvh - 24px))' : 'min(840px, calc(100dvh - 16px))',
+          height: isLandscape ? 'min(420px, calc(100dvh - 24px))' : '100dvh',
           maxWidth: '100vw',
           maxHeight: '100dvh',
           aspectRatio: isLandscape ? '16 / 9' : '9 / 16',
