@@ -145,6 +145,26 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
                 </button>
               </div>
             )}
+            {!showSystemHud && (
+              <div className="portfolio-mode-toggle portfolio-mobile-mode-toggle" aria-label="Landing page theme">
+                <button
+                  className={`portfolio-mode-button ${landingTheme === 'day' ? 'active' : ''}`}
+                  aria-label="Use day theme"
+                  aria-pressed={landingTheme === 'day'}
+                  onClick={() => setLandingTheme('day')}
+                >
+                  <Sun size={13} />
+                </button>
+                <button
+                  className={`portfolio-mode-button ${landingTheme === 'night' ? 'active' : ''}`}
+                  aria-label="Use night theme"
+                  aria-pressed={landingTheme === 'night'}
+                  onClick={() => setLandingTheme('night')}
+                >
+                  <Moon size={13} />
+                </button>
+              </div>
+            )}
             <button className="portfolio-enter" onClick={() => enterPortfolio('work')}>Enter Portfolio</button>
             <button className="portfolio-menu-button" aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-controls="mobile-navigation" aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}>
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}

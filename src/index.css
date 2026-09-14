@@ -336,6 +336,10 @@
   color: #9bfaff;
 }
 
+.portfolio-mobile-mode-toggle {
+  display: none;
+}
+
 .portfolio-enter {
   border: 1px solid rgba(255,255,255,0.16);
   background: rgba(235, 245, 255, 0.92);
@@ -1722,6 +1726,16 @@
   .portfolio-desktop-links { display: none; }
   .portfolio-menu-button { display: grid; }
   .portfolio-enter { display: none; }
+  .portfolio-mobile-mode-toggle {
+    display: flex;
+    gap: 0.15rem;
+    padding: 0.15rem;
+  }
+  .portfolio-mobile-mode-toggle .portfolio-mode-button {
+    width: 34px;
+    height: 32px;
+    padding: 0;
+  }
 }
 
 @media (max-width: 767px) {
