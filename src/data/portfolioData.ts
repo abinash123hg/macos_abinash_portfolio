@@ -53,7 +53,7 @@ Based in Bhubaneswar, Odisha, India, I am actively seeking AI/ML engineering int
         { label: 'Interface', value: 'MCP' }
       ],
       technologies: ['Python', 'Pandas', 'NumPy', 'Scikit-learn', 'ChromaDB', 'RAG', 'Ollama', 'FastMCP', 'Streamlit', 'Matplotlib', 'Jinja2'],
-      githubUrl: 'https://github.com/abinash123hg',
+      githubUrl: 'https://github.com/abinash123hg/agentic-mlops-mcp-engine.git',
       liveDemoUrl: 'https://ais-dev-clxhguavorwiqmygvyflld-888038745886.asia-east1.run.app',
       featured: true,
       color: '#007aff',
