@@ -46,7 +46,7 @@ const PortfolioRoot: React.FC = () => {
 
   return (
     <div 
-      className={`fixed inset-0 w-screen h-screen overflow-hidden select-none font-sans relative transition-colors duration-300 ${
+      className={`fixed inset-0 w-screen h-[100dvh] min-h-[100svh] overflow-hidden select-none font-sans relative transition-colors duration-300 ${
         resolvedTheme === 'dark' ? 'dark bg-neutral-950 text-white' : 'light bg-neutral-100 text-neutral-900'
       }`}
       style={{
