@@ -1741,6 +1741,12 @@
 @media (max-width: 767px) {
   body { overflow-x: hidden; }
 
+  .iphone-lock-screen .portfolio-header {
+    min-height: 112px;
+    padding-top: 44px;
+    box-sizing: border-box;
+  }
+
   .iphone-lock-screen .portfolio-photo-frame::before {
     opacity: 0.08;
   }
