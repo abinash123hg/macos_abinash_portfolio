@@ -203,7 +203,7 @@ export const Shell: React.FC = () => {
     <div className="relative flex items-center justify-center w-full h-[100dvh] min-h-[100svh] p-0 select-none overflow-hidden">
       {/* iPhone Screen Shell: fluid scale for portrait and landscape without locked box geometry */}
       <div 
-        className="relative w-full h-[100dvh] min-h-0 aspect-auto md:rounded-[54px] md:p-2.5 md:shadow-[0_25px_70px_rgba(0,0,0,0.9)] md:ring-1 md:ring-neutral-700/80 flex flex-col justify-between overflow-hidden bg-black shrink-0"
+        className="iphone-shell relative w-full h-[100dvh] min-h-0 aspect-auto md:rounded-[54px] md:p-2.5 md:shadow-[0_25px_70px_rgba(0,0,0,0.9)] md:ring-1 md:ring-neutral-700/80 flex flex-col justify-between overflow-hidden bg-black shrink-0"
         style={{
           width: isLandscape ? 'min(960px, calc(100vw - 24px))' : 'min(420px, calc(100vw - 16px))',
           height: isLandscape ? 'min(420px, calc(100dvh - 24px))' : '100dvh',
@@ -233,7 +233,7 @@ export const Shell: React.FC = () => {
           <DynamicIsland />
 
           {/* iOS 18 Dynamic Status Bar with top gesture triggers */}
-          <div className="pt-[env(safe-area-inset-top,0px)] shrink-0 z-40">
+          <div className="iphone-status-bar pt-[env(safe-area-inset-top,0px)] shrink-0 z-40">
             <StatusBar
               onSwipeDownLeft={() => setShowNotifications(prev => !prev)}
               onSwipeDownRight={() => setShowControlCenter(prev => !prev)}

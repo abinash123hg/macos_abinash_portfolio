@@ -1680,6 +1680,14 @@
   background: rgba(238,247,246,0.7);
 }
 
+/* The status bar sits outside the landing component, so mirror Day mode with :has(). */
+.iphone-shell:has(.portfolio-landing--day) .iphone-status-bar,
+.iphone-shell:has(.portfolio-landing--day) .iphone-status-bar button,
+.iphone-shell:has(.portfolio-landing--day) .iphone-status-bar svg {
+  color: #18343e !important;
+  text-shadow: none !important;
+}
+
 .portfolio-landing--day .portfolio-hero-snapshot {
   border-color: rgba(8,118,129,0.24);
   background: linear-gradient(145deg, rgba(255,255,255,0.62), rgba(255,255,255,0.28));
