@@ -228,7 +228,7 @@ const LinkedInIcon: React.FC<{ className?: string }> = ({ className = 'w-full h-
 const ProfileAvatarIcon: React.FC<{ className?: string }> = ({ className = 'w-full h-full' }) => (
   <div className={`relative rounded-[20px] overflow-hidden p-0.5 bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-500 shadow-md ${className}`}>
     <img
-      src="https://media.licdn.com/dms/image/v2/D4D03AQHu8iauv0OdlA/profile-displayphoto-scale_400_400/B4DZ_ILs1ZIoAk-/0/1785769943899?e=1789603200&v=beta&t=OOZYTjy226VAOPwWen2qM1sN7U2FZai2zeoktl60x-g"
+      src="/assets/images/abinash-profile-192.webp"
       alt="Abinash Portfolio"
       className="w-full h-full object-cover rounded-[18px]"
     />

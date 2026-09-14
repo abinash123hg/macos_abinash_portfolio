@@ -19,6 +19,11 @@
     Cache-Control = "public,max-age=31536000,immutable"
 
 [[headers]]
+  for = "/Abinash-Swain-Resume.pdf"
+  [headers.values]
+    Cache-Control = "public,max-age=31536000,immutable"
+
+[[headers]]
   for = "/favicon.ico"
   [headers.values]
     Cache-Control = "public,max-age=31536000,immutable"
@@ -27,3 +32,16 @@
   for = "/index.html"
   [headers.values]
     Cache-Control = "public,max-age=0,must-revalidate"
+
+# Security headers for all responses. The CSP is deliberately permissive for
+# third-party images/media so the app's portfolios, photos and AI features keep
+# working (self-hosted fonts/scripts are preferred).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Permissions-Policy = "camera=(self), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss: data:; worker-src 'self' blob:; frame-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'"

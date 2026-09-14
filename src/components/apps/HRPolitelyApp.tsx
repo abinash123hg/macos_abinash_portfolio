@@ -150,7 +150,7 @@ export const HRPolitelyApp: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-cyan-400/80 shadow-md shrink-0">
                     <img 
-                      src="https://media.licdn.com/dms/image/v2/D4D03AQHu8iauv0OdlA/profile-displayphoto-scale_400_400/B4DZ_ILs1ZIoAk-/0/1785769943899?e=1789603200&v=beta&t=OOZYTjy226VAOPwWen2qM1sN7U2FZai2zeoktl60x-g"
+                      src="/assets/images/abinash-profile-192.webp"
                       alt={portfolioData.name}
                       className="w-full h-full object-cover"
                     />

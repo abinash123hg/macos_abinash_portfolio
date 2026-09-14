@@ -28,19 +28,33 @@ const apiSuccess = (res: express.Response, data: Record<string, unknown> = {}) =
   res.json({ success: true, ...data });
 };
 
+// Security headers for the self-hosted (Express) production server.
+// Netlify deployments get equivalent headers from netlify.toml.
+if (process.env.NODE_ENV === "production") {
+  app.use((_req, res, next) => {
+    res.set("X-Content-Type-Options", "nosniff");
+    res.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    res.set("X-Frame-Options", "DENY");
+    res.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+    res.set("Permissions-Policy", "camera=(self), microphone=(), geolocation=()");
+    next();
+  });
+}
+
 // Serve static assets directly with streaming & range support
 const assetsDir = path.join(process.cwd(), "assets");
 const publicAssetsDir = path.join(process.cwd(), "public/assets");
+const longCache = { maxAge: "365d", immutable: true as const };
 if (fs.existsSync(assetsDir)) {
-  app.use("/assets", express.static(assetsDir));
-  app.use("/favorites", express.static(path.join(assetsDir, "favorites")));
-  app.use("/photos", express.static(path.join(assetsDir, "photos")));
+  app.use("/assets", express.static(assetsDir, longCache));
+  app.use("/favorites", express.static(path.join(assetsDir, "favorites"), longCache));
+  app.use("/photos", express.static(path.join(assetsDir, "photos"), longCache));
   app.use("/video", express.static(path.join(assetsDir, "video")));
   app.use("/videos", express.static(path.join(assetsDir, "video")));
   app.use("/music", express.static(path.join(assetsDir, "music")));
-  app.use("/certifications", express.static(path.join(assetsDir, "certifications")));
+  app.use("/certifications", express.static(path.join(assetsDir, "certifications"), longCache));
 } else if (fs.existsSync(publicAssetsDir)) {
-  app.use("/assets", express.static(publicAssetsDir));
+  app.use("/assets", express.static(publicAssetsDir, longCache));
 }
 app.use(express.static(path.join(process.cwd(), "public")));
 

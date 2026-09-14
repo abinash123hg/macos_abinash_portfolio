@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDevice } from '../../context/DeviceContext';
 import { StatusBar } from './StatusBar';
 import { DynamicIsland } from './DynamicIsland';
@@ -58,6 +58,31 @@ export const Shell: React.FC = () => {
     unlockPhone
     ,openApp
   } = useDevice();
+
+  const [viewportSize, setViewportSize] = useState(() => ({
+    width: typeof window === 'undefined' ? 390 : window.innerWidth,
+    height: typeof window === 'undefined' ? 844 : window.innerHeight,
+  }));
+
+  useEffect(() => {
+    const syncViewport = () => {
+      setViewportSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    syncViewport();
+    window.addEventListener('resize', syncViewport);
+    window.addEventListener('orientationchange', syncViewport);
+
+    return () => {
+      window.removeEventListener('resize', syncViewport);
+      window.removeEventListener('orientationchange', syncViewport);
+    };
+  }, []);
+
+  const isLandscape = viewportSize.width > viewportSize.height;
 
   const [showControlCenter, setShowControlCenter] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -175,11 +200,16 @@ export const Shell: React.FC = () => {
   };
 
   return (
-    <div className="relative flex items-center justify-center w-full h-[100dvh] min-h-0 md:h-full md:min-h-0 p-0 md:p-3 select-none overflow-hidden">
-      {/* iPhone Screen Shell - Edge-to-edge on mobile, perfectly scaled aspect ratio on desktop/laptop */}
+    <div className="relative flex items-center justify-center w-full h-[100dvh] min-h-0 p-0 select-none overflow-hidden">
+      {/* iPhone Screen Shell: fluid scale for portrait and landscape without locked box geometry */}
       <div 
-        className="relative w-full h-[100dvh] min-h-0 aspect-auto md:w-auto md:h-[min(852px,calc(100vh-32px))] md:aspect-[393/852] md:max-w-[95vw] md:rounded-[54px] md:p-2.5 md:shadow-[0_25px_70px_rgba(0,0,0,0.9)] md:ring-1 md:ring-neutral-700/80 flex flex-col justify-between overflow-hidden bg-black shrink-0"
+        className="relative w-full h-[100dvh] min-h-0 aspect-auto md:rounded-[54px] md:p-2.5 md:shadow-[0_25px_70px_rgba(0,0,0,0.9)] md:ring-1 md:ring-neutral-700/80 flex flex-col justify-between overflow-hidden bg-black shrink-0"
         style={{
+          width: isLandscape ? 'min(960px, calc(100vw - 24px))' : 'min(420px, calc(100vw - 16px))',
+          height: isLandscape ? 'min(420px, calc(100dvh - 24px))' : 'min(840px, calc(100dvh - 16px))',
+          maxWidth: '100vw',
+          maxHeight: '100dvh',
+          aspectRatio: isLandscape ? '16 / 9' : '9 / 16',
           boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.1)',
         }}
         onTouchStart={handleTopSwipeStart}
@@ -212,11 +242,7 @@ export const Shell: React.FC = () => {
 
           {/* Screen Content Layers */}
           <div className={`absolute inset-0 z-10 min-h-0 w-full overflow-hidden flex flex-col will-change-transform ${isPortfolioEntering && !isLocked ? 'portfolio-rising' : ''}`}>
-            {isLocked ? (
-              <div className="iphone-lock-screen w-full h-full">
-                <LandingScreen onExplore={handleLandingExplore} />
-              </div>
-            ) : showQuickSettings ? (
+            {showQuickSettings ? (
               <div className="relative h-full w-full overflow-hidden">
                 <ControlCenter onClose={() => setShowQuickSettings(false)} />
                 <div
@@ -232,6 +258,10 @@ export const Shell: React.FC = () => {
               <IPhoneNotificationCenter onClose={() => setShowNotifications(false)} />
             ) : showSpotlight ? (
               <Spotlight onClose={() => setShowSpotlight(false)} />
+            ) : isLocked ? (
+              <div className="iphone-lock-screen w-full h-full">
+                <LandingScreen onExplore={handleLandingExplore} />
+              </div>
             ) : phoneScreen === 'switcher' ? (
               <AppSwitcher />
             ) : activeAppId ? (

@@ -1,8 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, Battery, Linkedin, Mail, Menu, X } from 'lucide-react';
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import {
+  ArrowDown,
+  Download,
+  Github,
+  Linkedin,
+  Mail,
+  Menu,
+  Moon,
+  Sparkles,
+  Sun,
+  X,
+} from 'lucide-react';
 import { portfolioData } from '../../data/portfolioData';
 import { sound } from '../../utils/audioHaptics';
+import landingVideo from '../../assets/video/34301-400974283_medium.mp4';
+
+// Below-the-fold landing sections load in a separate chunk so the hero and
+// navigation stay in the smallest possible initial bundle.
+const LandingSections = lazy(() => import('./LandingSections').then((m) => ({ default: m.LandingSections })));
 
 interface LandingScreenProps {
   onExplore: (destination?: LandingDestination) => void;
@@ -10,158 +25,231 @@ interface LandingScreenProps {
   showSystemHud?: boolean;
 }
 
-export type LandingDestination = 'home' | 'about' | 'projects' | 'skills' | 'contact';
+export type LandingDestination = 'home' | 'about' | 'work' | 'expertise' | 'contact';
 
-const profileImage = 'https://media.licdn.com/dms/image/v2/D4D03AQHu8iauv0OdlA/profile-displayphoto-scale_400_400/B4DZ_ILs1ZIoAk-/0/1785769943899?e=1789603200&v=beta&t=OOZYTjy226VAOPwWen2qM1sN7U2FZai2zeoktl60x-g';
+// Locally optimized WebP portrait (192px + 384px @2x) served from this origin.
+const PROFILE_IMAGE_192 = '/assets/images/abinash-profile-192.webp';
+const PROFILE_IMAGE_384 = '/assets/images/abinash-profile-384.webp';
+const profileImageSrcSet = `${PROFILE_IMAGE_192} 1x, ${PROFILE_IMAGE_384} 2x`;
 
 export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResume, showSystemHud = false }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isLeaving, setIsLeaving] = useState(false);
   const [activeNav, setActiveNav] = useState<LandingDestination>('home');
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [now, setNow] = useState(() => new Date());
-  const [isOnline, setIsOnline] = useState(() => navigator.onLine);
-  const [batteryPercent, setBatteryPercent] = useState<number | null>(null);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const [landingTheme, setLandingTheme] = useState<'day' | 'night'>('night');
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
   const transitionTimerRef = useRef<number | null>(null);
-  const landingVideoUrl = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260622_204221_5339e40b-e73d-4ab0-9c65-79c18c66fd50.mp4';
-
-  useEffect(() => () => {
-    if (transitionTimerRef.current !== null) window.clearTimeout(transitionTimerRef.current);
-  }, []);
 
   useEffect(() => {
-    if (!showSystemHud) return;
+    const connection = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    const shouldAvoidVideo = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      || connection?.saveData
+      || ['slow-2g', '2g'].includes(connection?.effectiveType ?? '')
+      || window.matchMedia('(max-width: 767px)').matches;
 
-    const timer = window.setInterval(() => setNow(new Date()), 1000);
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    if (shouldAvoidVideo) return;
 
-    type BatteryManager = EventTarget & { level: number; addEventListener: (type: string, listener: EventListener) => void; removeEventListener: (type: string, listener: EventListener) => void };
-    const batteryNavigator = navigator as Navigator & { getBattery?: () => Promise<BatteryManager> };
-    let battery: BatteryManager | null = null;
-    const updateBattery = (event?: Event) => {
-      const target = (event?.currentTarget || battery) as BatteryManager | null;
-      if (target) setBatteryPercent(Math.round(target.level * 100));
+    const loadVideo = () => setShouldLoadVideo(true);
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+      cancelIdleCallback?: (handle: number) => void;
     };
 
-    if (batteryNavigator.getBattery) {
-      void batteryNavigator.getBattery().then((result) => {
-        battery = result;
-        updateBattery();
-        battery.addEventListener('levelchange', updateBattery);
-      }).catch(() => {});
+    if (idleWindow.requestIdleCallback) {
+      const idleId = idleWindow.requestIdleCallback(loadVideo, { timeout: 2500 });
+      return () => idleWindow.cancelIdleCallback?.(idleId);
     }
 
-    return () => {
-      window.clearInterval(timer);
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-      battery?.removeEventListener('levelchange', updateBattery);
-    };
-  }, [showSystemHud]);
+    const timeoutId = window.setTimeout(loadVideo, 1800);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
 
-  const dateParts = new Intl.DateTimeFormat('en-US', { weekday: 'short', day: '2-digit', month: 'short' }).formatToParts(now);
-  const weekday = dateParts.find((part) => part.type === 'weekday')?.value || '';
-  const day = dateParts.find((part) => part.type === 'day')?.value || '';
-  const month = dateParts.find((part) => part.type === 'month')?.value || '';
-  const time = new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).format(now);
-
-  const enterPortfolio = (destination: LandingDestination = 'home') => {
-    if (isLeaving) return;
-    sound.landingOpenChime();
-    setMobileMenuOpen(false);
-    setActiveNav(destination);
-    setIsLeaving(true);
-    transitionTimerRef.current = window.setTimeout(() => onExplore(destination), 520);
-  };
+  const navItems = [
+    { id: 'home' as LandingDestination, label: 'Home' },
+    { id: 'about' as LandingDestination, label: 'About' },
+    { id: 'work' as LandingDestination, label: 'Work' },
+    { id: 'expertise' as LandingDestination, label: 'Expertise' },
+    { id: 'contact' as LandingDestination, label: 'Contact' },
+  ];
 
   const navigateTo = (destination: LandingDestination) => {
     setActiveNav(destination);
-    enterPortfolio(destination);
+    if (destination === 'work') {
+      const work = document.getElementById('work');
+      if (work) work.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      const target = document.getElementById(destination);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setMobileMenuOpen(false);
+  };
+
+  const enterPortfolio = (destination: LandingDestination = 'work') => {
+    if (isLeaving) return;
+    sound.landingOpenChime();
+    setActiveNav(destination);
+    setIsLeaving(true);
+    transitionTimerRef.current = window.setTimeout(() => onExplore(destination), 420);
   };
 
   return (
-    <main className={`foldcraft-landing ${isLeaving ? 'foldcraft-landing--leaving' : ''}`} onScroll={(event) => setIsScrolled(event.currentTarget.scrollTop > 8)}>
-      <video
-        className="foldcraft-video"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-hidden="true"
-      >
-        <source src={landingVideoUrl} type="video/mp4" />
-      </video>
-      <div className="foldcraft-video-overlay" aria-hidden="true" />
-
-      {showSystemHud && (
-        <div className="foldcraft-system-hud" aria-live="off" aria-label="Local time, battery, and network status">
-          <span>{weekday}, {day} {month}</span>
-          <i aria-hidden="true">·</i>
-          <time dateTime={now.toISOString()}>{time}</time>
-          <i aria-hidden="true">·</i>
-          <span className="foldcraft-system-hud__network">
-            <b className={isOnline ? 'foldcraft-system-hud__dot--online' : 'foldcraft-system-hud__dot--offline'} aria-hidden="true" />
-            {isOnline ? 'Online' : 'Offline'}
-          </span>
-          {batteryPercent !== null && <><i aria-hidden="true">·</i><span className="foldcraft-system-hud__battery"><Battery size={12} aria-hidden="true" /> {batteryPercent}%</span></>}
-        </div>
+    <div className={`portfolio-landing portfolio-landing--${landingTheme}`}>
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      {shouldLoadVideo && (
+        <video className="portfolio-video" autoPlay muted loop playsInline preload="none" aria-hidden="true">
+          <source src={landingVideo} type="video/mp4" />
+        </video>
       )}
+      <div className="portfolio-video-overlay" aria-hidden="true" />
 
-      <motion.nav className={`foldcraft-nav ${isScrolled ? 'foldcraft-nav--scrolled' : ''}`} initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} aria-label="Portfolio navigation">
-        <div className="foldcraft-nav-inner">
-            <button className={`foldcraft-wordmark ${activeNav === 'home' ? 'foldcraft-nav-item--active' : ''}`} onClick={() => navigateTo('home')} aria-label={`${portfolioData.name} home`}>ABINASH SWAIN</button>
-          <div className="foldcraft-desktop-links">
-            <button className={activeNav === 'home' ? 'foldcraft-nav-item--active' : ''} onClick={() => navigateTo('home')}>Home</button>
-            <button className={activeNav === 'about' ? 'foldcraft-nav-item--active' : ''} onClick={() => navigateTo('about')}>About Me</button>
-            <button className={activeNav === 'projects' ? 'foldcraft-nav-item--active' : ''} onClick={() => navigateTo('projects')}>Work</button>
-            <button className={activeNav === 'skills' ? 'foldcraft-nav-item--active' : ''} onClick={() => navigateTo('skills')}>Expertise</button>
-            <button className={activeNav === 'contact' ? 'foldcraft-nav-item--active' : ''} onClick={() => navigateTo('contact')}>Contact</button>
+      <header className="portfolio-header">
+        <nav className="portfolio-nav" aria-label="Main">
+          <a className="portfolio-brand" href="#home">ABINASH SWAIN</a>
+
+          <div className="portfolio-desktop-links">
+            {navItems.map((item) => (
+              <a className={activeNav === item.id ? 'active' : ''} key={item.id} href={item.id === 'work' ? '#work' : `#${item.id}`} onClick={(e) => { e.preventDefault(); navigateTo(item.id); }}>{item.label}</a>
+            ))}
           </div>
-          <div className="foldcraft-nav-actions">
-            <button className="foldcraft-talk" onClick={() => enterPortfolio('home')}>Enter Portfolio</button>
-            <button className="foldcraft-menu-button" onClick={() => setMobileMenuOpen((open) => !open)} aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={mobileMenuOpen}>
-              <AnimatePresence mode="wait" initial={false}>
-                {mobileMenuOpen ? <motion.span key="close" initial={{ opacity: 0, rotate: -90, scale: .7 }} animate={{ opacity: 1, rotate: 0, scale: 1 }} exit={{ opacity: 0, rotate: 90, scale: .7 }} transition={{ duration: .3 }}><X size={21} /></motion.span> : <motion.span key="menu" initial={{ opacity: 0, rotate: 90, scale: .7 }} animate={{ opacity: 1, rotate: 0, scale: 1 }} exit={{ opacity: 0, rotate: -90, scale: .7 }} transition={{ duration: .3 }}><Menu size={21} /></motion.span>}
-              </AnimatePresence>
+
+          <div className="portfolio-nav-actions">
+            {showSystemHud && (
+              <div className="portfolio-mode-toggle" aria-label="Landing page theme">
+                <button
+                  className={`portfolio-mode-button ${landingTheme === 'day' ? 'active' : ''}`}
+                  aria-pressed={landingTheme === 'day'}
+                  onClick={() => setLandingTheme('day')}
+                >
+                  <Sun size={14} />
+                  <span>Day</span>
+                </button>
+                <button
+                  className={`portfolio-mode-button ${landingTheme === 'night' ? 'active' : ''}`}
+                  aria-pressed={landingTheme === 'night'}
+                  onClick={() => setLandingTheme('night')}
+                >
+                  <Moon size={14} />
+                  <span>Night</span>
+                </button>
+              </div>
+            )}
+            <button className="portfolio-enter" onClick={() => enterPortfolio('work')}>Enter Portfolio</button>
+            <button className="portfolio-menu-button" aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-controls="mobile-navigation" aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}>
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
-        </div>
-        <AnimatePresence>
-          {mobileMenuOpen && <motion.div className="foldcraft-mobile-menu" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: '100svh' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: .5, ease: [0.16, 1, 0.3, 1] }}>
-            <div className="foldcraft-mobile-links">
-              <button onClick={() => navigateTo('home')}>Home</button>
-              <button onClick={() => navigateTo('about')}>About Me</button>
-              <button onClick={() => navigateTo('projects')}>Work</button>
-              <button onClick={() => navigateTo('skills')}>Expertise</button>
-              <button onClick={() => navigateTo('contact')}>Contact</button>
-              <button className="foldcraft-mobile-cta" onClick={() => enterPortfolio('home')}>Enter Portfolio <ArrowRight size={18} /></button>
-            </div>
-          </motion.div>}
-        </AnimatePresence>
-      </motion.nav>
+        </nav>
 
-      <section className="foldcraft-hero" id="landing-hero">
-        <div className="foldcraft-hero-top">
-          <motion.div className="foldcraft-profile" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .15 }}><img src={profileImage} alt={portfolioData.name} width="400" height="400" referrerPolicy="no-referrer" /></motion.div>
-          <motion.p className="foldcraft-eyebrow" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .25 }}>AI · MACHINE LEARNING · DATA ANALYTICS</motion.p>
-          <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .4, duration: .8 }}>{portfolioData.name}</motion.h1>
-          <motion.p className="foldcraft-hero-role" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5 }}>AI/ML Engineer delivering scalable, measurable intelligence</motion.p>
+        {mobileMenuOpen && (
+          <div id="mobile-navigation" className="portfolio-mobile-menu portfolio-mobile-menu--enter">
+            <button className="portfolio-mobile-close" aria-label="Close navigation menu" onClick={() => setMobileMenuOpen(false)}><X size={22} /></button>
+            <div className="portfolio-mobile-links">
+              {navItems.map((item) => (
+                <a key={item.id} href={item.id === 'work' ? '#work' : `#${item.id}`} onClick={(e) => { e.preventDefault(); navigateTo(item.id); }}>{item.label}</a>
+              ))}
+              <button className="portfolio-mobile-enter" onClick={() => enterPortfolio('work')}>Enter Portfolio</button>
+            </div>
+          </div>
+        )}
+      </header>
+
+      <main id="main-content" className="portfolio-main">
+        <section id="home" className="portfolio-hero">
+          <div className="portfolio-hero-copy">
+            {showSystemHud && (
+              <div className="portfolio-hero-photo-wrap portfolio-hero-photo-wrap--inline">
+                <div className="portfolio-photo-frame">
+                  <img
+                    src={PROFILE_IMAGE_192}
+                    srcSet={profileImageSrcSet}
+                    sizes="160px"
+                    alt="Abinash Swain, AI and machine learning developer"
+                    width="192"
+                    height="192"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              </div>
+            )}
+            <div className="portfolio-hero-kicker">AI · MACHINE LEARNING · DATA ANALYTICS</div>
+            <h1>Abinash Swain</h1>
+            <div className="portfolio-hero-label">AI/ML Developer · RAG · LLMs · MCP · Data Analytics</div>
+            <div className="portfolio-hero-headline">Building practical AI systems from data to intelligent decisions.</div>
+            <p className="portfolio-hero-description">I build practical AI and data-driven applications using machine learning, LLMs, RAG, MCP, AI agents, and data analytics. My focus is on turning technical concepts into useful, working solutions.</p>
+
+            <div className="portfolio-hero-actions">
+              <a className="portfolio-button portfolio-button--primary" href="#home" onClick={(event) => { event.preventDefault(); enterPortfolio('work'); }}>
+                <span>Enter Portfolio</span>
+                <ArrowDown size={16} />
+              </a>
+
+              <a className="portfolio-button portfolio-button--secondary" href="/Abinash-Swain-Resume.pdf" download aria-label="Download Abinash Swain's resume (PDF)">
+                <Download size={16} />
+                <span>View Resume</span>
+              </a>
+
+              <div className="portfolio-socials">
+                <a aria-label="Visit Abinash Swain's GitHub profile" target="_blank" rel="noreferrer" href={portfolioData.github}><Github size={16} />GitHub</a>
+                <a aria-label="Visit Abinash Swain's LinkedIn profile" target="_blank" rel="noreferrer" href={portfolioData.linkedin}><Linkedin size={16} />LinkedIn</a>
+                <a aria-label="Email Abinash Swain" href={`mailto:${portfolioData.email}`}>
+                  <Mail size={16} />Email
+                </a>
+              </div>
+            </div>
+
+            <div className="portfolio-availability">
+              <Sparkles size={14} />
+              Available for AI/ML opportunities
+            </div>
+          </div>
+
+          {!showSystemHud && (
+            <div className="portfolio-hero-photo-wrap">
+              <div className="portfolio-photo-frame">
+                <img
+                  src={PROFILE_IMAGE_192}
+                  srcSet={profileImageSrcSet}
+                  sizes="280px"
+                  alt="Abinash Swain, AI and machine learning developer"
+                  width="192"
+                  height="192"
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div className="portfolio-photo-grid">
+                <span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          )}
+        </section>
+
+        <Suspense fallback={null}>
+          <LandingSections showSystemHud={showSystemHud} />
+        </Suspense>
+      </main>
+
+      <footer className="portfolio-footer">
+        <div className="portfolio-footer-inner">
+          <div>
+            <span className="portfolio-footer-name">Abinash Swain</span>
+            <span className="portfolio-footer-role">AI/ML Developer · RAG · LLMs · MCP · Data Analytics</span>
+          </div>
+          <div className="portfolio-footer-links">
+            <a href={portfolioData.github} target="_blank" rel="noreferrer" aria-label="Visit Abinash Swain's GitHub profile">GitHub</a>
+            <a href={portfolioData.linkedin} target="_blank" rel="noreferrer" aria-label="Visit Abinash Swain's LinkedIn profile">LinkedIn</a>
+            <a href={`mailto:${portfolioData.email}`} aria-label={`Email Abinash Swain at ${portfolioData.email}`}>Email</a>
+          </div>
+          <span className="portfolio-footer-copy">© 2026 Abinash Swain</span>
         </div>
-        <div className="foldcraft-hero-bottom">
-          <motion.p className="foldcraft-bio" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .7 }}>I build machine learning and analytics systems that improve operational decisions, automate insight generation, and create measurable business value. My 5G KPI platform achieved 96.2% accuracy and a 96.5% F1-score across 5,000+ telemetry records.</motion.p>
-          <motion.div className="foldcraft-cta-row" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .9 }}>
-            <button className="foldcraft-primary-cta" onClick={() => enterPortfolio('projects')} disabled={isLeaving}>Explore Work <ArrowRight size={16} /></button>
-            <button className="foldcraft-secondary-cta" onClick={() => onResume ? onResume() : enterPortfolio('home')}>View Resume</button>
-            <a className="foldcraft-secondary-cta" href={`mailto:${portfolioData.email}`}><Mail size={16} /> Email Me</a>
-            <a className="foldcraft-secondary-cta" href={portfolioData.linkedin} target="_blank" rel="noreferrer"><Linkedin size={16} /> LinkedIn</a>
-          </motion.div>
-          <motion.div className="foldcraft-stats" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}><span>96.2% Accuracy</span><i /><span>96.5% F1-Score</span><i /><span>5,000+ Telemetry Records</span></motion.div>
-        </div>
-      </section>
-    </main>
+      </footer>
+    </div>
   );
 };

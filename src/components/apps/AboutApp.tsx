@@ -39,7 +39,7 @@ export const AboutApp: React.FC = () => {
           <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-800 p-0.5 shadow-xl shadow-cyan-500/10">
             <div className="w-full h-full rounded-[14px] bg-neutral-900 flex flex-col items-center justify-center text-center overflow-hidden">
               <img
-                src="https://media.licdn.com/dms/image/v2/D4D03AQHu8iauv0OdlA/profile-displayphoto-scale_400_400/B4DZ_ILs1ZIoAk-/0/1785769943899?e=1789603200&v=beta&t=OOZYTjy226VAOPwWen2qM1sN7U2FZai2zeoktl60x-g"
+                src="/assets/images/abinash-profile-192.webp"
                 alt="Abinash Swain"
                 className="w-full h-full object-cover"
               />
