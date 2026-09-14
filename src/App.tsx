@@ -23,7 +23,8 @@ const PortfolioRoot: React.FC = () => {
     landingTransitionStarted.current = true;
     setIsDesktopLocked(false);
     if (destination !== 'home') {
-      openDesktopWindow(destination === 'contact' ? 'mail' : destination);
+      const desktopApp = destination === 'work' ? 'about' : destination === 'contact' ? 'mail' : destination;
+      openDesktopWindow(desktopApp);
     }
   };
 
