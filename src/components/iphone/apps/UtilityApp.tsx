@@ -108,6 +108,9 @@ export const UtilityApp: React.FC<UtilityAppProps> = ({ appId }) => {
           <h1 className="text-lg font-semibold">{appId === 'clock' ? 'Clock' : appId === 'calculator' ? 'Calculator' : detail?.title}</h1>
           <p className="text-xs text-white/55">{appId === 'clock' ? 'Local time' : appId === 'calculator' ? 'Basic calculator' : detail?.subtitle}</p>
         </div>
+        <button onClick={closeApp} aria-label="Close" className="ml-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white/75 hover:bg-white/20">
+          <X className="h-4 w-4" />
+        </button>
       </header>
 
       <main className="flex-1 overflow-y-auto p-5">

@@ -36,6 +36,8 @@ export const SettingsApp: React.FC = () => {
     { id: 4, name: 'Sunset Coral', class: 'from-orange-500 via-rose-600 to-fuchsia-950' },
     { id: 5, name: 'Emerald Coast', class: 'from-emerald-400 via-teal-700 to-slate-950' },
     { id: 6, name: 'Ocean Glass', class: 'from-cyan-300 via-blue-600 to-indigo-950' },
+    { id: 7, name: 'Pure White', class: 'from-white via-slate-100 to-sky-100' },
+    { id: 8, name: 'Color Spectrum', class: 'from-rose-300 via-amber-200 to-cyan-300' },
   ];
 
   return (

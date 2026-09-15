@@ -562,13 +562,13 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     : NaN;
   const [settings, setSettings] = useState<SystemSettings>({
     theme: 'dark',
-    wallpaperIndex: Number.isInteger(storedWallpaperIndex) && storedWallpaperIndex >= 0 && storedWallpaperIndex <= 6
+    wallpaperIndex: Number.isInteger(storedWallpaperIndex) && storedWallpaperIndex >= 0 && storedWallpaperIndex <= 8
       ? storedWallpaperIndex
       : 6,
     wallpapers: {
       macDesktop: null,
       macLock: null,
-      iosHome: null,
+      iosHome: 'https://unsplash.com/photos/MFzAzxTkYLU/download?force=true&w=1600',
       iosLock: null,
     },
     soundEnabled: true,
@@ -941,12 +941,7 @@ export const DeviceProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     sound.faceIdSuccess();
     setIsLocked(false);
     setPhoneScreen('home');
-    triggerDynamicIsland({
-      mode: 'notification',
-      title: 'Face ID Verified',
-      subtitle: 'Welcome to Abinash’s iPhone 15'
-    }, 2500);
-  }, [triggerDynamicIsland]);
+  }, []);
 
   const lockPhone = useCallback(() => {
     sound.lockSound();

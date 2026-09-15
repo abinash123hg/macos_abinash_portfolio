@@ -25,16 +25,16 @@ export const IPhoneNotificationCenter: React.FC<{ onClose: () => void }> = ({ on
   return (
     <div className="ios-notification-center h-full w-full bg-black/85 backdrop-blur-2xl p-5 pt-14 flex flex-col justify-between select-none text-white overflow-y-auto">
       {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
-        <div className="flex items-center gap-2">
+      <div className="flex min-h-10 items-center justify-between gap-3 border-b border-neutral-800 pb-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
           <Bell className="w-4 h-4 text-cyan-400" />
-          <span className="text-xs font-bold uppercase tracking-wider text-neutral-300">Notification Center</span>
+          <span className="truncate text-xs font-bold uppercase tracking-wider text-neutral-300">Notification Center</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1">
           {notifications.length > 0 && (
             <button
               onClick={clearAllNotifications}
-              className="min-w-11 min-h-11 rounded-full flex items-center justify-center text-neutral-400 hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60 text-xs cursor-pointer"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-neutral-400 hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60 text-xs cursor-pointer"
               title="Clear all"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -42,7 +42,7 @@ export const IPhoneNotificationCenter: React.FC<{ onClose: () => void }> = ({ on
           )}
           <button
             onClick={onClose}
-            className="w-11 h-11 rounded-full bg-neutral-800 text-neutral-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-800 text-neutral-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>

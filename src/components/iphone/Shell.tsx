@@ -160,6 +160,10 @@ export const Shell: React.FC = () => {
         return 'bg-gradient-to-br from-emerald-400 via-teal-700 to-slate-950';
       case 6:
         return 'bg-gradient-to-br from-cyan-300 via-blue-600 to-indigo-950';
+      case 7:
+        return 'bg-gradient-to-br from-white via-slate-100 to-sky-100';
+      case 8:
+        return 'bg-gradient-to-br from-rose-300 via-amber-200 to-cyan-300';
       default:
         return 'bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.96)_0%,rgba(166,214,255,0.86)_9%,rgba(99,146,255,0.62)_16%,transparent_30%),radial-gradient(circle_at_80%_18%,rgba(223,195,255,0.92)_0%,rgba(131,108,255,0.72)_18%,transparent_36%),radial-gradient(circle_at_50%_86%,rgba(23,42,88,0.9)_0%,rgba(12,18,35,0.98)_48%,transparent_70%),linear-gradient(160deg,#b9dbff_0%,#7aa7ef_28%,#5967d1_56%,#101b35_100%)]';
     }
@@ -216,7 +220,7 @@ export const Shell: React.FC = () => {
       >
         {/* Inner OLED Display Glass */}
         <div 
-          className={`relative w-full h-full ${isLocked ? 'bg-black' : activeCustomWallpaper ? 'bg-black' : getWallpaperGradient()} md:rounded-[44px] overflow-hidden flex flex-col justify-between`}
+          className={`relative w-full h-full ${isLocked || activeCustomWallpaper ? 'bg-black' : getWallpaperGradient()} md:rounded-[44px] overflow-hidden flex flex-col justify-between`}
           style={activeCustomWallpaper ? {
             backgroundImage: `url(${resolveMediaUrl(activeCustomWallpaper)})`,
             backgroundSize: 'cover',
@@ -227,15 +231,21 @@ export const Shell: React.FC = () => {
           {activeCustomWallpaper && (
             <div className="absolute inset-0 bg-black/25 pointer-events-none" />
           )}
-          
-          {/* Restore the Dynamic Island on landing and home states, but hide it over overlays */}
+
+          {/* Transparent status controls: no backing strip or horizontal overlay. */}
           {!showControlCenter && !showNotifications && !showQuickSettings && !showSpotlight && <DynamicIsland />}
-
-          {/* iOS 18 Dynamic Status Bar with top gesture triggers */}
           <div className="iphone-status-bar pt-[env(safe-area-inset-top,0px)] shrink-0 z-40">
-            <StatusBar onSwipeDownRight={() => setShowControlCenter((visible) => !visible)} />
+            <StatusBar
+              onSwipeDownLeft={() => {
+                setShowNotifications(true);
+                setShowControlCenter(false);
+                setShowSpotlight(false);
+                setShowQuickSettings(false);
+              }}
+              onSwipeDownRight={() => setShowControlCenter((visible) => !visible)}
+            />
           </div>
-
+          
           {/* Screen Content Layers */}
           <div className={`absolute inset-0 z-10 min-h-0 w-full overflow-hidden flex flex-col will-change-transform ${isPortfolioEntering && !isLocked ? 'portfolio-rising' : ''}`}>
             {isLocked ? (
@@ -244,6 +254,8 @@ export const Shell: React.FC = () => {
               </div>
             ) : showControlCenter ? (
               <ControlCenter onClose={() => setShowControlCenter(false)} />
+            ) : showNotifications ? (
+              <IPhoneNotificationCenter onClose={() => setShowNotifications(false)} />
             ) : activeAppId ? (
               <div className="iphone-app-layer absolute inset-x-0 bottom-0 top-0 z-10 w-full min-h-0 flex flex-col animate-in fade-in zoom-in-95 duration-150 will-change-transform">
                 {renderActiveApp()}

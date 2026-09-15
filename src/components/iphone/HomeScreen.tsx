@@ -486,7 +486,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
 
   return (
     <div 
-      className="iphone-home-screen relative w-full h-full flex flex-col justify-between p-4 pt-14 text-white select-none overflow-hidden font-sans"
+      className="iphone-home-screen relative w-full h-full flex flex-col justify-between p-4 pt-0 text-white select-none overflow-hidden font-sans"
       onTouchStart={(event) => {
         handleTouchStart(event);
         startEmptyLongPress(event);
@@ -627,8 +627,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
               </div>
             </div>
             <div className="ios-home-grid grid grid-cols-4 gap-x-3 gap-y-3.5 px-0.5 py-0.5">
-              {pageTwoApps.map((app) => (
-                <div key={app.id} className="flex justify-center">
+              {pageTwoApps.map((app, index) => (
+                <div key={app.id} className={`flex justify-center ${index < 4 ? 'ios-home-top-row' : ''}`}>
                   <AppIcon
                     id={app.id}
                     name={app.name}

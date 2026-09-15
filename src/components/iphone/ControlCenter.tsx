@@ -80,7 +80,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
       onClick={handleClose}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="ios-control-center absolute inset-0 z-30 bg-black/60 backdrop-blur-3xl p-5 pt-16 pb-10 flex flex-col justify-between select-none font-sans text-white overflow-y-auto animate-in fade-in zoom-in-95 duration-200 cursor-default"
+      className="ios-control-center absolute inset-0 z-30 bg-transparent p-5 pt-16 pb-10 flex flex-col justify-between select-none font-sans text-white overflow-y-auto animate-in fade-in zoom-in-95 duration-200 cursor-default"
     >
       {/* Top Header */}
       <div 
@@ -106,7 +106,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
         className="grid grid-cols-2 gap-3.5 flex-1"
       >
         {/* 1. Connectivity Platter (4-in-1 Tile) */}
-        <div className="p-3 rounded-[24px] bg-white/10 dark:bg-neutral-900/60 backdrop-blur-2xl border border-white/15 grid grid-cols-2 gap-2 shadow-lg">
+        <div className="p-3 rounded-[24px] bg-transparent backdrop-blur-2xl border border-white/15 grid grid-cols-2 gap-2 shadow-lg">
           {/* Airplane Mode */}
           <button
             onClick={() => {
@@ -161,7 +161,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
         </div>
 
         {/* 2. Media / Now Playing Platter */}
-        <div className="p-3 rounded-[24px] bg-white/10 dark:bg-neutral-900/60 backdrop-blur-2xl border border-white/15 flex flex-col justify-between shadow-lg">
+        <div className="p-3 rounded-[24px] bg-transparent backdrop-blur-2xl border border-white/15 flex flex-col justify-between shadow-lg">
           <div className="flex items-center justify-between">
             <div 
               onClick={() => {
@@ -216,7 +216,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
         </div>
 
         {/* 3. Brightness Slider */}
-        <div className="p-3.5 rounded-[24px] bg-white/10 dark:bg-neutral-900/60 backdrop-blur-2xl border border-white/15 flex items-center gap-3 shadow-lg">
+        <div className="p-3.5 rounded-[24px] bg-transparent backdrop-blur-2xl border border-white/15 flex items-center gap-3 shadow-lg">
           <Sun className="w-5 h-5 text-amber-400 flex-shrink-0" />
           <input
             type="range"
@@ -229,7 +229,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
         </div>
 
         {/* 4. Volume Slider */}
-        <div className="p-3.5 rounded-[24px] bg-white/10 dark:bg-neutral-900/60 backdrop-blur-2xl border border-white/15 flex items-center gap-3 shadow-lg">
+        <div className="p-3.5 rounded-[24px] bg-transparent backdrop-blur-2xl border border-white/15 flex items-center gap-3 shadow-lg">
           {settings.soundEnabled ? (
             <Volume2 className="w-5 h-5 text-cyan-400 flex-shrink-0" />
           ) : (

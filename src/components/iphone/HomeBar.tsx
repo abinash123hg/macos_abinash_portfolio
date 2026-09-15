@@ -54,12 +54,6 @@ export const HomeBar: React.FC<HomeBarProps> = ({ onSwipeUp, className = '', lig
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       title="Tap to go Home, Right-click for App Switcher"
-    >
-      <div
-        className={`w-32 h-1 rounded-full transition-all duration-200 group-hover:scale-105 group-active:scale-95 focus-visible:outline-none ${
-          light ? 'bg-black/60 group-hover:bg-black/80' : 'bg-white/70 group-hover:bg-white/90'
-        } shadow-sm`}
-      />
-    </div>
+    />
   );
 };

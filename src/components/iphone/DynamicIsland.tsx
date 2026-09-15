@@ -107,7 +107,7 @@ export const DynamicIsland: React.FC = () => {
   };
 
   return (
-    <div className="ios-dynamic-island absolute top-2 left-1/2 -translate-x-1/2 z-50 flex items-start justify-center pointer-events-auto">
+    <div className="ios-dynamic-island absolute top-2 left-1/2 z-50 flex -translate-x-1/2 items-start justify-center pointer-events-auto">
       <div
         onClick={handleIslandClick}
         className={`bg-black text-white transition-[width,min-height,border-radius,padding] duration-150 ease-out flex items-center shadow-2xl cursor-pointer select-none border border-white/10 will-change-[width,height] overflow-hidden ${
@@ -124,7 +124,6 @@ export const DynamicIsland: React.FC = () => {
             <div className={`h-4 w-4 overflow-hidden rounded-full ${isMusic ? 'bg-white/10' : 'bg-white/7'} flex items-center justify-center shrink-0 border border-white/10`}>
               {isMusic && track.coverUrl ? <img src={resolveMediaUrl(track.coverUrl)} alt="" className="h-full w-full object-cover" /> : <Music className="h-2.5 w-2.5 text-white/80" />}
             </div>
-            <div className="absolute left-1/2 top-1/2 h-[23px] w-[62px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#050505] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)]" />
             <div className="flex items-end gap-0.5 h-3 shrink-0">
               {isMusic && isPlayingMusic ? <><span className="h-2 w-0.5 rounded-full bg-white/80 animate-pulse" /><span className="h-3 w-0.5 rounded-full bg-white/95 animate-bounce" /><span className="h-1.5 w-0.5 rounded-full bg-white/80 animate-pulse" /></> : <span className={`h-2 w-2 rounded-full ${mode === 'camera' ? 'bg-emerald-400 animate-pulse' : mode === 'ai' ? 'bg-cyan-400 animate-pulse' : 'bg-white/70'}`} />}
             </div>

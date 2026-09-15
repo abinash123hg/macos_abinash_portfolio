@@ -112,7 +112,6 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
           <source src={landingVideo} type="video/mp4" />
         </video>
       )}
-      <div className="portfolio-video-overlay" aria-hidden="true" />
 
       <header className="portfolio-header">
         <nav className="portfolio-nav" aria-label="Main">

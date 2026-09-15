@@ -85,6 +85,9 @@ export const StatusBar: React.FC<StatusBarProps> = ({
         <span>{timeStr}</span>
       </button>
 
+      {/* Center: Dynamic Island is centered independently by its own absolute layer */}
+      <div aria-hidden="true" className="flex-1" />
+
       {/* Right: Cellular, Wi-Fi, and Battery Status (Interactive to trigger Control Center) */}
       <button
         onClick={() => {
@@ -92,7 +95,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
           if (onSwipeDownRight) onSwipeDownRight();
         }}
         title="Swipe down or tap for Control Center"
-        className="min-h-11 min-w-11 justify-end flex items-center gap-1.5 text-[12px] pr-1.5 hover:opacity-80 active:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 rounded-full transition-opacity cursor-pointer"
+        className="relative left-1 min-h-11 min-w-11 shrink-0 justify-end flex items-center gap-1.5 text-[12px] pr-4 hover:opacity-80 active:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 rounded-full transition-opacity cursor-pointer"
       >
         <Signal className="w-3.5 h-3.5" />
         <Wifi className="w-3.5 h-3.5" />

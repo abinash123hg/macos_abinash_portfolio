@@ -80,18 +80,15 @@ export const AppWindow: React.FC<AppWindowProps> = ({
         </div>
 
         {/* Right: Custom Action or Spacer */}
-        <div className="flex items-center justify-end min-w-[70px] gap-1">
-          {headerRight ? (
-            headerRight
-          ) : (
-            <button
-              onClick={handleBack}
-              aria-label="Close"
-              className="w-11 h-11 rounded-full bg-neutral-200/70 dark:bg-neutral-800/80 hover:bg-neutral-300 dark:hover:bg-neutral-700 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#007AFF]/50 transition-all flex items-center justify-center text-neutral-600 dark:text-neutral-300 cursor-pointer"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          )}
+        <div className="flex min-w-[108px] items-center justify-end gap-1">
+          {headerRight}
+          <button
+            onClick={handleBack}
+            aria-label="Close"
+            className="w-11 h-11 shrink-0 rounded-full bg-neutral-200/70 dark:bg-neutral-800/80 hover:bg-neutral-300 dark:hover:bg-neutral-700 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#007AFF]/50 transition-all flex items-center justify-center text-neutral-600 dark:text-neutral-300 cursor-pointer"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
         </div>
       </header>
 
