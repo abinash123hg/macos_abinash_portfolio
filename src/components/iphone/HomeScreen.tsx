@@ -537,7 +537,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
           }}
         >
           {/* ================= PAGE 1 ================= */}
-          <div className="ios-home-page w-1/2 h-full flex flex-col justify-between px-1">
+          <div className="ios-home-page w-1/2 h-full flex flex-col justify-between px-1 overflow-y-auto">
             <div className="w-full grid grid-cols-2 gap-3 mb-2.5">
               <div
                 onClick={(e) => {
@@ -600,7 +600,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
           </div>
 
           {/* ================= PAGE 2 ================= */}
-          <div className="ios-home-page w-1/2 h-full flex flex-col justify-between px-1">
+          <div className="ios-home-page w-1/2 h-full flex flex-col justify-between px-1 overflow-y-auto">
             <div className="ios-home-secondary-widgets grid grid-cols-2 gap-3 mb-2.5">
               <div className="ios-home-widget ios-widget--large p-4 rounded-[22px] bg-gradient-to-br from-emerald-500/35 to-cyan-900/45 flex flex-col justify-between">
                 <div className="flex items-center justify-between">

@@ -55,8 +55,9 @@ export const Shell: React.FC = () => {
     clickCameraControl, 
     lightPressCameraControl,
     lockPhone,
-    unlockPhone
-    ,openApp
+    unlockPhone,
+    openApp,
+    isPlayingMusic
   } = useDevice();
 
   const [viewportSize, setViewportSize] = useState(() => ({
@@ -227,8 +228,8 @@ export const Shell: React.FC = () => {
             <div className="absolute inset-0 bg-black/25 pointer-events-none" />
           )}
           
-          {/* Dynamic Island Overlay (Dedicated for Music & Real-time playback) */}
-          <DynamicIsland />
+          {/* Restore the Dynamic Island on landing and home states, but hide it over overlays */}
+          {!showControlCenter && !showNotifications && !showQuickSettings && !showSpotlight && <DynamicIsland />}
 
           {/* iOS 18 Dynamic Status Bar with top gesture triggers */}
           <div className="iphone-status-bar pt-[env(safe-area-inset-top,0px)] shrink-0 z-40">
