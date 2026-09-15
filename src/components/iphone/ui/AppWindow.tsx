@@ -47,16 +47,16 @@ export const AppWindow: React.FC<AppWindowProps> = ({
   };
 
   return (
-    <div className={`w-full h-full min-h-0 flex flex-col pt-11 ${backgroundClass} text-neutral-900 dark:text-white select-none overflow-hidden font-sans relative`}>
+    <div className={`ios-app-window w-full h-full min-h-0 flex flex-col ${backgroundClass} text-neutral-900 dark:text-white select-none overflow-hidden font-sans relative`}>
       {/* iOS 18 Translucent Navigation Bar (48px standard iOS height) */}
-      <header className={`w-full h-12 flex-shrink-0 px-3 flex items-center justify-between z-30 select-none ${headerClass}`}>
+      <header className={`ios-app-window__header w-full h-12 flex-shrink-0 px-3 flex items-center justify-between z-30 select-none ${headerClass}`}>
         {/* Left: Back / Close Action */}
         <div className="flex items-center min-w-[70px]">
           {showBackButton && (
             <button
               onClick={handleBack}
               aria-label="Go Back"
-              className="flex items-center gap-0.5 text-[#007AFF] hover:text-[#0056B3] active:opacity-60 transition-opacity font-normal text-[15px] -ml-1 cursor-pointer py-1 px-1.5 rounded-lg active:bg-neutral-200/40 dark:active:bg-neutral-800/40"
+              className="min-h-11 flex items-center gap-0.5 text-[#007AFF] hover:text-[#0056B3] active:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#007AFF]/50 transition-opacity font-normal text-[15px] -ml-1 cursor-pointer py-1 px-1.5 rounded-lg active:bg-neutral-200/40 dark:active:bg-neutral-800/40"
             >
               <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
               <span className="truncate max-w-[80px]">{backLabel}</span>
@@ -87,7 +87,7 @@ export const AppWindow: React.FC<AppWindowProps> = ({
             <button
               onClick={handleBack}
               aria-label="Close"
-              className="w-7 h-7 rounded-full bg-neutral-200/70 dark:bg-neutral-800/80 hover:bg-neutral-300 dark:hover:bg-neutral-700 active:scale-95 transition-all flex items-center justify-center text-neutral-600 dark:text-neutral-300 cursor-pointer"
+              className="w-11 h-11 rounded-full bg-neutral-200/70 dark:bg-neutral-800/80 hover:bg-neutral-300 dark:hover:bg-neutral-700 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#007AFF]/50 transition-all flex items-center justify-center text-neutral-600 dark:text-neutral-300 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>

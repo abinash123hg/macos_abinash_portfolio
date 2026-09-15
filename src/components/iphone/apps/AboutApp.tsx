@@ -33,9 +33,9 @@ export const AboutApp: React.FC = () => {
       icon={<User className="w-4 h-4 text-blue-500" />}
     >
       {/* 1. iOS 18 Hero Profile Platter */}
-      <div className="flex flex-col items-center text-center mb-5">
+      <div className="ios-about-profile flex flex-col items-center text-center mb-5">
         <div className="relative mb-3">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 p-0.5 shadow-lg">
+          <div className="ios-about-avatar w-20 h-20 rounded-full bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 p-0.5 shadow-lg">
             <div className="w-full h-full rounded-full bg-neutral-900 overflow-hidden">
               <img
                 src="/assets/images/abinash-profile-192.webp"
@@ -61,17 +61,17 @@ export const AboutApp: React.FC = () => {
         </div>
 
         {/* Quick Contact Circle Actions */}
-        <div className="flex items-center gap-3 mt-4">
+        <div className="ios-about-actions flex items-center gap-3 mt-4">
           <a
             href={`mailto:${portfolioData.email}`}
-            className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-950/50 text-[#007AFF] flex items-center justify-center shadow-xs active:scale-95 transition-transform"
+            className="w-11 h-11 rounded-[12px] bg-white dark:bg-neutral-800 text-[#007AFF] flex items-center justify-center shadow-sm active:scale-95 transition-transform"
             title="Email"
           >
             <Mail className="w-4 h-4" />
           </a>
           <a
             href={`tel:${portfolioData.phone}`}
-            className="w-10 h-10 rounded-full bg-green-50 dark:bg-green-950/50 text-[#34C759] flex items-center justify-center shadow-xs active:scale-95 transition-transform"
+            className="w-11 h-11 rounded-[12px] bg-white dark:bg-neutral-800 text-[#34C759] flex items-center justify-center shadow-sm active:scale-95 transition-transform"
             title="Call"
           >
             <Phone className="w-4 h-4" />
@@ -80,7 +80,7 @@ export const AboutApp: React.FC = () => {
             href={portfolioData.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full bg-sky-50 dark:bg-sky-950/50 text-sky-600 flex items-center justify-center shadow-xs active:scale-95 transition-transform"
+            className="w-11 h-11 rounded-[12px] bg-white dark:bg-neutral-800 text-sky-600 flex items-center justify-center shadow-sm active:scale-95 transition-transform"
             title="LinkedIn"
           >
             <Linkedin className="w-4 h-4" />
@@ -89,7 +89,7 @@ export const AboutApp: React.FC = () => {
             href={portfolioData.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 flex items-center justify-center shadow-xs active:scale-95 transition-transform"
+            className="w-11 h-11 rounded-[12px] bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 flex items-center justify-center shadow-sm active:scale-95 transition-transform"
             title="GitHub"
           >
             <Github className="w-4 h-4" />
@@ -98,9 +98,9 @@ export const AboutApp: React.FC = () => {
       </div>
 
       {/* 2. Key Metrics Grid */}
-      <div className="grid grid-cols-2 gap-2.5 mb-4">
+      <div className="ios-about-metrics grid grid-cols-2 gap-3 mb-4">
         {portfolioData.quickStats.map((stat, i) => (
-          <IOSCard key={i} padding="sm" className="bg-white/90 dark:bg-neutral-900/90">
+          <IOSCard key={i} padding="md" className="ios-about-metric bg-white dark:bg-neutral-900">
             <span className="text-[11px] text-neutral-500 dark:text-neutral-400 font-medium block">
               {stat.label}
             </span>
@@ -116,7 +116,7 @@ export const AboutApp: React.FC = () => {
 
       {/* 3. Editorial Bio Card */}
       <IOSSectionHeader title="Executive Summary" />
-      <IOSCard className="mb-4">
+      <IOSCard className="ios-about-summary mb-4">
         <p className="text-[13.5px] text-neutral-700 dark:text-neutral-300 leading-relaxed">
           {portfolioData.aboutEditorial}
         </p>

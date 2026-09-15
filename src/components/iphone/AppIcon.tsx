@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { sound } from '../../utils/audioHaptics';
 
 export interface AppIconProps {
@@ -8,6 +8,8 @@ export interface AppIconProps {
   gradient?: string;
   badge?: number | string;
   onClick: () => void;
+  onLongPress?: () => void;
+  isEditing?: boolean;
   size?: 'sm' | 'md' | 'lg';
   showLabel?: boolean;
 }
@@ -19,10 +21,38 @@ const AppIconComponent: React.FC<AppIconProps> = ({
   gradient = 'from-blue-500 to-indigo-600',
   badge,
   onClick,
+  onLongPress,
+  isEditing = false,
   size = 'md',
   showLabel = true,
 }) => {
+  const longPressTimerRef = React.useRef<number | null>(null);
+  const longPressTriggeredRef = React.useRef(false);
+
+  const clearLongPress = () => {
+    if (longPressTimerRef.current !== null) {
+      window.clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
+  const handlePressStart = () => {
+    longPressTriggeredRef.current = false;
+    clearLongPress();
+    longPressTimerRef.current = window.setTimeout(() => {
+      longPressTriggeredRef.current = true;
+      sound.tap();
+      onLongPress?.();
+    }, 1000);
+  };
+
+  useEffect(() => clearLongPress, []);
+
   const handleClick = () => {
+    if (longPressTriggeredRef.current) {
+      longPressTriggeredRef.current = false;
+      return;
+    }
     sound.appOpen();
     onClick();
   };
@@ -55,21 +85,25 @@ const AppIconComponent: React.FC<AppIconProps> = ({
     <button
       id={`app-icon-${id}`}
       onClick={handleClick}
+      onPointerDown={handlePressStart}
+      onPointerUp={clearLongPress}
+      onPointerCancel={clearLongPress}
+      onPointerLeave={clearLongPress}
       aria-label={`Open ${name}`}
-      className="ios-app-icon flex flex-col items-center justify-start gap-1.5 focus:outline-none group active:scale-[0.88] transition-transform duration-200 cursor-pointer select-none"
+      className={`ios-app-icon flex flex-col items-center justify-start gap-1.5 focus:outline-none group active:scale-[0.92] transition-transform duration-200 ease-out cursor-pointer select-none ${isEditing ? 'ios-app-icon--editing' : ''}`}
     >
       {/* iOS 18 Squircle Icon Container with subtle bevel and shadow */}
       <div
-        className={`ios-app-icon__surface relative ${container} bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-md shadow-black/25 ring-1 ring-white/20 group-hover:brightness-105 transition-all overflow-hidden`}
+        className={`ios-app-icon__surface relative ${container} bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-[0_8px_18px_rgba(0,0,0,0.22)] ring-1 ring-white/15 group-hover:brightness-105 transition-all overflow-hidden`}
         style={{
-          boxShadow: '0 4px 12px -2px rgba(0, 0, 0, 0.3), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35)',
+          boxShadow: '0 8px 18px -4px rgba(0, 0, 0, 0.28), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35)',
         }}
       >
         {/* Subtle Top-left Specular Glass Sheen */}
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/25 pointer-events-none" />
 
         {/* Icon Glyph */}
-        <div className="relative z-10 drop-shadow-sm flex items-center justify-center">
+        <div className="ios-app-icon__glyph relative z-10 drop-shadow-sm flex items-center justify-center">
           {icon}
         </div>
 

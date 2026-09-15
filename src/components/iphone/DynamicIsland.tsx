@@ -107,7 +107,7 @@ export const DynamicIsland: React.FC = () => {
   };
 
   return (
-    <div className="absolute top-2 left-1/2 -translate-x-1/2 z-50 flex items-start justify-center pointer-events-auto">
+    <div className="ios-dynamic-island absolute top-2 left-1/2 -translate-x-1/2 z-50 flex items-start justify-center pointer-events-auto">
       <div
         onClick={handleIslandClick}
         className={`bg-black text-white transition-[width,min-height,border-radius,padding] duration-150 ease-out flex items-center shadow-2xl cursor-pointer select-none border border-white/10 will-change-[width,height] overflow-hidden ${

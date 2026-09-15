@@ -64,7 +64,7 @@ export const AppSwitcher: React.FC = () => {
 
   return (
     <div 
-      className="absolute inset-0 z-40 bg-black/60 backdrop-blur-2xl p-4 flex flex-col justify-between select-none font-sans text-white"
+      className="ios-app-switcher absolute inset-0 z-40 bg-black/60 backdrop-blur-2xl p-4 flex flex-col justify-between select-none font-sans text-white"
       onClick={() => setPhoneScreen('home')}
     >
       {/* Top Header */}
@@ -77,7 +77,7 @@ export const AppSwitcher: React.FC = () => {
             sound.tap();
             setPhoneScreen('home');
           }}
-          className="text-xs font-medium text-[#007AFF] hover:text-[#3897FF] cursor-pointer"
+          className="min-h-11 px-3 text-xs font-medium text-[#007AFF] hover:text-[#3897FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#007AFF]/60 rounded-full cursor-pointer"
         >
           Done
         </button>

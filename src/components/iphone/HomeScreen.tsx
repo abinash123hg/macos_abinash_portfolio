@@ -33,6 +33,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Calculator,
+  Calendar,
   CloudSun,
   Map,
   MessageSquare,
@@ -73,11 +74,11 @@ interface HomeAppDef {
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
-  const { openApp } = useDevice();
-  const [activePage, setActivePage] = useState<0 | 1 | 2>(() => {
+  const { openApp, settings } = useDevice();
+  const [activePage, setActivePage] = useState<0 | 1>(() => {
     if (typeof window === 'undefined') return 0;
     const storedPage = Number(window.sessionStorage.getItem('iphone-home-page'));
-    return storedPage === 1 || storedPage === 2 ? storedPage : 0;
+    return storedPage === 1 ? 1 : 0;
   });
 
   const trackRef = useRef<HTMLDivElement>(null);
@@ -87,18 +88,52 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
   const isDraggingRef = useRef<boolean>(false);
   const isHorizontalSwipeRef = useRef<boolean | null>(null);
   const isAnimatingRef = useRef<boolean>(false);
+  const frameRef = useRef<number | null>(null);
+  const emptyLongPressTimerRef = useRef<number | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentDate, setCurrentDate] = useState(() => new Date());
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setCurrentDate(new Date()), 30_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const clearEmptyLongPress = () => {
+    if (emptyLongPressTimerRef.current !== null) {
+      window.clearTimeout(emptyLongPressTimerRef.current);
+      emptyLongPressTimerRef.current = null;
+    }
+  };
+
+  const startEmptyLongPress = (event: React.TouchEvent | React.MouseEvent) => {
+    if ((event.target as HTMLElement).closest('button')) return;
+    clearEmptyLongPress();
+    emptyLongPressTimerRef.current = window.setTimeout(() => {
+      sound.tap();
+      setIsEditing(true);
+    }, 1000);
+  };
+
+  const dateNumber = currentDate.getDate();
+  const dateLabel = currentDate.toLocaleDateString([], { weekday: 'short' });
+  const isLowBattery = settings.batteryLevel <= 20 && !settings.isCharging;
 
   // Sync track transform with activePage smoothly
   useEffect(() => {
     if (trackRef.current && !isDraggingRef.current) {
       trackRef.current.style.transition = 'transform 320ms cubic-bezier(0.25, 1, 0.5, 1)';
-      trackRef.current.style.transform = `translate3d(${-activePage * (100 / 3)}%, 0, 0)`;
+      trackRef.current.style.transform = `translate3d(${-activePage * (100 / 2)}%, 0, 0)`;
     }
   }, [activePage]);
 
   useEffect(() => {
     window.sessionStorage.setItem('iphone-home-page', String(activePage));
   }, [activePage]);
+
+  useEffect(() => () => {
+    clearEmptyLongPress();
+    if (frameRef.current !== null) window.cancelAnimationFrame(frameRef.current);
+  }, []);
 
   // Page 1: Main Portfolio Apps & Core Showcases
   const primaryApps: HomeAppDef[] = [
@@ -152,12 +187,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
       icon: <FileText className="w-7 h-7 text-white" />,
       gradient: 'from-rose-500 to-red-600',
       badge: 1,
-    },
-    {
-      id: 'photos',
-      name: 'Photos',
-      icon: <Image className="w-7 h-7 text-white" />,
-      gradient: 'from-pink-500 via-rose-500 to-amber-500',
     },
     {
       id: 'camera',
@@ -300,6 +329,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
     { id: 'shortcuts', name: 'Shortcuts', icon: <Sparkles className="w-7 h-7 text-white" />, gradient: 'from-[#9b6ae8] to-[#7c3aed]' },
   ];
 
+  const pageOneApps = [...primaryApps, ...secondaryApps.slice(0, 4)];
+  const pageTwoApps = [...secondaryApps.slice(4), ...utilityApps];
+
   // Swipe / Gesture Handlers with zero-rerender GPU acceleration
   const handleTouchStart = (e: React.TouchEvent) => {
     startXRef.current = e.touches[0].clientX;
@@ -320,6 +352,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
     const deltaX = currentX - startXRef.current;
     const deltaY = currentY - startYRef.current;
 
+    if (Math.abs(deltaX) > 8 || Math.abs(deltaY) > 8) clearEmptyLongPress();
+
     if (isHorizontalSwipeRef.current === null) {
       if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 6) {
         isHorizontalSwipeRef.current = true;
@@ -330,13 +364,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
 
     if (isHorizontalSwipeRef.current && trackRef.current) {
       let offset = deltaX;
-      const maxPage = 2;
+      const maxPage = 1;
       const pageLimit = (activePage === 0 && deltaX > 0) || (activePage === maxPage && deltaX < 0);
       if (pageLimit) {
         offset = deltaX * 0.25;
       }
       dragOffsetRef.current = offset;
-      trackRef.current.style.transform = `translate3d(calc(${-activePage * (100 / 3)}% + ${offset}px), 0, 0)`;
+      if (frameRef.current === null) {
+        frameRef.current = window.requestAnimationFrame(() => {
+          if (trackRef.current) {
+            trackRef.current.style.transform = `translate3d(calc(${-activePage * (100 / 2)}% + ${dragOffsetRef.current}px), 0, 0)`;
+          }
+          frameRef.current = null;
+        });
+      }
     }
   };
 
@@ -344,20 +385,24 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
     if (isDraggingRef.current && startXRef.current !== null) {
       const offset = dragOffsetRef.current;
       isDraggingRef.current = false;
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
       if (trackRef.current) {
         trackRef.current.style.transition = 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1)';
         trackRef.current.style.willChange = 'auto';
       }
 
       if (isHorizontalSwipeRef.current) {
-        if (offset < -35 && activePage < 2) {
+        if (offset < -35 && activePage < 1) {
           sound.tap();
-          setActivePage((prev) => (prev + 1) as 0 | 1 | 2);
+          setActivePage((prev) => (prev + 1) as 0 | 1);
         } else if (offset > 35 && activePage > 0) {
           sound.tap();
-          setActivePage((prev) => (prev - 1) as 0 | 1 | 2);
+          setActivePage((prev) => (prev - 1) as 0 | 1);
         } else if (trackRef.current) {
-          trackRef.current.style.transform = `translate3d(${-activePage * (100 / 3)}%, 0, 0)`;
+          trackRef.current.style.transform = `translate3d(${-activePage * (100 / 2)}%, 0, 0)`;
         }
       }
     }
@@ -383,6 +428,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDraggingRef.current || startXRef.current === null) return;
     const deltaX = e.clientX - startXRef.current;
+    if (Math.abs(deltaX) > 8) clearEmptyLongPress();
     
     if (Math.abs(deltaX) > 6) {
       isHorizontalSwipeRef.current = true;
@@ -390,13 +436,20 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
 
     if (isHorizontalSwipeRef.current && trackRef.current) {
       let offset = deltaX;
-      const maxPage = 2;
+      const maxPage = 1;
       const pageLimit = (activePage === 0 && deltaX > 0) || (activePage === maxPage && deltaX < 0);
       if (pageLimit) {
         offset = deltaX * 0.25;
       }
       dragOffsetRef.current = offset;
-      trackRef.current.style.transform = `translate3d(calc(${-activePage * (100 / 3)}% + ${offset}px), 0, 0)`;
+      if (frameRef.current === null) {
+        frameRef.current = window.requestAnimationFrame(() => {
+          if (trackRef.current) {
+            trackRef.current.style.transform = `translate3d(calc(${-activePage * (100 / 2)}% + ${dragOffsetRef.current}px), 0, 0)`;
+          }
+          frameRef.current = null;
+        });
+      }
     }
   };
 
@@ -404,20 +457,24 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
     if (isDraggingRef.current && startXRef.current !== null) {
       const offset = dragOffsetRef.current;
       isDraggingRef.current = false;
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
       if (trackRef.current) {
         trackRef.current.style.transition = 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1)';
         trackRef.current.style.willChange = 'auto';
       }
 
       if (isHorizontalSwipeRef.current) {
-        if (offset < -35 && activePage < 2) {
+        if (offset < -35 && activePage < 1) {
           sound.tap();
-          setActivePage((prev) => (prev + 1) as 0 | 1 | 2);
+          setActivePage((prev) => (prev + 1) as 0 | 1);
         } else if (offset > 35 && activePage > 0) {
           sound.tap();
-          setActivePage((prev) => (prev - 1) as 0 | 1 | 2);
+          setActivePage((prev) => (prev - 1) as 0 | 1);
         } else if (trackRef.current) {
-          trackRef.current.style.transform = `translate3d(${-activePage * (100 / 3)}%, 0, 0)`;
+          trackRef.current.style.transform = `translate3d(${-activePage * (100 / 2)}%, 0, 0)`;
         }
       }
     }
@@ -430,26 +487,57 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
   return (
     <div 
       className="iphone-home-screen relative w-full h-full flex flex-col justify-between p-4 pt-14 text-white select-none overflow-hidden font-sans"
-      onTouchStart={handleTouchStart}
+      onTouchStart={(event) => {
+        handleTouchStart(event);
+        startEmptyLongPress(event);
+      }}
       onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseDown}
+      onTouchEnd={() => {
+        clearEmptyLongPress();
+        handleTouchEnd();
+      }}
+      onClick={(event) => {
+        if (isEditing && !(event.target as HTMLElement).closest('button')) setIsEditing(false);
+      }}
+      onMouseDown={(event) => {
+        handleMouseDown(event);
+        startEmptyLongPress(event);
+      }}
       onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
+      onMouseUp={() => {
+        clearEmptyLongPress();
+        handleMouseUp();
+      }}
+      onMouseLeave={() => {
+        clearEmptyLongPress();
+        handleMouseUp();
+      }}
     >
+      {isLowBattery && (
+        <div className="ios-low-battery-alert" role="status">
+          <span className="ios-low-battery-alert__dot" />
+          <span>Low Battery</span>
+          <strong>{settings.batteryLevel}%</strong>
+        </div>
+      )}
+      {isEditing && (
+        <div className="ios-home-edit-toolbar" onClick={(event) => event.stopPropagation()}>
+          <span>Edit Home Screen</span>
+          <button type="button" onClick={() => setIsEditing(false)}>Done</button>
+        </div>
+      )}
       {/* Sliding App Track (Horizontal side scrolling between Page 1 and Page 2) */}
       <div className="flex-1 w-full overflow-hidden relative touch-pan-y">
         <div 
           ref={trackRef}
-          className="flex flex-row w-[300%] h-full will-change-transform"
+          className="flex flex-row w-[200%] h-full will-change-transform"
           style={{
-            transform: `translate3d(${-activePage * (100 / 3)}%, 0, 0)`,
+            transform: `translate3d(${-activePage * (100 / 2)}%, 0, 0)`,
             transition: 'transform 320ms cubic-bezier(0.25, 1, 0.5, 1)'
           }}
         >
           {/* ================= PAGE 1 ================= */}
-          <div className="w-1/3 h-full flex flex-col justify-between px-1">
+          <div className="ios-home-page w-1/2 h-full flex flex-col justify-between px-1">
             <div className="w-full grid grid-cols-2 gap-3 mb-2.5">
               <div
                 onClick={(e) => {
@@ -458,18 +546,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                   sound.appOpen();
                   openApp('about');
                 }}
-                className="ios-home-widget p-3.5 rounded-[26px] bg-white/20 dark:bg-black/35 backdrop-blur-2xl border border-white/25 shadow-lg flex flex-col justify-between cursor-pointer hover:bg-white/25 active:scale-95 transition-all group"
+                className="ios-home-widget ios-widget--medium p-4 rounded-[22px] bg-white/20 dark:bg-black/35 backdrop-blur-2xl border border-white/25 shadow-lg flex flex-col justify-between cursor-pointer hover:bg-white/25 active:scale-95 transition-all group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-white uppercase tracking-wider">Abinash Swain</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="flex items-center gap-1.5 text-[11px] font-bold text-white uppercase tracking-wider"><CloudSun className="w-4 h-4 text-sky-200" />Weather</span>
+                  <span className="text-[10px] text-white/70">Today</span>
                 </div>
                 <div>
-                  <div className="text-[20px] font-bold text-white tracking-tight leading-tight">8.32 CGPA</div>
-                  <div className="text-[11px] text-white/80 font-medium truncate mt-0.5">B.Tech AI/ML • CUTM</div>
+                  <div className="text-[26px] font-semibold text-white tracking-tight leading-tight">28°</div>
+                  <div className="text-[11px] text-white/80 font-medium truncate mt-0.5">Bhubaneswar · H 31° / L 24°</div>
                 </div>
               </div>
-
               <div
                 onClick={(e) => {
                   if (Math.abs(dragOffsetRef.current) > 8) return;
@@ -477,23 +564,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                   sound.appOpen();
                   openApp('recruiter');
                 }}
-                className="ios-home-widget p-3.5 rounded-[26px] bg-gradient-to-br from-blue-600/30 to-indigo-900/40 backdrop-blur-2xl border border-blue-400/30 shadow-lg flex flex-col justify-between cursor-pointer hover:bg-blue-600/40 active:scale-95 transition-all group"
+                className="ios-home-widget ios-widget--medium p-4 rounded-[22px] bg-gradient-to-br from-blue-600/30 to-indigo-900/40 backdrop-blur-2xl border border-blue-400/30 shadow-lg flex flex-col justify-between cursor-pointer hover:bg-blue-600/40 active:scale-95 transition-all group"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1 text-[11px] font-semibold text-cyan-300">
-                    <Radio className="w-3 h-3 text-cyan-400 animate-pulse" />
-                    <span>Recruiter Brief</span>
+                    <Calendar className="w-3 h-3 text-cyan-300" />
+                    <span>Calendar</span>
                   </div>
                   <span className="text-[10px] text-white/70 font-mono">96.2%</span>
                 </div>
                 <div>
-                  <div className="text-[13px] font-semibold text-white tracking-tight leading-tight">Open portfolio summary</div>
+                  <div className="text-[13px] font-semibold text-white tracking-tight leading-tight">{dateLabel}, {dateNumber} · Portfolio review</div>
                 </div>
               </div>
             </div>
-
-            <div className="grid grid-cols-4 gap-x-3 gap-y-3.5 px-0.5 py-0.5">
-              {primaryApps.map((app) => (
+            <div className="ios-home-grid grid grid-cols-4 gap-x-3 gap-y-3.5 px-0.5 py-0.5">
+              {pageOneApps.map((app) => (
                 <div key={app.id} className="flex justify-center">
                   <AppIcon
                     id={app.id}
@@ -501,6 +587,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                     icon={app.icon}
                     gradient={app.gradient}
                     badge={app.badge}
+                    isEditing={isEditing}
+                    onLongPress={() => setIsEditing(true)}
                     onClick={() => {
                       if (Math.abs(dragOffsetRef.current) > 8) return;
                       openApp(app.id);
@@ -512,9 +600,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
           </div>
 
           {/* ================= PAGE 2 ================= */}
-          <div className="w-1/3 h-full flex flex-col justify-between px-1">
-            <div className="grid grid-cols-2 gap-3 mb-2.5">
-              <div className="ios-home-widget p-3.5 rounded-[26px] bg-gradient-to-br from-emerald-500/35 to-cyan-900/45 flex flex-col justify-between">
+          <div className="ios-home-page w-1/2 h-full flex flex-col justify-between px-1">
+            <div className="ios-home-secondary-widgets grid grid-cols-2 gap-3 mb-2.5">
+              <div className="ios-home-widget ios-widget--large p-4 rounded-[22px] bg-gradient-to-br from-emerald-500/35 to-cyan-900/45 flex flex-col justify-between">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-white uppercase tracking-wider">Skills</span>
                   <TrendingUp className="w-4 h-4 text-emerald-200" />
@@ -524,19 +612,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                   <div className="text-[11px] text-white/80 font-medium mt-0.5">Core strengths</div>
                 </div>
               </div>
-              <div className="ios-home-widget p-3.5 rounded-[26px] bg-gradient-to-br from-amber-500/35 to-rose-900/45 flex flex-col justify-between">
+              <div className="ios-home-widget ios-widget--medium p-4 rounded-[22px] bg-gradient-to-br from-amber-500/35 to-rose-900/45 flex flex-col justify-between">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-white uppercase tracking-wider">Library</span>
                   <BookOpen className="w-4 h-4 text-amber-200" />
                 </div>
                 <div>
-                  <div className="text-[20px] font-bold text-white tracking-tight leading-tight">6+</div>
-                  <div className="text-[11px] text-white/80 font-medium mt-0.5">Certificates</div>
+                  <div className="flex items-end gap-2">
+                    <div className="text-[20px] font-bold text-white tracking-tight leading-tight">6+</div>
+                    <div className="ios-home-calendar-date"><strong>{dateNumber}</strong><span>{dateLabel}</span></div>
+                  </div>
+                  <div className="text-[11px] text-white/80 font-medium mt-0.5">Certificates · Today</div>
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-4 gap-x-3 gap-y-3.5 px-0.5 py-0.5">
-              {secondaryApps.map((app) => (
+            <div className="ios-home-grid grid grid-cols-4 gap-x-3 gap-y-3.5 px-0.5 py-0.5">
+              {pageTwoApps.map((app) => (
                 <div key={app.id} className="flex justify-center">
                   <AppIcon
                     id={app.id}
@@ -544,6 +635,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
                     icon={app.icon}
                     gradient={app.gradient}
                     badge={app.badge}
+                    isEditing={isEditing}
+                    onLongPress={() => setIsEditing(true)}
                     onClick={() => {
                       if (Math.abs(dragOffsetRef.current) > 8) return;
                       openApp(app.id);
@@ -554,44 +647,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
             </div>
           </div>
 
-          {/* ================= PAGE 3 ================= */}
-          <div className="w-1/3 h-full flex flex-col justify-between px-1">
-            <div className="ios-home-widget p-3.5 rounded-[26px] bg-gradient-to-br from-sky-500/35 to-blue-900/45 mb-2.5 flex flex-col justify-between">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1 text-[11px] font-bold text-white uppercase tracking-wider">
-                  <CloudSun className="w-4 h-4 text-sky-200" />
-                  <span>Bhubaneswar</span>
-                </div>
-                <span className="text-[10px] text-white/70">Today</span>
-              </div>
-              <div className="flex items-end justify-between mt-3">
-                <div className="text-[28px] font-semibold text-white tracking-tight leading-none">28°</div>
-                <div className="text-right text-[11px] text-white/80 font-medium">Partly cloudy<br />Good day to explore</div>
-              </div>
-            </div>
-            <div className="grid grid-cols-4 gap-x-3 gap-y-3.5 px-0.5 py-0.5 mt-1">
-              {utilityApps.map((app) => (
-                <div key={app.id} className="flex justify-center">
-                  <AppIcon
-                    id={app.id}
-                    name={app.name}
-                    icon={app.icon}
-                    gradient={app.gradient}
-                    badge={app.badge}
-                    onClick={() => {
-                      if (Math.abs(dragOffsetRef.current) > 8) return;
-                      openApp(app.id);
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
       {/* Center Pagination Dots & Spotlight Search Pill */}
-      <div className="w-full flex flex-col items-center gap-1.5 py-1 shrink-0">
+      <div className="ios-home-pagination w-full flex flex-col items-center gap-1.5 py-1 shrink-0">
         {/* Pagination Dots with Smooth Indicator */}
         <div className="flex items-center gap-2">
           <button
@@ -612,16 +672,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
             aria-label="Page 2"
             className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
               activePage === 1 ? 'bg-white w-5 shadow-sm' : 'bg-white/40 w-2 hover:bg-white/60'
-            }`}
-          />
-          <button
-            onClick={() => {
-              sound.tap();
-              setActivePage(2);
-            }}
-            aria-label="Page 3"
-            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-              activePage === 2 ? 'bg-white w-5 shadow-sm' : 'bg-white/40 w-2 hover:bg-white/60'
             }`}
           />
         </div>
@@ -649,6 +699,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ onOpenSpotlight }) => {
             icon={app.icon}
             gradient={app.gradient}
             badge={app.badge}
+            isEditing={isEditing}
+            onLongPress={() => setIsEditing(true)}
             onClick={() => openApp(app.id)}
             size="sm"
             showLabel={false}

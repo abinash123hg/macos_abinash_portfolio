@@ -84,9 +84,9 @@ export const Shell: React.FC = () => {
 
   const isLandscape = viewportSize.width > viewportSize.height;
 
-  const [showControlCenter, setShowControlCenter] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSpotlight, setShowSpotlight] = useState(false);
+  const [showControlCenter, setShowControlCenter] = useState(false);
   const [showQuickSettings, setShowQuickSettings] = useState(false);
   const [isPortfolioEntering, setIsPortfolioEntering] = useState(false);
   const topSwipeStartY = React.useRef<number | null>(null);
@@ -212,8 +212,6 @@ export const Shell: React.FC = () => {
           aspectRatio: isLandscape ? '16 / 9' : '9 / 16',
           boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.1)',
         }}
-        onTouchStart={handleTopSwipeStart}
-        onTouchEnd={handleTopSwipeEnd}
       >
         {/* Inner OLED Display Glass */}
         <div 
@@ -234,38 +232,19 @@ export const Shell: React.FC = () => {
 
           {/* iOS 18 Dynamic Status Bar with top gesture triggers */}
           <div className="iphone-status-bar pt-[env(safe-area-inset-top,0px)] shrink-0 z-40">
-            <StatusBar
-              onSwipeDownLeft={() => setShowNotifications(prev => !prev)}
-              onSwipeDownRight={() => setShowControlCenter(prev => !prev)}
-            />
+            <StatusBar onSwipeDownRight={() => setShowControlCenter((visible) => !visible)} />
           </div>
 
           {/* Screen Content Layers */}
           <div className={`absolute inset-0 z-10 min-h-0 w-full overflow-hidden flex flex-col will-change-transform ${isPortfolioEntering && !isLocked ? 'portfolio-rising' : ''}`}>
-            {showQuickSettings ? (
-              <div className="relative h-full w-full overflow-hidden">
-                <ControlCenter onClose={() => setShowQuickSettings(false)} />
-                <div
-                  className="absolute inset-x-3 top-3 bottom-3 z-10 overflow-hidden rounded-[28px] border border-white/15 shadow-2xl"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  <IPhoneNotificationCenter onClose={() => setShowQuickSettings(false)} />
-                </div>
-              </div>
-            ) : showControlCenter ? (
-              <ControlCenter onClose={() => setShowControlCenter(false)} />
-            ) : showNotifications ? (
-              <IPhoneNotificationCenter onClose={() => setShowNotifications(false)} />
-            ) : showSpotlight ? (
-              <Spotlight onClose={() => setShowSpotlight(false)} />
-            ) : isLocked ? (
+            {isLocked ? (
               <div className="iphone-lock-screen w-full h-full">
                 <LandingScreen onExplore={handleLandingExplore} />
               </div>
-            ) : phoneScreen === 'switcher' ? (
-              <AppSwitcher />
+            ) : showControlCenter ? (
+              <ControlCenter onClose={() => setShowControlCenter(false)} />
             ) : activeAppId ? (
-              <div className="absolute inset-0 z-10 w-full h-full min-h-0 flex flex-col animate-in fade-in zoom-in-95 duration-150 will-change-transform">
+              <div className="iphone-app-layer absolute inset-x-0 bottom-0 top-0 z-10 w-full min-h-0 flex flex-col animate-in fade-in zoom-in-95 duration-150 will-change-transform">
                 {renderActiveApp()}
               </div>
             ) : (
@@ -277,11 +256,7 @@ export const Shell: React.FC = () => {
           <div className="pb-[env(safe-area-inset-bottom,0px)] shrink-0 z-40">
             <HomeBar
               onSwipeUp={() => {
-                if (showQuickSettings) setShowQuickSettings(false);
-                else if (showControlCenter) setShowControlCenter(false);
-                else if (showNotifications) setShowNotifications(false);
-                else if (showSpotlight) setShowSpotlight(false);
-                else if (phoneScreen === 'switcher') setPhoneScreen('home');
+                if (showControlCenter) setShowControlCenter(false);
                 else if (activeAppId) closeApp();
               }}
             />

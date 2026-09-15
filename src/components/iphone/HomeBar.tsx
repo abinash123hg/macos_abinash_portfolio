@@ -10,6 +10,7 @@ export interface HomeBarProps {
 
 export const HomeBar: React.FC<HomeBarProps> = ({ onSwipeUp, className = '', light = false }) => {
   const { phoneScreen, setPhoneScreen, activeAppId, closeApp } = useDevice();
+  const touchStartY = React.useRef<number | null>(null);
 
   const handleHomeClick = () => {
     sound.tap();
@@ -31,15 +32,31 @@ export const HomeBar: React.FC<HomeBarProps> = ({ onSwipeUp, className = '', lig
     setPhoneScreen(phoneScreen === 'switcher' ? 'home' : 'switcher');
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0]?.clientY ?? null;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartY.current === null) return;
+    const deltaY = (e.changedTouches[0]?.clientY ?? touchStartY.current) - touchStartY.current;
+    touchStartY.current = null;
+    if (deltaY < -24 && onSwipeUp) {
+      sound.tap();
+      onSwipeUp();
+    }
+  };
+
   return (
     <div
-      className={`ios-home-indicator w-full h-7 flex items-center justify-center cursor-pointer select-none z-50 group ${className}`}
+      className={`ios-home-indicator w-full min-h-11 flex items-center justify-center cursor-pointer select-none z-50 group ${className}`}
       onClick={handleHomeClick}
       onContextMenu={handleContextMenu}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       title="Tap to go Home, Right-click for App Switcher"
     >
       <div
-        className={`w-36 h-1.2 rounded-full transition-all duration-200 group-hover:scale-105 group-active:scale-95 ${
+        className={`w-32 h-1 rounded-full transition-all duration-200 group-hover:scale-105 group-active:scale-95 focus-visible:outline-none ${
           light ? 'bg-black/60 group-hover:bg-black/80' : 'bg-white/70 group-hover:bg-white/90'
         } shadow-sm`}
       />

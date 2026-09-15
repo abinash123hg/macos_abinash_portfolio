@@ -35,6 +35,7 @@ export const PhotosApp: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'all' | 'photos' | 'favorites' | 'cinema' | 'certificates' | 'videos'>('all');
   const [selectedPhoto, setSelectedPhoto] = useState<MediaItem | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<VideoAsset | null>(null);
+  const [showPhotoDetails, setShowPhotoDetails] = useState(true);
   const [showWallpaperSheet, setShowWallpaperSheet] = useState(false);
   const [wallpaperFeedback, setWallpaperFeedback] = useState<string | null>(null);
   const swipeStartX = React.useRef<number | null>(null);
@@ -138,6 +139,7 @@ export const PhotosApp: React.FC = () => {
                 onClick={() => {
                   sound.tap();
                   setSelectedPhoto(item);
+                  setShowPhotoDetails(true);
                   setShowWallpaperSheet(false);
                 }}
                 className="aspect-square bg-neutral-900 overflow-hidden text-white cursor-pointer active:opacity-75 transition-opacity relative group"
@@ -148,7 +150,7 @@ export const PhotosApp: React.FC = () => {
                     alt={item.title}
                     loading="lazy"
                     decoding="async"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain bg-neutral-950"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                     }}
@@ -180,7 +182,7 @@ export const PhotosApp: React.FC = () => {
       {/* Fullscreen iOS Photo Viewer Modal */}
       {selectedPhoto && (
         <div
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-3xl flex flex-col justify-between p-4 animate-in fade-in zoom-in-95 duration-200 text-white"
+          className="ios-photo-viewer fixed inset-0 z-50 bg-black flex flex-col justify-between animate-in fade-in duration-200 text-white"
           onTouchStart={(event) => { swipeStartX.current = event.touches[0]?.clientX ?? null; }}
           onTouchEnd={(event) => {
             if (swipeStartX.current === null) return;
@@ -192,14 +194,21 @@ export const PhotosApp: React.FC = () => {
           }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between pt-2">
-            <span className="text-xs font-semibold text-white/80 line-clamp-1 max-w-[200px]">
+          <div className="ios-photo-viewer__header flex items-center justify-between px-4 pt-[calc(.5rem+env(safe-area-inset-top,0px))]">
+            <button onClick={() => setSelectedPhoto(null)} className="min-h-11 flex items-center gap-1 rounded-full px-2 text-[15px] text-[#0a84ff] active:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0a84ff]">
+              <ChevronLeft className="w-5 h-5" />
+              <span>Photos</span>
+            </button>
+            <span className="text-[13px] font-semibold text-white/80 line-clamp-1 max-w-[150px] text-center">
               {selectedPhoto.title}
             </span>
             <div className="flex items-center gap-2">
+              <button onClick={() => { sound.tap(); if (navigator.share) void navigator.share({ title: selectedPhoto.title, text: selectedPhoto.description, url: window.location.href }); }} aria-label="Share photo" className="w-11 h-11 rounded-full bg-white/10 text-white flex items-center justify-center active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80">
+                <Share className="w-4 h-4" />
+              </button>
               <button
                 onClick={() => toggleFavorite(selectedPhoto.id)}
-                className="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
+                className="w-11 h-11 rounded-full bg-white/10 text-white flex items-center justify-center cursor-pointer active:scale-90 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
               >
                 <Heart 
                   className={`w-4 h-4 ${favorites[selectedPhoto.id] ? 'text-rose-500 fill-rose-500' : 'text-white'}`} 
@@ -211,7 +220,7 @@ export const PhotosApp: React.FC = () => {
                   setSelectedPhoto(null);
                   setShowWallpaperSheet(false);
                 }}
-                className="w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center cursor-pointer active:scale-90 transition-transform"
+                className="w-11 h-11 rounded-full bg-white/10 text-white flex items-center justify-center cursor-pointer active:scale-90 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -219,12 +228,13 @@ export const PhotosApp: React.FC = () => {
           </div>
 
           {/* Central Image View */}
-          <div className="my-auto flex flex-col items-center text-center p-2">
-            <div className="relative w-full h-[min(64dvh,560px)] rounded-2xl overflow-hidden bg-black/50 border border-white/10 flex items-center justify-center shadow-2xl mb-3">
+          <div className="my-auto flex flex-col items-center text-center px-0 py-2">
+            <div className="relative w-full h-[min(68dvh,600px)] overflow-hidden bg-black flex items-center justify-center mb-3">
               <img
                 src={resolveMediaUrl(selectedPhoto.thumbnail || selectedPhoto.url)}
                 alt={selectedPhoto.title}
                 className="w-full h-full object-contain"
+                onClick={() => setShowPhotoDetails((value) => !value)}
               />
               <button onClick={showPreviousPhoto} aria-label="Previous photo" className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/70 text-white flex items-center justify-center cursor-pointer">
                 <ChevronLeft className="w-4 h-4" />
@@ -233,12 +243,12 @@ export const PhotosApp: React.FC = () => {
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
-            <h3 className="text-[17px] font-bold text-white tracking-tight">
-              {selectedPhoto.title}
-            </h3>
-            <p className="text-[12px] text-white/70 max-w-xs mt-1 leading-relaxed line-clamp-2">
-              {selectedPhoto.description}
-            </p>
+            {showPhotoDetails && (
+              <>
+                <h3 className="text-[17px] font-bold text-white tracking-tight">{selectedPhoto.title}</h3>
+                <p className="text-[12px] text-white/70 max-w-xs mt-1 leading-relaxed line-clamp-2">{selectedPhoto.description}</p>
+              </>
+            )}
           </div>
 
           {/* Bottom iOS Action Bar */}

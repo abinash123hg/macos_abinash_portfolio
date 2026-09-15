@@ -80,7 +80,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
       onClick={handleClose}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="absolute inset-0 z-30 bg-black/60 backdrop-blur-3xl p-5 pt-16 pb-10 flex flex-col justify-between select-none font-sans text-white overflow-y-auto animate-in fade-in zoom-in-95 duration-200 cursor-default"
+      className="ios-control-center absolute inset-0 z-30 bg-black/60 backdrop-blur-3xl p-5 pt-16 pb-10 flex flex-col justify-between select-none font-sans text-white overflow-y-auto animate-in fade-in zoom-in-95 duration-200 cursor-default"
     >
       {/* Top Header */}
       <div 
@@ -93,7 +93,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
         </div>
         <button
           onClick={handleClose}
-          className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 active:scale-95 transition-all flex items-center justify-center text-white cursor-pointer"
+          className="w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 transition-all flex items-center justify-center text-white cursor-pointer"
           title="Close"
         >
           <X className="w-4 h-4" />

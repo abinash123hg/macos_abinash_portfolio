@@ -23,7 +23,7 @@ export const IPhoneNotificationCenter: React.FC<{ onClose: () => void }> = ({ on
   };
 
   return (
-    <div className="h-full w-full bg-black/85 backdrop-blur-2xl p-5 pt-14 flex flex-col justify-between select-none text-white overflow-y-auto">
+    <div className="ios-notification-center h-full w-full bg-black/85 backdrop-blur-2xl p-5 pt-14 flex flex-col justify-between select-none text-white overflow-y-auto">
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
         <div className="flex items-center gap-2">
@@ -34,7 +34,7 @@ export const IPhoneNotificationCenter: React.FC<{ onClose: () => void }> = ({ on
           {notifications.length > 0 && (
             <button
               onClick={clearAllNotifications}
-              className="p-1 rounded-md text-neutral-400 hover:text-red-400 text-xs cursor-pointer"
+              className="min-w-11 min-h-11 rounded-full flex items-center justify-center text-neutral-400 hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60 text-xs cursor-pointer"
               title="Clear all"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -42,7 +42,7 @@ export const IPhoneNotificationCenter: React.FC<{ onClose: () => void }> = ({ on
           )}
           <button
             onClick={onClose}
-            className="p-1 rounded-full bg-neutral-800 text-neutral-400 hover:text-white cursor-pointer"
+            className="w-11 h-11 rounded-full bg-neutral-800 text-neutral-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>

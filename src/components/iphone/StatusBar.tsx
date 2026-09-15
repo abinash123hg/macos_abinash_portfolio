@@ -66,7 +66,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
     <div
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className={`w-full h-11 px-6 flex items-center justify-between text-xs z-40 select-none relative ${textColor} cursor-pointer bg-transparent`}
+      className={`ios-status-bar w-full min-h-11 px-5 flex items-center justify-between text-xs z-40 select-none relative ${textColor} cursor-pointer bg-transparent`}
       style={{
         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
         color: '#ffffff',
@@ -80,7 +80,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
           if (onSwipeDownLeft) onSwipeDownLeft();
         }}
         title="Pull down for Notifications"
-        className="font-semibold text-[14px] tracking-tight pl-1.5 hover:opacity-80 active:opacity-60 transition-opacity cursor-pointer flex items-center"
+        className="min-w-11 min-h-11 font-semibold text-[14px] tracking-tight pl-1.5 hover:opacity-80 active:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 rounded-full transition-opacity cursor-pointer flex items-center"
       >
         <span>{timeStr}</span>
       </button>
@@ -92,7 +92,7 @@ export const StatusBar: React.FC<StatusBarProps> = ({
           if (onSwipeDownRight) onSwipeDownRight();
         }}
         title="Swipe down or tap for Control Center"
-        className="flex items-center gap-1.5 text-[12px] pr-1.5 hover:opacity-80 active:opacity-60 transition-opacity cursor-pointer"
+        className="min-h-11 min-w-11 justify-end flex items-center gap-1.5 text-[12px] pr-1.5 hover:opacity-80 active:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 rounded-full transition-opacity cursor-pointer"
       >
         <Signal className="w-3.5 h-3.5" />
         <Wifi className="w-3.5 h-3.5" />
