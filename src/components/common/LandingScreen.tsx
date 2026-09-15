@@ -205,7 +205,6 @@ export const LandingScreen: React.FC<LandingScreenProps> = ({ onExplore, onResum
                 </div>
               </div>
             )}
-            <div className="portfolio-hero-kicker">AI · MACHINE LEARNING · DATA ANALYTICS</div>
             <h1>Abinash Swain</h1>
             <div className="portfolio-hero-label">AI/ML Developer · RAG · LLMs · MCP · Data Analytics</div>
             <div className="portfolio-hero-headline">Building practical AI systems from data to intelligent decisions.</div>

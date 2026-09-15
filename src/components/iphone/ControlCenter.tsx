@@ -21,6 +21,8 @@ import {
   SkipForward,
   SkipBack,
   ChevronUp
+  , Plus,
+  Power
 } from 'lucide-react';
 import { sound } from '../../utils/audioHaptics';
 
@@ -38,7 +40,8 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
     nextMusicTrack,
     prevMusicTrack,
     openApp,
-    toggleFlashlight
+    toggleFlashlight,
+    lockPhone
   } = useDevice();
   const [airplaneMode, setAirplaneMode] = useState(false);
   const [wifiEnabled, setWifiEnabled] = useState(true);
@@ -80,33 +83,41 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
       onClick={handleClose}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="ios-control-center absolute inset-0 z-30 bg-transparent p-5 pt-16 pb-10 flex flex-col justify-between select-none font-sans text-white overflow-y-auto animate-in fade-in zoom-in-95 duration-200 cursor-default"
+      className="ios-control-center absolute inset-0 z-30 bg-transparent p-4 pt-3 pb-5 flex flex-col justify-between select-none font-sans text-white overflow-y-auto animate-in fade-in zoom-in-95 duration-200 cursor-default"
     >
-      {/* Top Header */}
+      {/* Compact iOS Control Center top bar */}
       <div 
         onClick={(e) => e.stopPropagation()} 
         className="w-full flex items-center justify-between pb-3 shrink-0"
       >
-        <div className="flex items-center gap-1.5 text-xs text-white/80 font-medium">
-          <Sliders className="w-4 h-4 text-cyan-400" />
-          <span>Control Center</span>
-        </div>
         <button
-          onClick={handleClose}
-          className="w-11 h-11 rounded-full bg-white/20 hover:bg-white/30 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 transition-all flex items-center justify-center text-white cursor-pointer"
-          title="Close"
+          onClick={() => sound.tap()}
+          className="flex h-9 w-9 items-center justify-center rounded-full text-white hover:bg-white/15 active:scale-90"
+          aria-label="Add Control"
         >
-          <X className="w-4 h-4" />
+          <Plus className="h-5 w-5" />
+        </button>
+        <button
+          onClick={() => {
+            sound.tap();
+            lockPhone();
+            onClose();
+          }}
+          className="flex h-9 w-9 items-center justify-center rounded-full text-white hover:bg-white/15 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+          title="Lock iPhone"
+          aria-label="Lock iPhone"
+        >
+          <Power className="h-5 w-5" />
         </button>
       </div>
 
-      {/* iOS 18 Modular Bento Grid */}
+      {/* iOS glass bento controls */}
       <div 
         onClick={(e) => e.stopPropagation()} 
-        className="grid grid-cols-2 gap-3.5 flex-1"
+        className="grid flex-1 grid-cols-4 content-start gap-3"
       >
         {/* 1. Connectivity Platter (4-in-1 Tile) */}
-        <div className="p-3 rounded-[24px] bg-transparent backdrop-blur-2xl border border-white/15 grid grid-cols-2 gap-2 shadow-lg">
+        <div className="col-span-2 grid grid-cols-2 gap-2 rounded-[24px] border border-white/20 bg-white/12 p-3 shadow-xl backdrop-blur-2xl">
           {/* Airplane Mode */}
           <button
             onClick={() => {
@@ -161,7 +172,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
         </div>
 
         {/* 2. Media / Now Playing Platter */}
-        <div className="p-3 rounded-[24px] bg-transparent backdrop-blur-2xl border border-white/15 flex flex-col justify-between shadow-lg">
+        <div className="col-span-2 flex flex-col justify-between rounded-[24px] border border-white/20 bg-white/12 p-3 shadow-xl backdrop-blur-2xl">
           <div className="flex items-center justify-between">
             <div 
               onClick={() => {
@@ -216,7 +227,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
         </div>
 
         {/* 3. Brightness Slider */}
-        <div className="p-3.5 rounded-[24px] bg-transparent backdrop-blur-2xl border border-white/15 flex items-center gap-3 shadow-lg">
+        <div className="col-span-1 flex h-40 flex-col items-center justify-between rounded-[24px] border border-white/20 bg-white/12 p-3 shadow-xl backdrop-blur-2xl">
           <Sun className="w-5 h-5 text-amber-400 flex-shrink-0" />
           <input
             type="range"
@@ -224,12 +235,12 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
             max="100"
             value={settings.brightness ?? 80}
             onChange={(e) => updateSettings({ brightness: Number(e.target.value) })}
-            className="w-full accent-[#007AFF] cursor-pointer"
+            className="control-center-slider h-24 w-6 accent-[#007AFF] cursor-pointer"
           />
         </div>
 
         {/* 4. Volume Slider */}
-        <div className="p-3.5 rounded-[24px] bg-transparent backdrop-blur-2xl border border-white/15 flex items-center gap-3 shadow-lg">
+        <div className="col-span-1 flex h-40 flex-col items-center justify-between rounded-[24px] border border-white/20 bg-white/12 p-3 shadow-xl backdrop-blur-2xl">
           {settings.soundEnabled ? (
             <Volume2 className="w-5 h-5 text-cyan-400 flex-shrink-0" />
           ) : (
@@ -241,7 +252,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
             max="100"
             value={settings.volume ?? 75}
             onChange={(e) => updateSettings({ volume: Number(e.target.value) })}
-            className="w-full accent-[#007AFF] cursor-pointer"
+            className="control-center-slider h-24 w-6 accent-[#007AFF] cursor-pointer"
           />
         </div>
 
@@ -251,7 +262,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
             sound.tap();
             updateSettings({ theme: settings.theme === 'dark' ? 'light' : 'dark' });
           }}
-          className={`p-3 rounded-[20px] backdrop-blur-2xl border border-white/15 flex items-center gap-2.5 transition-all cursor-pointer shadow-lg active:scale-95 ${
+          className={`col-span-2 p-3 rounded-[20px] backdrop-blur-2xl border border-white/20 flex items-center gap-2.5 transition-all cursor-pointer shadow-xl active:scale-95 ${
             settings.theme === 'dark'
               ? 'bg-indigo-600/80 text-white'
               : 'bg-white/10 text-white hover:bg-white/20'
@@ -267,7 +278,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
             sound.tap();
             updateSettings({ soundEnabled: !settings.soundEnabled });
           }}
-          className={`p-3 rounded-[20px] backdrop-blur-2xl border border-white/15 flex items-center gap-2.5 transition-all cursor-pointer shadow-lg active:scale-95 ${
+          className={`col-span-2 p-3 rounded-[20px] backdrop-blur-2xl border border-white/20 flex items-center gap-2.5 transition-all cursor-pointer shadow-xl active:scale-95 ${
             settings.soundEnabled
               ? 'bg-blue-600/80 text-white'
               : 'bg-white/10 text-white hover:bg-white/20'
@@ -283,7 +294,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
             sound.tap();
             void toggleFlashlight();
           }}
-          className={`p-3 rounded-[20px] backdrop-blur-2xl border border-white/15 flex items-center gap-2.5 transition-all cursor-pointer shadow-lg active:scale-95 ${
+          className={`col-span-2 p-3 rounded-[20px] backdrop-blur-2xl border border-white/20 flex items-center gap-2.5 transition-all cursor-pointer shadow-xl active:scale-95 ${
             flashlightEnabled
               ? 'bg-white text-neutral-900'
               : 'bg-white/10 text-white hover:bg-white/20'
@@ -300,7 +311,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
             openApp('recruiter');
             onClose();
           }}
-          className="p-3 rounded-[20px] bg-gradient-to-r from-cyan-500/30 to-blue-600/30 backdrop-blur-2xl border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/40 flex items-center gap-2.5 transition-all cursor-pointer shadow-lg active:scale-95"
+          className="col-span-2 p-3 rounded-[20px] bg-white/12 backdrop-blur-2xl border border-white/20 text-white/85 hover:bg-white/20 flex items-center gap-2.5 transition-all cursor-pointer shadow-xl active:scale-95"
         >
           <BriefcaseBusiness className="w-4 h-4 text-cyan-400" />
           <span className="text-xs font-medium">HR View</span>
@@ -314,7 +325,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({ onClose }) => {
       >
         <button
           onClick={handleClose}
-          className="w-full py-2.5 rounded-xl bg-white/15 hover:bg-white/25 active:bg-white/30 text-white text-xs font-semibold tracking-tight transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+          className="w-full py-2.5 rounded-2xl bg-white/12 hover:bg-white/20 active:bg-white/25 text-white/85 text-xs font-semibold tracking-tight transition-colors cursor-pointer flex items-center justify-center gap-1.5 border border-white/15"
         >
           <ChevronUp className="w-3.5 h-3.5" />
           <span>Swipe Up or Tap to Close</span>

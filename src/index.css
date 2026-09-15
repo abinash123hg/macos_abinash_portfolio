@@ -2040,12 +2040,37 @@ html:has(.portfolio-landing--day) {
 
 @media (max-width: 767px) {
   .iphone-lock-screen .portfolio-header {
-    display: none;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 0;
+    height: 52px;
+    z-index: 30;
     margin-top: 0;
     border-bottom: 0;
     background: transparent;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+  }
+
+  .iphone-lock-screen .portfolio-header .portfolio-nav {
+    min-height: 52px;
+    height: 52px;
+    padding: 0 16px;
+  }
+
+  .iphone-lock-screen .portfolio-header .portfolio-mobile-mode-toggle {
+    display: flex;
+    left: 16px;
+    top: 10px;
+  }
+
+  .iphone-lock-screen .portfolio-header .portfolio-menu-button {
+    display: grid;
+    top: 5px;
+    right: 16px;
   }
 
   .iphone-lock-screen .portfolio-landing {
@@ -2117,8 +2142,11 @@ html.dark .iphone-shell .ios-app-window__header { background:rgba(28,28,30,.88);
 .iphone-shell .ios-notification-center > div:first-child { padding-top:.25rem; border-bottom-color:rgba(255,255,255,.14); }
 .iphone-shell .ios-notification-center [class*="rounded-2xl"] { border-color:rgba(255,255,255,.14); background:rgba(40,42,50,.72); backdrop-filter:blur(18px) saturate(125%); -webkit-backdrop-filter:blur(18px) saturate(125%); }
 .iphone-shell .ios-notification-center [class*="rounded-2xl"]:active { transform:scale(.985); }
-.iphone-shell .ios-control-center { background:rgba(255,255,255,.08); backdrop-filter:blur(32px) saturate(120%); -webkit-backdrop-filter:blur(32px) saturate(120%); }
+.iphone-shell .ios-control-center { background:linear-gradient(145deg,#26354d 0%,#18243a 48%,#101a2b 100%); backdrop-filter:none; -webkit-backdrop-filter:none; }
 .iphone-shell .ios-control-center > div > div { background:rgba(255,255,255,.1); backdrop-filter:blur(22px) saturate(115%); -webkit-backdrop-filter:blur(22px) saturate(115%); }
+.iphone-shell .ios-control-center .control-center-slider { writing-mode:vertical-lr; direction:rtl; appearance:none; background:rgba(255,255,255,.18); border-radius:999px; }
+.iphone-shell .ios-control-center .control-center-slider::-webkit-slider-thumb { appearance:none; width:1.1rem; height:1.1rem; border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.22); }
+.iphone-shell .ios-control-center .control-center-slider::-moz-range-thumb { width:1.1rem; height:1.1rem; border:0; border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.22); }
 .iphone-shell .iphone-home-screen { touch-action:pan-y; padding-top:calc(2.75rem + env(safe-area-inset-top,0px)); }
 .iphone-shell .iphone-home-screen { background:transparent; }
 .iphone-shell .iphone-home-screen .ios-home-widget { border-radius:22px; border-color:rgba(255,255,255,.28); }
