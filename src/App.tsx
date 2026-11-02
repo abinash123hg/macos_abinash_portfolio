@@ -97,7 +97,7 @@ export default function App(){
 
       <section className="missions-section section-wrap" id="missions">
         <Heading index="02" eyebrow="MISSION BOARD" title="Work from the field." copy="A selection of projects I've worked on — each one a different problem to understand and solve."/>
-        <div className="mission-toolbar"><div className="mission-note"><Flame size={15}/> S-RANK / A-RANK FIELD MISSIONS</div><div className="filter-tabs" role="group" aria-label="Filter projects">{filters.map(f=><button key={f} className={activeFilter===f?"filter-tab active":"filter-tab"} onClick={()=>setActiveFilter(f)}>{f}</button>)}</div></div>
+        <div className="mission-toolbar"><div className="mission-note"><Flame size={15}/> TEAM 07 · S-RANK / A-RANK MISSIONS</div><div className="filter-tabs" role="group" aria-label="Filter projects">{filters.map(f=><button key={f} className={activeFilter===f?"filter-tab active":"filter-tab"} onClick={()=>setActiveFilter(f)}>{f}</button>)}</div></div>
         <div className="mission-grid">{visible.map((p,i)=><button className={"mission-card "+(i===0?"mission-featured":"")} key={p.id} onClick={()=>setSelected(p)}>
           <div className="mission-top"><span className="mission-code">{p.code} / {p.category}</span><span className="mission-status"><span/>{p.status}</span></div>
           <div className="mission-symbol">{p.id==="doculens"?<FileText size={26}/>:p.id==="handwriting"?<Layers3 size={26}/>:p.id==="mcp"?<Orbit size={26}/>:p.id==="inventory"?<Database size={26}/>:<BrainCircuit size={26}/>}</div>
@@ -111,7 +111,7 @@ export default function App(){
       <section className="arsenal-section section-wrap" id="arsenal">
         <Heading index="03" eyebrow="NINJA ARSENAL" title="Tools I work with." copy="A practical toolkit across AI applications, retrieval, data and product development."/>
         <div className="arsenal-grid">
-          <div className="arsenal-map"><div className="map-header"><span>SKILL CONSTELLATION</span><span>FIELD MAP · 06 NODES</span></div>
+          <div className="arsenal-map"><div className="map-header"><span>SKILL RADAR · CONSTELLATION</span><span>FIELD MAP · 06 NODES</span></div>
             <div className="constellation"><div className="constellation-ring ring-a"/><div className="constellation-ring ring-b"/><div className="constellation-ring ring-c"/>
               <svg viewBox="0 0 420 340" className="constellation-lines" aria-hidden="true"><path d="M210 45 L335 115 L335 245 L210 300 L85 245 L85 115 Z M210 45 L210 300 M85 115 L335 245 M335 115 L85 245"/></svg>
               <div className="constellation-core"><Mark/><span>CORE</span></div>
